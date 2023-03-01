@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../styles.dart';
+
 class ButtonWidget extends StatefulWidget {
   final Function onClick;
   final String text;
@@ -24,7 +26,7 @@ class ButtonWidget extends StatefulWidget {
     required this.height,
     required this.borderSideColor,
     this.leadingIcon,
-    this.trailingIcon
+    this.trailingIcon,
   }) : super(key: key);
 
   @override
@@ -36,11 +38,32 @@ class _ButtonWidgetState extends State<ButtonWidget> {
   Widget build(BuildContext context) {
     return ElevatedButton(
         onPressed: () => widget.onClick(),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: widget.backgroundColor,
-          foregroundColor: widget.splashColor,
-          minimumSize: Size(widget.minWidth, widget.height),
+        style: ButtonStyle(
+          overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
+              if (states.contains(MaterialState.pressed)) {
+                return Colors.black12;
+              }
+              return null;
+            },
+          ),
+          shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5)),),
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(5)),
+          shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
+          minimumSize: MaterialStateProperty.all<Size>(Size(widget.minWidth, widget.height)),
+          backgroundColor: MaterialStateProperty.all<Color>(widget.backgroundColor),
+          foregroundColor: MaterialStateProperty.all<Color>(widget.splashColor),
         ),
+        // style: ElevatedButton.styleFrom(
+        //   shadowColor: Colors.transparent,
+        //   // shape: RoundedRectangleBorder(
+        //   //     borderRadius: BorderRadius.circular(5)
+        //   // ),
+        //   backgroundColor: widget.backgroundColor,
+        //   foregroundColor: widget.splashColor,
+        //   minimumSize: Size(widget.minWidth, widget.height),
+        // ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           // This is must when you are using Row widget inside Raised Button
@@ -49,13 +72,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
             _buildLeadingIcon(widget.leadingIcon),
             Text(
               widget.text.toUpperCase(),
-              style: TextStyle(
-                color: widget.color,
-                fontSize: 14.0,
-                fontWeight: FontWeight.w500,
-                fontStyle: FontStyle.normal,
-                letterSpacing: 1.2,
-              ),
+              style: TextStyles.text14Medium?.apply(color: widget.color)
             ),
             _buildTrailingIcon(widget.trailingIcon)
           ],
@@ -66,7 +83,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
   Widget _buildLeadingIcon(Widget? leadingIcon) {
     if (null != leadingIcon) {
       return Row(
-        children: <Widget>[leadingIcon, SizedBox(width: 10)],
+        children: <Widget>[leadingIcon, const SizedBox(width: 10)],
       );
     }
     return Container();
@@ -76,7 +93,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
     if (null != trailingIcon) {
       return Row(
         children: <Widget>[
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           trailingIcon,
         ],
       );

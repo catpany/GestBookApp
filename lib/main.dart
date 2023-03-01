@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sigest/models/user.dart';
 import 'package:sigest/views/scenes/auth/login.dart';
 
-import 'bloc/auth/login/login_cubit.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserModelAdapter());
   runApp(const MyApp());
 }
 
@@ -14,12 +17,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Sigest',
+      title: 'Книга Жестов',
         theme: ThemeData(scaffoldBackgroundColor: Colors.pink),
-      home: BlocProvider(
-        create: (context) => LoginCubit(),
-        child: LoginScreen(),
-      )
+      home: LoginScreen(),
     );
   }
 }

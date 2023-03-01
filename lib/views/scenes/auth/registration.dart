@@ -1,86 +1,85 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:sigest/bloc/auth/registration/registration_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/views/scenes/auth/auth.dart';
 import 'package:sigest/views/scenes/auth/login.dart';
 
+import '../../../bloc/auth/auth_cubit.dart';
+import '../../styles.dart';
 import '../../widgets/button.dart';
 import '../../widgets/input.dart';
 import '../../widgets/link_button.dart';
 
 class RegistrationScreen extends AuthScreen {
-  RegistrationScreen({Key? key}) : super(key: key);
-  @override
-  final RegistrationCubit cubit = RegistrationCubit();
+  RegistrationScreen({Key? key})
+      : super(key: key, bindControllers: {
+          'username': TextEditingController(text: ''),
+          'email': TextEditingController(text: ''),
+          'password': TextEditingController(text: '')
+        });
 
   @override
   String get socialsText => 'или \войдите с помощью';
+
   @override
   String get title => 'Регистрация';
 
   @override
-  List<TextFormFieldWidget> renderFields() {
-    TextEditingController usernameController = TextEditingController(text: '');
-    TextEditingController passwordController = TextEditingController(text: '');
-
+  List<TextFormFieldWidget> renderFields([Map<String, dynamic>? errors]) {
     return [
       TextFormFieldWidget(
-          title: 'Имя пользователя',
-          titleColor: Colors.white,
-          hintText: 'Имя пользователя',
-          controller: usernameController,
-          functionValidate: cubit.validate,
-          onFieldTap: () => {log('tap field')}
+        title: 'Имя пользователя',
+        titleColor: Colors.white,
+        hintText: 'Имя пользователя',
+        controller: bindControllers['username'],
+        rules: 'required|username|min:1|max:256',
       ),
       TextFormFieldWidget(
-          title: 'Почта',
-          titleColor: Colors.white,
-          hintText: 'Почта',
-          controller: passwordController,
-          functionValidate: cubit.validate,
-          onFieldTap: () => {log('tap field')}
+        title: 'Почта',
+        titleColor: Colors.white,
+        hintText: 'Почта',
+        controller: bindControllers['email'],
+        rules: 'required|email|max:256',
       ),
       TextFormFieldWidget(
-          title: 'Пароль',
-          titleColor: Colors.white,
-          hintText: 'Почта',
-          controller: passwordController,
-          functionValidate: cubit.validate,
-          onFieldTap: () => {log('tap field')}
-      ),
-      TextFormFieldWidget(
-          title: 'Повтор пароля',
-          titleColor: Colors.white,
-          hintText: 'Повтор пароля',
-          controller: passwordController,
-          functionValidate: cubit.validate,
-          onFieldTap: () => {log('tap field')}
+        title: 'Пароль',
+        titleColor: Colors.white,
+        hintText: 'Пароль',
+        obscureText: true,
+        type: FieldType.password,
+        controller: bindControllers['password'],
+        rules: 'required|min:8|max:22|password',
       ),
     ];
   }
 
   @override
-  List<ButtonWidget> renderButtons() {
+  List<Widget> renderButtons() {
     return [
-      ButtonWidget(
-        onClick: () {
-          log('click on button');
-
-          if (!formKey.currentState!.validate()) {
-            return;
-          }
-          log('success!!');
-        },
-        text: 'Зарегистрироваться',
-        color: Color(0xffff6f91),
-        backgroundColor: Colors.white,
-        splashColor: Colors.white12,
-        borderRadius: 0,
-        minWidth: 248,
-        height: 41,
-        borderSideColor: Colors.white,
-      )
+      BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+        if (state is AuthDataLoading) {
+          return const CircularProgressIndicator(color: ColorStyles.white);
+        } else {
+          return ButtonWidget(
+            onClick: () {
+              if (!formKey.currentState!.validate()) {
+                return;
+              }
+              context.read<AuthCubit>().register();
+              log('success!!');
+            },
+            text: 'Зарегистрироваться',
+            color: const Color(0xffff6f91),
+            backgroundColor: Colors.white,
+            splashColor: Colors.white12,
+            borderRadius: 0,
+            minWidth: 248,
+            height: 41,
+            borderSideColor: Colors.white,
+          );
+        }
+      }),
     ];
   }
 
@@ -89,16 +88,17 @@ class RegistrationScreen extends AuthScreen {
     return [
       LinkButtonWidget(
           onClick: (BuildContext context) => {
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context){
-          return LoginScreen();
-          }), (r){
-          return false;
-          })},
+                Navigator.pushAndRemoveUntil(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
+                  return LoginScreen();
+                }), (r) {
+                  return false;
+                })
+              },
           color: Colors.white,
           splashColor: Colors.white38,
           height: 35,
-          text: 'Войти'
-      )
+          text: 'Войти')
     ];
   }
 }
