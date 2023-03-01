@@ -28,7 +28,8 @@ class LinkButtonWidget extends StatelessWidget {
   final Color splashColor;
   final double height;
 
-  const LinkButtonWidget({Key? key,
+  const LinkButtonWidget({
+    Key? key,
     required this.onClick,
     this.text = '',
     required this.color,
@@ -38,14 +39,23 @@ class LinkButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-      SizedBox(
+    return SizedBox(
         height: height,
         child: TextButton(
           onPressed: () => onClick(context),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black.withOpacity(0.00),
+          style: ButtonStyle(
+            overlayColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.pressed)) {
+                  return Colors.transparent;
+                }
+                return null;
+              },
+            ),
           ),
+          // style: ElevatedButton.styleFrom(
+          //   backgroundColor: Colors.black.withOpacity(0.00),
+          // ),
           child: Text(
             text,
             style: TextStyle(
@@ -59,7 +69,6 @@ class LinkButtonWidget extends StatelessWidget {
               height: 1.2,
             ),
           ),
-        )
-      );
+        ));
   }
 }
