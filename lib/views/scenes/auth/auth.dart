@@ -151,7 +151,7 @@ class AuthScreen extends StatelessWidget {
                                             margin: EdgeInsets.only(top: 4),
                                             child: Text(
                                               state.error.message,
-                                              style: TextStyles.title18Medium
+                                              style: TextStyles.text14SemiBold
                                                   ?.apply(
                                                       color: ColorStyles.red),
                                             ));
