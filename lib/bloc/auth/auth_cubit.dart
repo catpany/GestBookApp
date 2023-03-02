@@ -57,4 +57,24 @@ class AuthCubit extends Cubit<AuthState> {
 
     emit(AuthSuccess());
   }
+
+  Future<void> forgotPassword() async {
+    emit(AuthDataLoading());
+
+    Response response = await Api.forgotPassword({
+      'username': bindControllers['username'],
+    });
+
+    if (response.isError()) {
+      ErrorResponse errorResponse = response.getError();
+
+      if (response.statusCode == 200) {
+        emit(AuthError(errorResponse));
+      } else {
+        emit(AuthDataLoadingError(errorResponse.message));
+      }
+    }
+
+    emit(AuthSuccess());
+  }
 }
