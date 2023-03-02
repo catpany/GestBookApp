@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sigest/bloc/auth/login/login_cubit.dart';
 import 'package:sigest/views/scenes/auth/auth.dart';
 import 'package:sigest/views/scenes/auth/registration.dart';
 import 'package:sigest/views/styles.dart';
@@ -13,10 +12,6 @@ import '../../../bloc/auth/auth_cubit.dart';
 import '../../widgets/input.dart';
 
 class LoginScreen extends AuthScreen {
-  // final Map<String, TextEditingController> bindControllers = {
-  //   'login': TextEditingController(text: ''),
-  //   'password': TextEditingController(text: '')
-  // };
 
   LoginScreen({Key? key}) : super(
       key: key,
