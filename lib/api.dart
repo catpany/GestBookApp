@@ -64,6 +64,22 @@ class Api {
     });
   }
 
+  static Future<http.Response> forgotPassword(Object data) {
+    const body = {
+      'data': {
+        'code': 456122,
+      }
+    };
+
+    return Future<http.Response>.delayed(const Duration(seconds: 3), () {
+      return http.Response(
+        jsonEncode(body),
+        200,
+        request: http.Request('post', Uri.parse('http://localhost/' + _prefix + 'forgot-password')),
+      );
+    });
+  }
+
   static Future<http.Response> user(String userId) {
     return http.get(
       Uri.parse('http://localhost/' + _prefix + 'user/$userId'),
@@ -85,7 +101,7 @@ class ErrorResponse {
 extension ApiResponse on http.Response {
   bool isError() {
     if (200 == statusCode) {
-      if (body.contains('code')) {
+      if (body.contains('code') && body.contains('message')) {
         return true;
       }
 
@@ -98,7 +114,7 @@ extension ApiResponse on http.Response {
   ErrorResponse getError() {
     if (200 == statusCode) {
 
-      if (body.contains('code')) {
+      if (body.contains('code') && body.contains('message')) {
         final dynamic response = jsonDecode(body)['data'];
 
         log(response.toString());

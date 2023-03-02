@@ -88,12 +88,12 @@ class RegistrationScreen extends AuthScreen {
     return [
       LinkButtonWidget(
           onClick: (BuildContext context) => {
-                Navigator.pushAndRemoveUntil(context,
-                    MaterialPageRoute(builder: (BuildContext context) {
-                  return LoginScreen();
-                }), (r) {
-                  return false;
-                })
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return LoginScreen();
+                  }),
+                )
               },
           color: Colors.white,
           splashColor: Colors.white38,
