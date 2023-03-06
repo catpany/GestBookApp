@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/views/scenes/auth/login.dart';
 import 'package:sigest/views/scenes/auth/registration.dart';
+import 'package:sigest/views/scenes/auth/reset-password.dart';
 
 import '../../../bloc/auth/auth_cubit.dart';
 import '../../styles.dart';
@@ -24,6 +25,9 @@ class ForgotPasswordScreen extends AuthScreen {
   String get title => 'Восстановление пароля';
 
   @override
+  bool get showSocials => false;
+
+  @override
   List<TextFormFieldWidget> renderFields([Map<String, dynamic>? errors]) {
     return [
       TextFormFieldWidget(
@@ -40,7 +44,7 @@ class ForgotPasswordScreen extends AuthScreen {
   @override
   List<Widget> renderButtons() {
     return [
-      BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+      BlocConsumer<AuthCubit, AuthState>(builder: (context, state) {
         if (state is AuthDataLoading) {
           return const CircularProgressIndicator(color: ColorStyles.white);
         } else {
@@ -53,17 +57,27 @@ class ForgotPasswordScreen extends AuthScreen {
               context.read<AuthCubit>().forgotPassword();
               log('success!!');
             },
-            text: 'Сбросить пароль',
+            text: 'Получить код',
             color: const Color(0xffff6f91),
             backgroundColor: Colors.white,
             splashColor: Colors.white12,
-            borderRadius: 0,
             minWidth: 248,
             height: 41,
             borderSideColor: Colors.white,
           );
         }
-      }),
+      },
+        listener: (context, state) {
+          if (state is CodeSent) {
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return ResetPasswordScreen(params: {'username': state.username},);
+                }
+            )
+            );
+          }
+        },
+      ),
     ];
   }
 

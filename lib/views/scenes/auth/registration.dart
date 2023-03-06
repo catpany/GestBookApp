@@ -73,10 +73,8 @@ class RegistrationScreen extends AuthScreen {
             color: const Color(0xffff6f91),
             backgroundColor: Colors.white,
             splashColor: Colors.white12,
-            borderRadius: 0,
             minWidth: 248,
             height: 41,
-            borderSideColor: Colors.white,
           );
         }
       }),

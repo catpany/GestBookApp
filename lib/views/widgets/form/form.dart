@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:sigest/views/widgets/input.dart';
 
 class AuthForm extends StatelessWidget {
+  const AuthForm({Key? key}) : super(key: key);
+
 
   List<TextFormFieldWidget> renderFields() {
     return [];
