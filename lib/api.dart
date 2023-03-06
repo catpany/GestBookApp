@@ -80,6 +80,18 @@ class Api {
     });
   }
 
+  static Future<http.Response> resetPassword(Object data) {
+    const body = {};
+
+    return Future<http.Response>.delayed(const Duration(seconds: 3), () {
+      return http.Response(
+        jsonEncode(body),
+        200,
+        request: http.Request('post', Uri.parse('http://localhost/' + _prefix + 'reset-password')),
+      );
+    });
+  }
+
   static Future<http.Response> user(String userId) {
     return http.get(
       Uri.parse('http://localhost/' + _prefix + 'user/$userId'),

@@ -31,4 +31,22 @@ class AuthError extends AuthState {
   List<Object> get props => [error];
 }
 
+class CodeSent extends AuthState {
+  final String username;
+
+  CodeSent(this.username);
+
+  @override
+  List<Object> get props => [username];
+}
+
+class CodeResent extends AuthState {
+  final String message;
+
+  CodeResent(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class AuthSuccess extends AuthState {}

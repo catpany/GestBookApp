@@ -83,15 +83,15 @@ extension RegString on String {
   }
 
   bool isValidEmail() {
-    return RegExp(r"^[\w-._'+]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(this.trim());
+    return RegExp(r"^[\w-._'+]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(trim());
   }
 
   bool isValidPassword() {
     // return RegExp(r"^[a-z][A-Z][!#$%&'()*+,-./:;<=>?@\[\]^_`{|}~]$").hasMatch(this);
     bool hasUppercase = RegExp(r'[A-Z]').hasMatch(this);
-    bool hasDigits = new RegExp(r'[0-9]').hasMatch(this);
-    bool hasLowercase = new RegExp(r'[a-z]').hasMatch(this);
-    bool hasSpecialCharacters = new RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(this);
+    bool hasDigits = RegExp(r'[0-9]').hasMatch(this);
+    bool hasLowercase = RegExp(r'[a-z]').hasMatch(this);
+    bool hasSpecialCharacters = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(this);
 
     return hasDigits & hasUppercase & hasLowercase & hasSpecialCharacters;
   }

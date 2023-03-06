@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:sigest/models/user.dart';
 import 'package:sigest/views/scenes/auth/login.dart';
 
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import 'models/auth.dart';
 
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(UserModelAdapter());
+  Hive.registerAdapter(AuthModelAdapter());
   runApp(const MyApp());
 }
 

@@ -3,7 +3,7 @@ part of 'main_cubit.dart';
 @immutable
 abstract class MainState extends Equatable {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class MainInitial  extends MainState {}

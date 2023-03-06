@@ -23,6 +23,10 @@ class UserStock extends AbstractStock<UserModel?> {
     }
   }
 
+  void updateUser(String id, Object data) {
+
+  }
+
 }
 
 

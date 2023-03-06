@@ -55,29 +55,29 @@ class LoginScreen extends AuthScreen {
   @override
   List<Widget> renderButtons() {
     return [
-      BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
-        if (state is AuthDataLoading) {
-          return const CircularProgressIndicator(color: ColorStyles.white);
-        } else {
-          return ButtonWidget(
-            onClick: () {
-              if (!formKey.currentState!.validate()) {
-                return;
-              }
-              context.read<AuthCubit>().login();
-              log('success!!');
-            },
-            text: 'Войти',
-            color: const Color(0xffff6f91),
-            backgroundColor: Colors.white,
-            splashColor: Colors.white12,
-            borderRadius: 0,
-            minWidth: 248,
-            height: 41,
-            borderSideColor: Colors.white,
-          );
-        }
-      }),
+      BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, state) {
+          if (state is AuthDataLoading) {
+            return const CircularProgressIndicator(color: ColorStyles.white);
+          } else {
+            return ButtonWidget(
+              onClick: () {
+                if (!formKey.currentState!.validate()) {
+                  return;
+                }
+                context.read<AuthCubit>().login();
+                log('success!!');
+              },
+              text: 'Войти',
+              color: const Color(0xffff6f91),
+              backgroundColor: Colors.white,
+              splashColor: Colors.white12,
+              minWidth: 248,
+              height: 41,
+            );
+          }
+        },
+      ),
     ];
   }
 
