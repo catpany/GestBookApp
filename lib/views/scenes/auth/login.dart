@@ -10,6 +10,7 @@ import 'package:sigest/views/widgets/link_button.dart';
 
 import '../../../bloc/auth/auth_cubit.dart';
 import '../../widgets/input.dart';
+import 'activate-profile.dart';
 import 'forgot-password.dart';
 
 class LoginScreen extends AuthScreen {
@@ -55,7 +56,7 @@ class LoginScreen extends AuthScreen {
   @override
   List<Widget> renderButtons() {
     return [
-      BlocBuilder<AuthCubit, AuthState>(
+      BlocConsumer<AuthCubit, AuthState>(
         builder: (context, state) {
           if (state is AuthDataLoading) {
             return const CircularProgressIndicator(color: ColorStyles.white);
@@ -75,6 +76,18 @@ class LoginScreen extends AuthScreen {
               minWidth: 248,
               height: 41,
             );
+          }
+        },
+        listener: (context, state) {
+          if (state is NeedToActivate) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return ActivateProfileScreen(
+                params: {
+                  'username': state.username,
+                  'password': state.password
+                },
+              );
+            }));
           }
         },
       ),

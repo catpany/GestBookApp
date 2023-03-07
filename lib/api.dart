@@ -92,6 +92,18 @@ class Api {
     });
   }
 
+  static Future<http.Response> activateProfile(Object data) {
+    const body = {};
+
+    return Future<http.Response>.delayed(const Duration(seconds: 3), () {
+      return http.Response(
+        jsonEncode(body),
+        200,
+        request: http.Request('post', Uri.parse('http://localhost/' + _prefix + 'activate-profile')),
+      );
+    });
+  }
+
   static Future<http.Response> user(String userId) {
     return http.get(
       Uri.parse('http://localhost/' + _prefix + 'user/$userId'),

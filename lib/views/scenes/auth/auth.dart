@@ -16,6 +16,7 @@ class AuthScreen extends StatelessWidget {
   final String title = '';
   final String socialsText = '';
   final bool showSocials = true;
+
   // final bool showAppBar = true;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final Map<String, TextEditingController> bindControllers;
@@ -233,6 +234,14 @@ class AuthScreen extends StatelessWidget {
                       }
                       return const SizedBox.shrink();
                     }),
+                    BlocListener<AuthCubit, AuthState>(
+                        listener: (context, state) {
+                      if (state is AuthSuccess) {
+                        log('auth success!');
+                      }
+                    },
+                    child: SizedBox.shrink()
+                    )
                   ],
                 ),
               )),

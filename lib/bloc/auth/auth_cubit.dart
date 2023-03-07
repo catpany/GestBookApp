@@ -9,8 +9,6 @@ import 'package:sigest/api.dart';
 import 'package:sigest/bloc/main_cubit.dart';
 import 'package:sigest/stock/auth.dart';
 
-import '../../models/auth.dart';
-
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -26,8 +24,10 @@ class AuthCubit extends Cubit<AuthState> {
       'password': bindControllers['password']
     });
 
-    if (!isErrorDetected(response)) {
-      await setTokens(response);
+    if (isNeedToActivate(response)) {
+      emit(NeedToActivate(bindControllers['login']!.text,
+          bindControllers['password']!.text));
+    } else if (!isErrorDetected(response)) {
       emit(AuthSuccess());
     }
   }
@@ -41,7 +41,10 @@ class AuthCubit extends Cubit<AuthState> {
       'password': bindControllers['password']
     });
 
-    if (!isErrorDetected(response)) {
+    if (isNeedToActivate(response)) {
+      emit(NeedToActivate(bindControllers['username']!.text,
+          bindControllers['password']!.text));
+    } else if (!isErrorDetected(response)) {
       emit(AuthSuccess());
     }
   }
@@ -60,7 +63,6 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> resendCode(String username) async {
     emit(AuthDataLoading());
-    log(username);
 
     Response response = await Api.forgotPassword({
       'username': username,
@@ -80,13 +82,31 @@ class AuthCubit extends Cubit<AuthState> {
     });
 
     if (!isErrorDetected(response)) {
-      response = await Api.login({
-        'login': username,
-        'password': bindControllers['password']
-      });
+      response = await Api.login(
+          {'login': username, 'password': bindControllers['password']});
 
-      await setTokens(response);
-      emit(AuthSuccess());
+      if (!isErrorDetected(response)) {
+        await setTokens(response);
+        emit(AuthSuccess());
+      }
+    }
+  }
+
+  Future<void> activateProfile(String username, String password) async {
+    emit(AuthDataLoading());
+
+    Response response = await Api.activateProfile({
+      'code': username,
+    });
+
+    if (!isErrorDetected(response)) {
+      response = await Api.login(
+          {'login': username, 'password': password});
+
+      if (!isErrorDetected(response)) {
+        await setTokens(response);
+        emit(AuthSuccess());
+      }
     }
   }
 
@@ -95,12 +115,28 @@ class AuthCubit extends Cubit<AuthState> {
       ErrorResponse errorResponse = response.getError();
 
       if (response.statusCode == 200) {
-        emit(AuthError(errorResponse));
+        if (ApiErrors.notActivated != Api.codeErrors[errorResponse.code]) {
+          emit(AuthError(errorResponse));
+        }
       } else {
         emit(AuthDataLoadingError(errorResponse.message));
       }
 
       return true;
+    }
+
+    return false;
+  }
+
+  bool isNeedToActivate(Response response) {
+    if (response.isError()) {
+      ErrorResponse errorResponse = response.getError();
+
+      if (response.statusCode == 200) {
+        if (ApiErrors.notActivated == Api.codeErrors[errorResponse.code]) {
+          return true;
+        }
+      }
     }
 
     return false;
@@ -113,5 +149,4 @@ class AuthCubit extends Cubit<AuthState> {
 
     auth.setAuth(decodedToken['id'], data);
   }
-
 }

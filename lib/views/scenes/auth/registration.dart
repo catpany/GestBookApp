@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sigest/views/scenes/auth/activate-profile.dart';
 import 'package:sigest/views/scenes/auth/auth.dart';
 import 'package:sigest/views/scenes/auth/login.dart';
 
@@ -20,7 +21,7 @@ class RegistrationScreen extends AuthScreen {
         });
 
   @override
-  String get socialsText => 'или \войдите с помощью';
+  String get socialsText => 'или \nвойдите с помощью';
 
   @override
   String get title => 'Регистрация';
@@ -57,27 +58,41 @@ class RegistrationScreen extends AuthScreen {
   @override
   List<Widget> renderButtons() {
     return [
-      BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
-        if (state is AuthDataLoading) {
-          return const CircularProgressIndicator(color: ColorStyles.white);
-        } else {
-          return ButtonWidget(
-            onClick: () {
-              if (!formKey.currentState!.validate()) {
-                return;
-              }
-              context.read<AuthCubit>().register();
-              log('success!!');
-            },
-            text: 'Зарегистрироваться',
-            color: const Color(0xffff6f91),
-            backgroundColor: Colors.white,
-            splashColor: Colors.white12,
-            minWidth: 248,
-            height: 41,
-          );
-        }
-      }),
+      BlocConsumer<AuthCubit, AuthState>(
+        builder: (context, state) {
+          if (state is AuthDataLoading) {
+            return const CircularProgressIndicator(color: ColorStyles.white);
+          } else {
+            return ButtonWidget(
+              onClick: () {
+                if (!formKey.currentState!.validate()) {
+                  return;
+                }
+                context.read<AuthCubit>().register();
+                log('success!!');
+              },
+              text: 'Зарегистрироваться',
+              color: const Color(0xffff6f91),
+              backgroundColor: Colors.white,
+              splashColor: Colors.white12,
+              minWidth: 248,
+              height: 41,
+            );
+          }
+        },
+        listener: (context, state) {
+          if (state is NeedToActivate) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return ActivateProfileScreen(
+                params: {
+                  'username': state.username,
+                  'password': state.password
+                },
+              );
+            }));
+          }
+        },
+      ),
     ];
   }
 

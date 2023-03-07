@@ -49,4 +49,14 @@ class CodeResent extends AuthState {
   List<Object> get props => [message];
 }
 
+class NeedToActivate extends AuthState {
+  final String username;
+  final String password;
+
+  NeedToActivate(this.username, this.password);
+
+  @override
+  List<Object> get props => [username, password];
+}
+
 class AuthSuccess extends AuthState {}
