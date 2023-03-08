@@ -7,6 +7,7 @@ import 'package:sigest/views/scenes/auth/auth.dart';
 import 'package:sigest/views/scenes/auth/login.dart';
 
 import '../../../bloc/auth/auth_cubit.dart';
+import '../../../bloc/main_cubit.dart';
 import '../../styles.dart';
 import '../../widgets/button.dart';
 import '../../widgets/input.dart';
@@ -58,9 +59,9 @@ class RegistrationScreen extends AuthScreen {
   @override
   List<Widget> renderButtons() {
     return [
-      BlocConsumer<AuthCubit, AuthState>(
+      BlocConsumer<AuthCubit, MainState>(
         builder: (context, state) {
-          if (state is AuthDataLoading) {
+          if (state is DataLoading) {
             return const CircularProgressIndicator(color: ColorStyles.white);
           } else {
             return ButtonWidget(

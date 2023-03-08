@@ -14,6 +14,6 @@ class AuthStock {
   Future<AuthModel?> getAuth(String id) async {
     final authBox = await Hive.openBox<AuthModel>('auth');
 
-    return authBox.get(id);
+    return authBox.getAt(0);
   }
 }

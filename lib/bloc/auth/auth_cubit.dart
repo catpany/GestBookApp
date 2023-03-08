@@ -11,13 +11,13 @@ import 'package:sigest/stock/auth.dart';
 
 part 'auth_state.dart';
 
-class AuthCubit extends Cubit<AuthState> {
+class AuthCubit extends MainCubit {
   final Map<String, TextEditingController> bindControllers;
 
-  AuthCubit(this.bindControllers) : super(AuthInitial());
+  AuthCubit(this.bindControllers) : super();
 
   Future<void> login() async {
-    emit(AuthDataLoading());
+    emit(DataLoading());
 
     Response response = await Api.login({
       'login': bindControllers['login'],
@@ -33,7 +33,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> register() async {
-    emit(AuthDataLoading());
+    emit(DataLoading());
 
     Response response = await Api.register({
       'username': bindControllers['username'],
@@ -41,16 +41,14 @@ class AuthCubit extends Cubit<AuthState> {
       'password': bindControllers['password']
     });
 
-    if (isNeedToActivate(response)) {
+    if (!isErrorDetected(response)){
       emit(NeedToActivate(bindControllers['username']!.text,
           bindControllers['password']!.text));
-    } else if (!isErrorDetected(response)) {
-      emit(AuthSuccess());
     }
   }
 
   Future<void> forgotPassword() async {
-    emit(AuthDataLoading());
+    emit(DataLoading());
 
     Response response = await Api.forgotPassword({
       'username': bindControllers['username']?.text,
@@ -62,7 +60,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> resendCode(String username) async {
-    emit(AuthDataLoading());
+    emit(DataLoading());
 
     Response response = await Api.forgotPassword({
       'username': username,
@@ -74,7 +72,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> resetPassword(String username) async {
-    emit(AuthDataLoading());
+    emit(DataLoading());
 
     Response response = await Api.resetPassword({
       'code': bindControllers['code'],
@@ -93,7 +91,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> activateProfile(String username, String password) async {
-    emit(AuthDataLoading());
+    emit(DataLoading());
 
     Response response = await Api.activateProfile({
       'code': username,
@@ -108,24 +106,6 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthSuccess());
       }
     }
-  }
-
-  bool isErrorDetected(Response response) {
-    if (response.isError()) {
-      ErrorResponse errorResponse = response.getError();
-
-      if (response.statusCode == 200) {
-        if (ApiErrors.notActivated != Api.codeErrors[errorResponse.code]) {
-          emit(AuthError(errorResponse));
-        }
-      } else {
-        emit(AuthDataLoadingError(errorResponse.message));
-      }
-
-      return true;
-    }
-
-    return false;
   }
 
   bool isNeedToActivate(Response response) {

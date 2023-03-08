@@ -9,6 +9,7 @@ import 'package:sigest/views/scenes/auth/registration.dart';
 import 'package:sigest/views/scenes/auth/reset-password.dart';
 
 import '../../../bloc/auth/auth_cubit.dart';
+import '../../../bloc/main_cubit.dart';
 import '../../styles.dart';
 import '../../widgets/button.dart';
 import '../../widgets/input.dart';
@@ -46,9 +47,9 @@ class ActivateProfileScreen extends AuthScreen {
   @override
   List<Widget> renderButtons() {
     return [
-      BlocBuilder<AuthCubit, AuthState>(
+      BlocBuilder<AuthCubit, MainState>(
         builder: (context, state) {
-          if (state is AuthDataLoading) {
+          if (state is DataLoading) {
             return const CircularProgressIndicator(color: ColorStyles.white);
           } else {
             return Container(
@@ -74,8 +75,8 @@ class ActivateProfileScreen extends AuthScreen {
           }
         },
       ),
-      BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
-        if (state is AuthDataLoading) {
+      BlocBuilder<AuthCubit, MainState>(builder: (context, state) {
+        if (state is DataLoading) {
           return const SizedBox.shrink();
         } else {
           return ButtonWidget(

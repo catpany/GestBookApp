@@ -9,8 +9,10 @@ import 'package:sigest/views/widgets/notification.dart';
 
 import '../../../api.dart';
 import '../../../bloc/auth/auth_cubit.dart';
+import '../../../bloc/main_cubit.dart';
 import '../../styles.dart';
 import '../../widgets/input.dart';
+import '../splash.dart';
 
 class AuthScreen extends StatelessWidget {
   final String title = '';
@@ -144,9 +146,9 @@ class AuthScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Container(
-                                      child: BlocBuilder<AuthCubit, AuthState>(
+                                      child: BlocBuilder<AuthCubit, MainState>(
                                         builder: (context, state) {
-                                          if (state is AuthError &&
+                                          if (state is Error &&
                                               Api.codeErrors[
                                                       state.error.code] ==
                                                   ApiErrors.validationError) {
@@ -163,9 +165,9 @@ class AuthScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Container(
-                                      child: BlocBuilder<AuthCubit, AuthState>(
+                                      child: BlocBuilder<AuthCubit, MainState>(
                                         builder: (context, state) {
-                                          if (state is AuthError) {
+                                          if (state is Error) {
                                             return Container(
                                                 margin: EdgeInsets.only(top: 4),
                                                 child: Text(
@@ -225,19 +227,26 @@ class AuthScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    BlocBuilder<AuthCubit, AuthState>(
+                    BlocBuilder<AuthCubit, MainState>(
                         builder: (context, state) {
                       if (state is CodeResent) {
                         return NotificationWidget(text: state.message);
-                      } else if (state is AuthDataLoadingError) {
+                      } else if (state is DataLoadingError) {
                         return NotificationWidget(text: state.message);
                       }
                       return const SizedBox.shrink();
                     }),
-                    BlocListener<AuthCubit, AuthState>(
+                    BlocListener<AuthCubit, MainState>(
                         listener: (context, state) {
                       if (state is AuthSuccess) {
                         log('auth success!');
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                            return SplashScreen();
+                          }),
+                          (Route<dynamic> route) => false,
+                        );
                       }
                     },
                     child: SizedBox.shrink()

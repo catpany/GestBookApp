@@ -9,6 +9,7 @@ import 'package:sigest/views/widgets/button.dart';
 import 'package:sigest/views/widgets/link_button.dart';
 
 import '../../../bloc/auth/auth_cubit.dart';
+import '../../../bloc/main_cubit.dart';
 import '../../widgets/input.dart';
 import 'activate-profile.dart';
 import 'forgot-password.dart';
@@ -56,9 +57,9 @@ class LoginScreen extends AuthScreen {
   @override
   List<Widget> renderButtons() {
     return [
-      BlocConsumer<AuthCubit, AuthState>(
+      BlocConsumer<AuthCubit, MainState>(
         builder: (context, state) {
-          if (state is AuthDataLoading) {
+          if (state is DataLoading) {
             return const CircularProgressIndicator(color: ColorStyles.white);
           } else {
             return ButtonWidget(

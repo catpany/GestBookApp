@@ -31,7 +31,7 @@ class TextStyles {
   static const TextStyle? title18Medium = TextStyle(
     color: ColorStyles.white,
     fontSize: 18.0,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
     fontFamily: 'Jost',
     letterSpacing: 1.2,
@@ -41,6 +41,15 @@ class TextStyles {
     color: ColorStyles.white,
     fontSize: 21.0,
     fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+    fontFamily: 'Jost',
+    letterSpacing: 1.2,
+  );
+
+  static const TextStyle? title60Bold = TextStyle(
+    color: ColorStyles.white,
+    fontSize: 60.0,
+    fontWeight: FontWeight.w700,
     fontStyle: FontStyle.normal,
     fontFamily: 'Jost',
     letterSpacing: 1.2,
