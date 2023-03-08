@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
+import 'package:sigest/stock/auth.dart';
+
+import 'models/auth.dart';
 
 enum ApiErrors {
   usernameTaken,
@@ -48,12 +51,7 @@ class Api {
   }
 
   static Future<http.Response> register(Object data) {
-    const body = {
-      'data': {
-        'code': 108,
-        'message': 'User not activated',
-      }
-    };
+    const body = {};
 
     return Future<http.Response>.delayed(const Duration(seconds: 3), () {
       return http.Response(
@@ -104,13 +102,28 @@ class Api {
     });
   }
 
-  static Future<http.Response> user(String userId) {
-    return http.get(
-      Uri.parse('http://localhost/' + _prefix + 'user/$userId'),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8;',
-      },
-    );
+  static Future<http.Response> user(String userId) async {
+    AuthModel? auth = await AuthStock().getAuth(userId);
+    const body = {
+      'username': 'user N',
+      'email': 'aaa@mail.ru'
+    };
+
+    // return http.get(
+    //   Uri.parse('http://localhost/' + _prefix + 'user/$userId'),
+    //   headers: {
+    //     'Content-Type': 'application/json; charset=UTF-8;',
+    //     'Bearer': auth.access_token,
+    //   },
+    // );
+
+    return Future<http.Response>.delayed(const Duration(seconds: 1), () {
+      return http.Response(
+        jsonEncode(body),
+        200,
+        request: http.Request('get', Uri.parse('http://localhost/' + _prefix + 'user-info')),
+      );
+    });
   }
 }
 
