@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.1 <3.0.0"
+  sdk: ">=2.16.1 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -44,6 +44,9 @@ dependencies:
   equatable: ^2.0.5
   async: ^2.9.0
   jwt_decoder: ^2.0.1
+  flutter_svg: ^1.1.6
+  hexcolor: ^2.0.4
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +83,10 @@ flutter:
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
+
+  assets:
+    - assets/images/triangle.svg
+    - assets/images/unit.svg
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

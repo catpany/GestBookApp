@@ -5,7 +5,7 @@ part 'user.g.dart';
 
 @JsonSerializable()
 @HiveType(typeId: 0)
-class UserModel {
+class UserModel  extends HiveObject {
   @HiveField(0)
   String id;
   @HiveField(1)

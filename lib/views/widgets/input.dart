@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -49,7 +51,6 @@ class TextFormFieldWidget extends StatefulWidget {
 
 class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
   double bottomPaddingToError = 20;
-  // bool _showText;
 
   Widget renderIcon() {
     if (widget.type == FieldType.password) {

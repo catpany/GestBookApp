@@ -1,23 +1,27 @@
 import 'package:flutter/cupertino.dart';
+import 'package:hive/hive.dart';
 import 'package:stock/stock.dart';
 
 import 'hive_source_of_truth.dart';
 
 abstract class AbstractStock<T> {
-  final String name;
-  late Fetcher<String, dynamic> fetcher;
+  final String name = 'default';
+  // final T mockObj;
+  late Fetcher<String, T> fetcher;
 
-  late HiveSourceOfTruth sourceOfTruth;
-  late Stock stock;
+  late HiveSourceOfTruth<String, T> sourceOfTruth;
+  late Stock<String, T> stock;
 
-  AbstractStock({required this.name}) {
-    fetcher = Fetcher.ofFuture<String, dynamic>((key) => load(key));
+  AbstractStock() {
+    fetcher = Fetcher.ofFuture<String, T>((key) => load(key));
     sourceOfTruth = HiveSourceOfTruth(name: name);
-    stock = Stock<String, dynamic>(
+    stock = Stock<String, T>(
       fetcher: fetcher,
       sourceOfTruth: sourceOfTruth,
     );
   }
+
+
 
   @protected
   Future<T> load(String key);
