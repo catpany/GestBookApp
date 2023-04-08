@@ -27,9 +27,9 @@ class _UnitsScreenState extends State<UnitsScreen> {
 
   PreferredSizeWidget _renderTopBar() {
     return PreferredSize(
-        preferredSize: const Size(double.infinity, 50),
+        preferredSize: const Size(double.infinity, 51),
         child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 13),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 33),
             decoration: const BoxDecoration(
                 color: ColorStyles.white,
                 border: Border(
@@ -38,15 +38,21 @@ class _UnitsScreenState extends State<UnitsScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(children: const [
-                  Icon(Icons.star_rounded, color: ColorStyles.yellow, size: 27),
-                  Text('40/20'),
-                ]),
-                Row(children: const [
-                  Icon(Icons.local_fire_department,
+                Container(
+                  child: const Icon(Icons.star_rounded,
+                      color: ColorStyles.yellow, size: 27),
+                  margin: const EdgeInsets.only(right: 2),
+                ),
+                Container(
+                  child: Text('40/20', style: TextStyles.text14Regular),
+                  margin: const EdgeInsets.only(right: 30),
+                ),
+                Container(
+                  child: const Icon(Icons.local_fire_department,
                       color: ColorStyles.orange, size: 27),
-                  Text('14'),
-                ]),
+                  margin: const EdgeInsets.only(right: 2),
+                ),
+                Text('14', style: TextStyles.text14Regular),
               ],
             )));
   }
@@ -67,11 +73,10 @@ class _UnitsScreenState extends State<UnitsScreen> {
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.white,
             appBar: _renderTopBar(),
-            body:
-                BlocConsumer<UnitsCubit, MainState>(listener: (context, state) {
-            }, builder: (context, state) {
-              return _renderBody(context, state);
-            })));
+            body: BlocConsumer<UnitsCubit, MainState>(
+                listener: (context, state) {},
+                builder: (context, state) {
+                  return _renderBody(context, state);
+                })));
   }
 }
-

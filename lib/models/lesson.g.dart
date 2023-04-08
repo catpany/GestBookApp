@@ -22,13 +22,16 @@ class LessonModelAdapter extends TypeAdapter<LessonModel> {
       name: fields[2] as String,
       progress: fields[3] as double,
       icon: fields[4] as int,
+      levelsTotal: fields[5] as int,
+      levelsFinished: fields[6] as int,
+      theory: fields[7] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, LessonModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,7 +41,14 @@ class LessonModelAdapter extends TypeAdapter<LessonModel> {
       ..writeByte(3)
       ..write(obj.progress)
       ..writeByte(4)
-      ..write(obj.icon);
+      ..write(obj.icon)
+      ..writeByte(5)
+      ..write(obj.levelsTotal)
+      ..writeByte(6)
+      ..write(obj.levelsFinished)
+      ..writeByte(7)
+      ..write(obj.theory)
+    ;
   }
 
   @override
@@ -57,12 +67,15 @@ class LessonModelAdapter extends TypeAdapter<LessonModel> {
 // **************************************************************************
 
 LessonModel _$LessonModelFromJson(Map<String, dynamic> json) => LessonModel(
-      id: json['id'] as String,
-      order: json['order'] as int,
-      name: json['name'] as String,
-      progress: (json['progress'] as num).toDouble(),
-      icon: json['icon'] as int,
-    );
+    id: json['id'] as String,
+    order: json['order'] as int,
+    name: json['name'] as String,
+    progress: (json['progress'] as num).toDouble(),
+    icon: json['icon'] as int,
+  levelsTotal: json['levels_total'] as int,
+  levelsFinished: json['levels_finished'] as int,
+  theory: json['theory'] as bool,
+);
 
 Map<String, dynamic> _$LessonModelToJson(LessonModel instance) =>
     <String, dynamic>{
@@ -71,4 +84,7 @@ Map<String, dynamic> _$LessonModelToJson(LessonModel instance) =>
       'name': instance.name,
       'progress': instance.progress,
       'icon': instance.icon,
+      'levels_total': instance.levelsTotal,
+      'levels_finished': instance.levelsFinished,
+      'theory': instance.theory
     };

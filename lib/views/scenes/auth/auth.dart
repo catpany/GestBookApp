@@ -86,14 +86,15 @@ class AuthScreen extends StatelessWidget {
   }
 
   Widget _renderTitleBlock() {
-    return Container(
-      constraints: const BoxConstraints(
-        minWidth: double.infinity,
-      ),
-      margin: const EdgeInsets.only(bottom: 13),
-      child: Text(title.toUpperCase(),
-          textAlign: TextAlign.center, style: TextStyles.title21Regular),
-    );
+    return SizedBox(
+        width: double.infinity,
+        height: 100,
+        child: Container(
+          alignment: Alignment.bottomCenter,
+          margin: const EdgeInsets.only(bottom: 13),
+          child: Text(title.toUpperCase(),
+              textAlign: TextAlign.center, style: TextStyles.title21Regular),
+        ));
   }
 
   Form _renderFormBlock(BuildContext context, MainState state) {
@@ -103,7 +104,7 @@ class AuthScreen extends StatelessWidget {
             constraints: const BoxConstraints(
               minWidth: double.infinity,
             ),
-            margin: const EdgeInsets.symmetric(horizontal: 33),
+            margin: const EdgeInsets.only(right: 33, left: 33),
             padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 22),
             decoration: const BoxDecoration(
                 color: Color(0x4dffffff),
@@ -156,7 +157,6 @@ class AuthScreen extends StatelessWidget {
 
   Widget _renderLinksBlock() {
     return Container(
-      // width: 260,
       margin: const EdgeInsets.only(left: 33, right: 33, top: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -206,8 +206,8 @@ class AuthScreen extends StatelessWidget {
   @override
   build(BuildContext context) {
     return BlocProvider(
-        create: (_) => AuthCubit(bindControllers),
-        child: Container(
+      create: (_) => AuthCubit(bindControllers),
+      child: Container(
           decoration: const BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.topRight,
@@ -222,28 +222,32 @@ class AuthScreen extends StatelessWidget {
               ),
               body: SafeArea(
                 child: BlocConsumer<AuthCubit, MainState>(
-    listener: (context, state) {
-    navigateTo(context, state);
-    }, builder: (context, state) {
-    return Stack(
-    alignment: Alignment.center,
-    children: [
-    Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: <Widget>[
-    _renderTitleBlock(),
-    _renderFormBlock(context, state),
-    _renderLinksBlock(),
-    // _renderSocialsBlock().,
-    ] +
-    _renderSocialsBlock(),
-    ),
-    _renderNotificationBlock(state),
-    ],
-    );
-    }),
-              ) )),
+                    listener: (context, state) {
+                  navigateTo(context, state);
+                }, builder: (context, state) {
+                  return Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      _renderTitleBlock(),
+                      Container(
+                        margin: const EdgeInsets.only(top: 100),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                                  _renderFormBlock(context, state),
+                                  _renderLinksBlock(),
+                                ] +
+                                _renderSocialsBlock(),
+                          ),
+                        ),
+                      ),
+                      _renderNotificationBlock(state),
+                    ],
+                  );
+                }),
+              ))),
     );
   }
 }

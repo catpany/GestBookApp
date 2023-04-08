@@ -94,7 +94,7 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
       constraints: const BoxConstraints(
         minHeight: 0,
         minWidth: 200,
-        maxHeight: 73,
+        maxHeight: 93,
         maxWidth: 248,
       ),
       child:
@@ -131,7 +131,8 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
                         right: 14.0
                     ),
                     isDense: true,
-                    errorStyle: TextStyles.text14Regular?.apply(color: ColorStyles.red),
+                    errorMaxLines: 2,
+                    errorStyle: TextStyles.text14Regular?.apply(color: ColorStyles.red, overflow: TextOverflow.visible),
                     errorBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: ColorStyles.red,

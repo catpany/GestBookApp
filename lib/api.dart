@@ -142,9 +142,12 @@ class Api {
               {
                 'id': 'lesson-1-1',
                 'order': 1,
-                'name': 'семья',
+                'name': 'новый1',
                 'progress': 0.1,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 4,
+                'theory': true,
               },
               {
                 'id': 'lesson-1-2',
@@ -152,6 +155,9 @@ class Api {
                 'name': 'животные',
                 'progress': 0.2,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 4,
+                'theory': true,
               },
               {
                 'id': 'lesson-1-3',
@@ -159,6 +165,9 @@ class Api {
                 'name': 'работа',
                 'progress': 0.0,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 4,
+                'theory': false,
               },
               {
                 'id': 'lesson-1-4',
@@ -166,6 +175,9 @@ class Api {
                 'name': 'природа',
                 'progress': 0.6,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 5,
+                'theory': false,
               },
               {
                 'id': 'lesson-1-5',
@@ -173,6 +185,9 @@ class Api {
                 'name': 'одежда',
                 'progress': 0.0,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 0,
+                'theory': true,
               },
               {
                 'id': 'lesson-1-6',
@@ -180,6 +195,9 @@ class Api {
                 'name': 'семья',
                 'progress': 0.1,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 0,
+                'theory': false,
               },
               {
                 'id': 'lesson-1-7',
@@ -187,6 +205,9 @@ class Api {
                 'name': 'животные',
                 'progress': 0.2,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 0,
+                'theory': true,
               },
               {
                 'id': 'lesson-1-8',
@@ -194,6 +215,9 @@ class Api {
                 'name': 'работа',
                 'progress': 0.0,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 5,
+                'theory': true,
               },
               {
                 'id': 'lesson-1-9',
@@ -201,6 +225,9 @@ class Api {
                 'name': 'природа',
                 'progress': 0.6,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 5,
+                'theory': false,
               },
               {
                 'id': 'lesson-1-10',
@@ -208,6 +235,9 @@ class Api {
                 'name': 'одежда',
                 'progress': 0.0,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 0,
+                'theory': true,
               },
               {
                 'id': 'lesson-1-11',
@@ -215,6 +245,9 @@ class Api {
                 'name': 'семья',
                 'progress': 0.1,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 2,
+                'theory': true,
               },
               {
                 'id': 'lesson-1-12',
@@ -222,6 +255,9 @@ class Api {
                 'name': 'животные',
                 'progress': 0.2,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 2,
+                'theory': true,
               },
               {
                 'id': 'lesson-1-13',
@@ -229,6 +265,9 @@ class Api {
                 'name': 'работа',
                 'progress': 0.0,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 2,
+                'theory': true,
               },
               {
                 'id': 'lesson-1-14',
@@ -236,6 +275,9 @@ class Api {
                 'name': 'природа',
                 'progress': 0.6,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 2,
+                'theory': true,
               },
               {
                 'id': 'lesson-1-15',
@@ -243,6 +285,9 @@ class Api {
                 'name': 'одежда',
                 'progress': 0.0,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 2,
+                'theory': true,
               },
             ]
           },
@@ -256,6 +301,9 @@ class Api {
                 'name': 'хобби',
                 'progress': 0.1,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 2,
+                'theory': true,
               },
               {
                 'id': 'lesson-2-2',
@@ -263,6 +311,9 @@ class Api {
                 'name': 'фильмы',
                 'progress': 0.2,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 2,
+                'theory': true,
               },
               {
                 'id': 'lesson-2-3',
@@ -270,6 +321,9 @@ class Api {
                 'name': 'невский',
                 'progress': 0.0,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 2,
+                'theory': true,
               },
               {
                 'id': 'lesson-2-4',
@@ -277,6 +331,9 @@ class Api {
                 'name': 'гачи',
                 'progress': 0.5,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 2,
+                'theory': true,
               },
               {
                 'id': 'lesson-2-5',
@@ -284,6 +341,9 @@ class Api {
                 'name': 'глаголы',
                 'progress': 1.0,
                 'icon': 0xf036b,
+                'levels_total': 5,
+                'levels_finished': 2,
+                'theory': true,
               },
             ]
           }

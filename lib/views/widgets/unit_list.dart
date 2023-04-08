@@ -13,6 +13,7 @@ import 'package:sigest/views/styles.dart';
 import 'package:sigest/views/widgets/lesson.dart';
 
 import '../../models/lesson.dart';
+import 'lesson_dialog.dart';
 
 class UnitListWidget extends StatefulWidget {
   final UnitsModel units;
@@ -135,8 +136,6 @@ class _UnitListState extends State<UnitListWidget> {
   }
 
   Widget _renderTitle() {
-    print('render title 1');
-    print(title.isEmpty.toString());
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
@@ -155,7 +154,6 @@ class _UnitListState extends State<UnitListWidget> {
   }
 
   List<Widget> _renderTitleBlock() {
-    print('render title');
     return [
       _renderLeftButton(),
       _renderTitle(),
@@ -163,8 +161,18 @@ class _UnitListState extends State<UnitListWidget> {
     ];
   }
 
+  Future<void> _renderLessonDialog(LessonModel lesson) async {
+    await showDialog<void>(
+        context: context,
+      builder: (BuildContext context) {
+          return LessonDialog(
+            lesson: lesson
+          );
+      }
+    );
+  }
+
   Widget _renderLessonList(List<LessonModel> lessons, int unitIndex) {
-    print('load grid');
     return GridView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
@@ -183,7 +191,9 @@ class _UnitListState extends State<UnitListWidget> {
               progress: lessons[index].progress,
               icon: lessons[index].icon,
               color: palette.palette[unitIndex].color,
-              title: lessons[index].name);
+              title: lessons[index].name,
+              onTap: () => _renderLessonDialog(lessons[index]),
+          );
         });
   }
 

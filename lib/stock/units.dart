@@ -1,7 +1,5 @@
 import 'dart:developer';
 
-import 'package:hive/hive.dart';
-import 'package:sigest/models/unit.dart';
 import 'package:sigest/stock/abstract_stock.dart';
 import 'package:stock/stock.dart';
 
@@ -24,7 +22,6 @@ class UnitsRepository extends AbstractStock<UnitsModel> {
       }
 
       response = response as SuccessResponse;
-      // log(response.data['units'].toString());
       return UnitsModel.fromJson({'items': response.data['units']});
     }
   }

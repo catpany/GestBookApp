@@ -60,6 +60,7 @@ class ResetPasswordScreen extends AuthScreen {
         titleColor: Colors.white,
         hintText: 'Новый пароль',
         type: FieldType.password,
+        obscureText: true,
         controller: bindControllers['password'],
         rules: 'required|min:8|max:22|password',
         errorText: errors != null ? errors['password'] : null,
@@ -108,11 +109,12 @@ class ResetPasswordScreen extends AuthScreen {
     return [
       LinkButtonWidget(
           onClick: (BuildContext context) => {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (BuildContext context) {
                     return LoginScreen();
                   }),
+                  (r) => false,
                 )
               },
           color: Colors.white,
@@ -121,11 +123,12 @@ class ResetPasswordScreen extends AuthScreen {
           text: 'Войти'),
       LinkButtonWidget(
           onClick: (BuildContext context) => {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (BuildContext context) {
                     return RegistrationScreen();
                   }),
+                  (r) => false,
                 )
               },
           color: Colors.white,

@@ -9,8 +9,9 @@ class LessonWidget extends StatefulWidget {
   final int icon;
   final Color color;
   final String title;
+  final Function onTap;
 
-  const LessonWidget({Key? key, required this.progress, required this.icon, required this.color, required this.title}) : super(key: key);
+  const LessonWidget({Key? key, required this.progress, required this.icon, required this.color, required this.title, required this.onTap}) : super(key: key);
 
   @override
   _LessonWidgetState createState() => _LessonWidgetState();
@@ -31,7 +32,7 @@ class _LessonWidgetState extends State<LessonWidget> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {log('press on lesson');},
+      onPressed: () {log('press on lesson'); widget.onTap();},
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -20,7 +20,7 @@ part 'splash_state.dart';
 class SplashCubit extends MainCubit {
   late Map<String, AbstractStock> repos;
   late Map<String, StreamSubscription<StockResponse<dynamic>>> streams;
-  late Map<String, HiveObject> data;
+  late int loaded = 0;
 
   SplashCubit() : super() {
     init();
@@ -32,31 +32,27 @@ class SplashCubit extends MainCubit {
       'user': UserRepository()
     };
     streams = {};
-    data={};
   }
 
-  void load(){
+  Future<void> load() async {
     emit(DataLoading());
     repos.forEach((name, rep) {
-      streams[name] = rep.stock
-          .stream(rep.name, refresh: true)
-          .listen((StockResponse<dynamic> stockResponse) {
-        stockResponse.when(
-          onLoading: (_) => {},
-          onData: (_, data) {
-            this.data[rep.name] = data;
-            checkIfLoadFinished();
-          },
-          onError: (_, error, stacktrace) {
+      log('update ' + rep.name.toString());
+      rep.stock.fresh(rep.name)
+          .onError((error, stacktrace) {
+            log(error.toString());
+            log(stacktrace.toString());
             checkForError(error);
-          },
-        );
+      })
+          .whenComplete(() {
+        loaded ++;
+              checkIfLoadFinished();
       });
     });
   }
 
   void checkIfLoadFinished() {
-    if (repos.length == data.length) {
+    if (repos.length == loaded) {
       emit(SplashLoaded());
     }
   }
