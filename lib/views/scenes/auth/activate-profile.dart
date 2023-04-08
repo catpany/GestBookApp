@@ -14,6 +14,7 @@ import '../../styles.dart';
 import '../../widgets/button.dart';
 import '../../widgets/input.dart';
 import '../../widgets/link_button.dart';
+import '../splash.dart';
 import 'auth.dart';
 
 class ActivateProfileScreen extends AuthScreen {
@@ -31,7 +32,20 @@ class ActivateProfileScreen extends AuthScreen {
   Map<String, dynamic> params;
 
   @override
-  List<TextFormFieldWidget> renderFields([Map<String, dynamic>? errors]) {
+  void navigateTo(BuildContext context, state) {
+    if (state is AuthSuccess) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) {
+          return SplashScreen();
+        }),
+        (Route<dynamic> route) => false,
+      );
+    }
+  }
+
+  @override
+  List<Widget> renderFields([Map<String, dynamic>? errors]) {
     return [
       TextFormFieldWidget(
         title: 'Код',
@@ -45,54 +59,41 @@ class ActivateProfileScreen extends AuthScreen {
   }
 
   @override
-  List<Widget> renderButtons() {
+  List<Widget> renderButtons(BuildContext context) {
     return [
-      BlocBuilder<AuthCubit, MainState>(
-        builder: (context, state) {
-          if (state is DataLoading) {
-            return const CircularProgressIndicator(color: ColorStyles.white);
-          } else {
-            return Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: ButtonWidget(
-                  onClick: () {
-                    if (!formKey.currentState!.validate()) {
-                      return;
-                    }
-
-                    context.read<AuthCubit>().activateProfile(
-                        params['username'], params['password']);
-                    log('success!!');
-                  },
-                  text: 'Активировать',
-                  color: const Color(0xffff6f91),
-                  backgroundColor: Colors.white,
-                  splashColor: Colors.white12,
-                  minWidth: 248,
-                  height: 41,
-                  borderSideColor: Colors.white,
-                ));
-          }
-        },
-      ),
-      BlocBuilder<AuthCubit, MainState>(builder: (context, state) {
-        if (state is DataLoading) {
-          return const SizedBox.shrink();
-        } else {
-          return ButtonWidget(
+      Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          child: ButtonWidget(
             onClick: () {
-              context.read<AuthCubit>().resendCode(params['username']);
+              if (!formKey.currentState!.validate()) {
+                return;
+              }
+
+              context
+                  .read<AuthCubit>()
+                  .activateProfile(params['username'], params['password']);
+              log('success!!');
             },
-            text: 'Отправить код еще раз',
-            color: Colors.white,
-            backgroundColor: Colors.transparent,
+            text: 'Активировать',
+            color: const Color(0xffff6f91),
+            backgroundColor: Colors.white,
             splashColor: Colors.white12,
             minWidth: 248,
             height: 41,
             borderSideColor: Colors.white,
-          );
-        }
-      }),
+          )),
+      ButtonWidget(
+        onClick: () {
+          context.read<AuthCubit>().resendCode(params['username']);
+        },
+        text: 'Отправить код еще раз',
+        color: Colors.white,
+        backgroundColor: Colors.transparent,
+        splashColor: Colors.white12,
+        minWidth: 248,
+        height: 41,
+        borderSideColor: Colors.white,
+      )
     ];
   }
 

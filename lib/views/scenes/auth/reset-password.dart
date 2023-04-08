@@ -13,6 +13,7 @@ import '../../styles.dart';
 import '../../widgets/button.dart';
 import '../../widgets/input.dart';
 import '../../widgets/link_button.dart';
+import '../splash.dart';
 import 'login.dart';
 
 class ResetPasswordScreen extends AuthScreen {
@@ -31,7 +32,20 @@ class ResetPasswordScreen extends AuthScreen {
   Map<String, dynamic> params;
 
   @override
-  List<TextFormFieldWidget> renderFields([Map<String, dynamic>? errors]) {
+  void navigateTo(BuildContext context, MainState state) {
+    if (state is AuthSuccess) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) {
+          return SplashScreen();
+        }),
+        (Route<dynamic> route) => false,
+      );
+    }
+  }
+
+  @override
+  List<Widget> renderFields([Map<String, dynamic>? errors]) {
     return [
       TextFormFieldWidget(
         title: 'Код',
@@ -46,6 +60,7 @@ class ResetPasswordScreen extends AuthScreen {
         titleColor: Colors.white,
         hintText: 'Новый пароль',
         type: FieldType.password,
+        obscureText: true,
         controller: bindControllers['password'],
         rules: 'required|min:8|max:22|password',
         errorText: errors != null ? errors['password'] : null,
@@ -54,53 +69,38 @@ class ResetPasswordScreen extends AuthScreen {
   }
 
   @override
-  List<Widget> renderButtons() {
+  List<Widget> renderButtons(BuildContext context) {
     return [
-      BlocBuilder<AuthCubit, MainState>(
-        builder: (context, state) {
-          if (state is DataLoading) {
-            return const CircularProgressIndicator(color: ColorStyles.white);
-          } else {
-            return Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              child: ButtonWidget(
-                onClick: () {
-                  if (!formKey.currentState!.validate()) {
-                    return;
-                  }
-
-                  context.read<AuthCubit>().resetPassword(params['username']);
-                  log('success!!');
-                },
-                text: 'Сбросить пароль',
-                color: ColorStyles.accent,
-                backgroundColor: ColorStyles.white,
-                splashColor: Colors.white12,
-                minWidth: 248,
-                height: 41,
-              )
-            );
-          }
-        },
-      ),
-      BlocBuilder<AuthCubit, MainState>(builder: (context, state) {
-        if (state is DataLoading) {
-          return const SizedBox.shrink();
-        } else {
-          return ButtonWidget(
+      Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          child: ButtonWidget(
             onClick: () {
-              context.read<AuthCubit>().resendCode(params['username']);
+              if (!formKey.currentState!.validate()) {
+                return;
+              }
+
+              context.read<AuthCubit>().resetPassword(params['username']);
+              log('success!!');
             },
-            text: 'Отправить код еще раз',
-            color: Colors.white,
-            backgroundColor: Colors.transparent,
+            text: 'Сбросить пароль',
+            color: ColorStyles.accent,
+            backgroundColor: ColorStyles.white,
             splashColor: Colors.white12,
             minWidth: 248,
             height: 41,
-            borderSideColor: Colors.white,
-          );
-        }
-      }),
+          )),
+      ButtonWidget(
+        onClick: () {
+          context.read<AuthCubit>().resendCode(params['username']);
+        },
+        text: 'Отправить код еще раз',
+        color: Colors.white,
+        backgroundColor: Colors.transparent,
+        splashColor: Colors.white12,
+        minWidth: 248,
+        height: 41,
+        borderSideColor: Colors.white,
+      )
     ];
   }
 
@@ -109,11 +109,12 @@ class ResetPasswordScreen extends AuthScreen {
     return [
       LinkButtonWidget(
           onClick: (BuildContext context) => {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (BuildContext context) {
                     return LoginScreen();
                   }),
+                  (r) => false,
                 )
               },
           color: Colors.white,
@@ -122,11 +123,12 @@ class ResetPasswordScreen extends AuthScreen {
           text: 'Войти'),
       LinkButtonWidget(
           onClick: (BuildContext context) => {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (BuildContext context) {
                     return RegistrationScreen();
                   }),
+                  (r) => false,
                 )
               },
           color: Colors.white,

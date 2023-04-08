@@ -8,7 +8,6 @@ import 'package:sigest/views/scenes/auth/login.dart';
 
 import '../../../bloc/auth/auth_cubit.dart';
 import '../../../bloc/main_cubit.dart';
-import '../../styles.dart';
 import '../../widgets/button.dart';
 import '../../widgets/input.dart';
 import '../../widgets/link_button.dart';
@@ -28,7 +27,18 @@ class RegistrationScreen extends AuthScreen {
   String get title => 'Регистрация';
 
   @override
-  List<TextFormFieldWidget> renderFields([Map<String, dynamic>? errors]) {
+  void navigateTo(BuildContext context, MainState state) {
+    if (state is NeedToActivate) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return ActivateProfileScreen(
+          params: {'username': state.username, 'password': state.password},
+        );
+      }));
+    }
+  }
+
+  @override
+  List<Widget> renderFields([Map<String, dynamic>? errors]) {
     return [
       TextFormFieldWidget(
         title: 'Имя пользователя',
@@ -57,43 +67,23 @@ class RegistrationScreen extends AuthScreen {
   }
 
   @override
-  List<Widget> renderButtons() {
+  List<Widget> renderButtons(BuildContext context) {
     return [
-      BlocConsumer<AuthCubit, MainState>(
-        builder: (context, state) {
-          if (state is DataLoading) {
-            return const CircularProgressIndicator(color: ColorStyles.white);
-          } else {
-            return ButtonWidget(
-              onClick: () {
-                if (!formKey.currentState!.validate()) {
-                  return;
-                }
-                context.read<AuthCubit>().register();
-                log('success!!');
-              },
-              text: 'Зарегистрироваться',
-              color: const Color(0xffff6f91),
-              backgroundColor: Colors.white,
-              splashColor: Colors.white12,
-              minWidth: 248,
-              height: 41,
-            );
+      ButtonWidget(
+        onClick: () {
+          if (!formKey.currentState!.validate()) {
+            return;
           }
+          context.read<AuthCubit>().register();
+          log('success!!');
         },
-        listener: (context, state) {
-          if (state is NeedToActivate) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ActivateProfileScreen(
-                params: {
-                  'username': state.username,
-                  'password': state.password
-                },
-              );
-            }));
-          }
-        },
-      ),
+        text: 'Зарегистрироваться',
+        color: const Color(0xffff6f91),
+        backgroundColor: Colors.white,
+        splashColor: Colors.white12,
+        minWidth: 248,
+        height: 41,
+      )
     ];
   }
 

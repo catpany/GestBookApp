@@ -19,7 +19,7 @@ class Validator {
             break;
           }
 
-          return 'Только латинница и -._\'+';
+          return 'Только латиница и -._\'+';
         case 'email':
           if (value.isValidEmail()) {
             break;
@@ -86,17 +86,22 @@ extension RegString on String {
     return RegExp(r"^[\w-._'+]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(trim());
   }
 
+  bool notHasSpaces() {
+    return RegExp(r'^\S*$').hasMatch(this);
+  }
+
   bool isValidPassword() {
     // return RegExp(r"^[a-z][A-Z][!#$%&'()*+,-./:;<=>?@\[\]^_`{|}~]$").hasMatch(this);
     bool hasUppercase = RegExp(r'[A-Z]').hasMatch(this);
     bool hasDigits = RegExp(r'[0-9]').hasMatch(this);
     bool hasLowercase = RegExp(r'[a-z]').hasMatch(this);
     bool hasSpecialCharacters = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(this);
+    bool notHasSpaces = this.notHasSpaces();
 
-    return hasDigits & hasUppercase & hasLowercase & hasSpecialCharacters;
+    return hasDigits & hasUppercase & hasLowercase & hasSpecialCharacters & notHasSpaces;
   }
 
   bool isValidUsername() {
-    return RegExp(r"^\w*[-._'+]*$").hasMatch(this);
+    return RegExp(r"^\w*[-._'+]*$").hasMatch(trim()) & notHasSpaces();
   }
 }

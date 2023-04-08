@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/views/scenes/auth/auth.dart';
 import 'package:sigest/views/scenes/auth/registration.dart';
-import 'package:sigest/views/styles.dart';
 import 'package:sigest/views/widgets/button.dart';
 import 'package:sigest/views/widgets/link_button.dart';
 
 import '../../../bloc/auth/auth_cubit.dart';
 import '../../../bloc/main_cubit.dart';
 import '../../widgets/input.dart';
+import '../splash.dart';
 import 'activate-profile.dart';
 import 'forgot-password.dart';
 
@@ -28,7 +28,26 @@ class LoginScreen extends AuthScreen {
   String get title => 'Вход';
 
   @override
-  List<TextFormFieldWidget> renderFields([Map<String, dynamic>? errors]) {
+  void navigateTo(BuildContext context, MainState state) {
+    if (state is AuthSuccess) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) {
+          return SplashScreen();
+        }),
+        (Route<dynamic> route) => false,
+      );
+    } else if (state is NeedToActivate) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return ActivateProfileScreen(
+          params: {'username': state.username, 'password': state.password},
+        );
+      }));
+    }
+  }
+
+  @override
+  List<Widget> renderFields([Map<String, dynamic>? errors]) {
     return [
       TextFormFieldWidget(
         title: 'Логин',
@@ -55,43 +74,23 @@ class LoginScreen extends AuthScreen {
   }
 
   @override
-  List<Widget> renderButtons() {
+  List<Widget> renderButtons(BuildContext context) {
     return [
-      BlocConsumer<AuthCubit, MainState>(
-        builder: (context, state) {
-          if (state is DataLoading) {
-            return const CircularProgressIndicator(color: ColorStyles.white);
-          } else {
-            return ButtonWidget(
-              onClick: () {
-                if (!formKey.currentState!.validate()) {
-                  return;
-                }
-                context.read<AuthCubit>().login();
-                log('success!!');
-              },
-              text: 'Войти',
-              color: const Color(0xffff6f91),
-              backgroundColor: Colors.white,
-              splashColor: Colors.white12,
-              minWidth: 248,
-              height: 41,
-            );
+      ButtonWidget(
+        onClick: () {
+          if (!formKey.currentState!.validate()) {
+            return;
           }
+          context.read<AuthCubit>().login();
+          log('success!!');
         },
-        listener: (context, state) {
-          if (state is NeedToActivate) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ActivateProfileScreen(
-                params: {
-                  'username': state.username,
-                  'password': state.password
-                },
-              );
-            }));
-          }
-        },
-      ),
+        text: 'Войти',
+        color: const Color(0xffff6f91),
+        backgroundColor: Colors.white,
+        splashColor: Colors.white12,
+        minWidth: 248,
+        height: 41,
+      )
     ];
   }
 

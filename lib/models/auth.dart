@@ -5,7 +5,7 @@ part 'auth.g.dart';
 
 @JsonSerializable()
 @HiveType(typeId: 1)
-class AuthModel {
+class AuthModel  extends HiveObject {
   @HiveField(0)
   String access_token;
   @HiveField(1)

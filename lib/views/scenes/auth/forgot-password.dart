@@ -29,7 +29,18 @@ class ForgotPasswordScreen extends AuthScreen {
   bool get showSocials => false;
 
   @override
-  List<TextFormFieldWidget> renderFields([Map<String, dynamic>? errors]) {
+  void navigateTo(BuildContext context, MainState state) {
+    if (state is CodeSent) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return ResetPasswordScreen(
+          params: {'username': state.username},
+        );
+      }));
+    }
+  }
+
+  @override
+  List<Widget> renderFields([Map<String, dynamic>? errors]) {
     return [
       TextFormFieldWidget(
         title: 'Имя пользователя',
@@ -43,42 +54,25 @@ class ForgotPasswordScreen extends AuthScreen {
   }
 
   @override
-  List<Widget> renderButtons() {
+  List<Widget> renderButtons(BuildContext context) {
     return [
-      BlocConsumer<AuthCubit, MainState>(builder: (context, state) {
-        if (state is DataLoading) {
-          return const CircularProgressIndicator(color: ColorStyles.white);
-        } else {
-          return ButtonWidget(
-            onClick: () {
-              if (!formKey.currentState!.validate()) {
-                return;
-              }
-
-              context.read<AuthCubit>().forgotPassword();
-              log('success!!');
-            },
-            text: 'Получить код',
-            color: const Color(0xffff6f91),
-            backgroundColor: Colors.white,
-            splashColor: Colors.white12,
-            minWidth: 248,
-            height: 41,
-            borderSideColor: Colors.white,
-          );
-        }
-      },
-        listener: (context, state) {
-          if (state is CodeSent) {
-            Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return ResetPasswordScreen(params: {'username': state.username},);
-                }
-            )
-            );
+      ButtonWidget(
+        onClick: () {
+          if (!formKey.currentState!.validate()) {
+            return;
           }
+
+          context.read<AuthCubit>().forgotPassword();
+          log('success!!');
         },
-      ),
+        text: 'Получить код',
+        color: const Color(0xffff6f91),
+        backgroundColor: Colors.white,
+        splashColor: Colors.white12,
+        minWidth: 248,
+        height: 41,
+        borderSideColor: Colors.white,
+      )
     ];
   }
 

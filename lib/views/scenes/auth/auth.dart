@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,25 +10,21 @@ import '../../../api.dart';
 import '../../../bloc/auth/auth_cubit.dart';
 import '../../../bloc/main_cubit.dart';
 import '../../styles.dart';
-import '../../widgets/input.dart';
-import '../splash.dart';
 
 class AuthScreen extends StatelessWidget {
   final String title = '';
   final String socialsText = '';
   final bool showSocials = true;
-
-  // final bool showAppBar = true;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final Map<String, TextEditingController> bindControllers;
 
   AuthScreen({Key? key, required this.bindControllers}) : super(key: key);
 
-  List<TextFormFieldWidget> renderFields([Map<String, dynamic>? errors]) {
+  List<Widget> renderFields([Map<String, dynamic>? errors]) {
     return [];
   }
 
-  List<Widget> renderButtons() {
+  List<Widget> renderButtons(BuildContext context) {
     return [];
   }
 
@@ -90,11 +85,129 @@ class AuthScreen extends StatelessWidget {
     ];
   }
 
+  Widget _renderTitleBlock() {
+    return SizedBox(
+        width: double.infinity,
+        height: 100,
+        child: Container(
+          alignment: Alignment.bottomCenter,
+          margin: const EdgeInsets.only(bottom: 13),
+          child: Text(title.toUpperCase(),
+              textAlign: TextAlign.center, style: TextStyles.title21Regular),
+        ));
+  }
+
+  Form _renderFormBlock(BuildContext context, MainState state) {
+    return Form(
+        key: formKey,
+        child: Container(
+            constraints: const BoxConstraints(
+              minWidth: double.infinity,
+            ),
+            margin: const EdgeInsets.only(right: 33, left: 33),
+            padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 22),
+            decoration: const BoxDecoration(
+                color: Color(0x4dffffff),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: _renderFormFieldsBlock(context, state) +
+                  [_renderFormButtonsBlock(context, state)],
+            )));
+  }
+
+  List<Widget> _renderFormFieldsBlock(BuildContext context, MainState state) {
+    if (state is Error) {
+      if (Api.codeErrors[state.error.code] == ApiErrors.validationError) {
+        return renderFields(state.error.messages);
+      } else {
+        return renderFields() +
+            [
+              Container(
+                  margin: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    state.error.message,
+                    style: TextStyles.text14SemiBold
+                        ?.apply(color: ColorStyles.red),
+                  ))
+            ];
+      }
+    }
+    return renderFields();
+  }
+
+  Widget _renderFormButtonsBlock(BuildContext context, MainState state) {
+    if (state is DataLoading) {
+      return const Padding(
+          padding: EdgeInsets.only(
+            top: 44,
+          ),
+          child: CircularProgressIndicator(color: ColorStyles.white));
+    }
+
+    return Padding(
+        padding: const EdgeInsets.only(
+          top: 44,
+        ),
+        child: Column(
+          children: renderButtons(context),
+        ));
+  }
+
+  Widget _renderLinksBlock() {
+    return Container(
+      margin: const EdgeInsets.only(left: 33, right: 33, top: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: renderLinks(),
+      ),
+    );
+  }
+
+  List<Widget> _renderSocialsBlock() {
+    return [
+      Container(
+        margin: const EdgeInsets.only(
+          top: 14,
+        ),
+        child: Text(
+          socialsText,
+          textAlign: TextAlign.center,
+          style: TextStyles.text14Regular?.apply(color: ColorStyles.white),
+        ),
+      ),
+      Container(
+        constraints: const BoxConstraints(
+          maxWidth: 142,
+        ),
+        margin: const EdgeInsets.only(top: 27),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: showSocials ? renderSocials() : [],
+        ),
+      )
+    ];
+  }
+
+  Widget _renderNotificationBlock(state) {
+    if (state is CodeResent) {
+      return NotificationWidget(text: state.message);
+    } else if (state is DataLoadingError) {
+      return NotificationWidget(text: state.message);
+    }
+    return const SizedBox.shrink();
+  }
+
+  void navigateTo(BuildContext context, MainState state) {}
+
   @override
   build(BuildContext context) {
     return BlocProvider(
-        create: (_) => AuthCubit(bindControllers),
-        child: Container(
+      create: (_) => AuthCubit(bindControllers),
+      child: Container(
           decoration: const BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.topRight,
@@ -107,153 +220,34 @@ class AuthScreen extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
               ),
-              body: Theme(
-                data: Theme.of(context).copyWith(
-                  primaryColor: ColorStyles.white,
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          constraints: const BoxConstraints(
-                            minWidth: double.infinity,
-                          ),
-                          margin: const EdgeInsets.only(bottom: 13),
-                          child: Text(title.toUpperCase(),
-                              textAlign: TextAlign.center,
-                              style: TextStyles.title21Regular),
-                        ),
-                        Form(
-                            key: formKey,
-                            child: Container(
-                                constraints: const BoxConstraints(
-                                  minWidth: double.infinity,
-                                ),
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 33),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 28, horizontal: 22),
-                                decoration: const BoxDecoration(
-                                    color: Color(0x4dffffff),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Container(
-                                      child: BlocBuilder<AuthCubit, MainState>(
-                                        builder: (context, state) {
-                                          if (state is Error &&
-                                              Api.codeErrors[
-                                                      state.error.code] ==
-                                                  ApiErrors.validationError) {
-                                            return Column(
-                                              children: renderFields(
-                                                  state.error.messages),
-                                            );
-                                          } else {
-                                            return Column(
-                                              children: renderFields(),
-                                            );
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                    Container(
-                                      child: BlocBuilder<AuthCubit, MainState>(
-                                        builder: (context, state) {
-                                          if (state is Error) {
-                                            return Container(
-                                                margin: EdgeInsets.only(top: 4),
-                                                child: Text(
-                                                  state.error.message,
-                                                  style: TextStyles
-                                                      .text14SemiBold
-                                                      ?.apply(
-                                                          color:
-                                                              ColorStyles.red),
-                                                ));
-                                          } else {
-                                            return const SizedBox.shrink();
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                    Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 44,
-                                        ),
-                                        child: Column(
-                                          children: renderButtons(),
-                                        )),
-                                  ],
-                                ))),
-                        Container(
-                          // width: 260,
-                          margin: const EdgeInsets.only(
-                              left: 33, right: 33, top: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: renderLinks(),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(
-                            top: 14,
-                          ),
-                          child: Text(
-                            socialsText,
-                            textAlign: TextAlign.center,
-                            style: TextStyles.text14Regular
-                                ?.apply(color: ColorStyles.white),
-                          ),
-                        ),
-                        Container(
-                          constraints: const BoxConstraints(
-                            maxWidth: 142,
-                          ),
-                          margin: const EdgeInsets.only(top: 27),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              body: SafeArea(
+                child: BlocConsumer<AuthCubit, MainState>(
+                    listener: (context, state) {
+                  navigateTo(context, state);
+                }, builder: (context, state) {
+                  return Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      _renderTitleBlock(),
+                      Container(
+                        margin: const EdgeInsets.only(top: 100),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: showSocials ? renderSocials() : [],
+                            children: <Widget>[
+                                  _renderFormBlock(context, state),
+                                  _renderLinksBlock(),
+                                ] +
+                                _renderSocialsBlock(),
                           ),
                         ),
-                      ],
-                    ),
-                    BlocBuilder<AuthCubit, MainState>(
-                        builder: (context, state) {
-                      if (state is CodeResent) {
-                        return NotificationWidget(text: state.message);
-                      } else if (state is DataLoadingError) {
-                        return NotificationWidget(text: state.message);
-                      }
-                      return const SizedBox.shrink();
-                    }),
-                    BlocListener<AuthCubit, MainState>(
-                        listener: (context, state) {
-                      if (state is AuthSuccess) {
-                        log('auth success!');
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                            return SplashScreen();
-                          }),
-                          (Route<dynamic> route) => false,
-                        );
-                      }
-                    },
-                    child: SizedBox.shrink()
-                    )
-                  ],
-                ),
-              )),
-        ));
+                      ),
+                      _renderNotificationBlock(state),
+                    ],
+                  );
+                }),
+              ))),
+    );
   }
 }
