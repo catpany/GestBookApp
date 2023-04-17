@@ -9,7 +9,7 @@ import 'package:sigest/stock/abstract_stock.dart';
 import 'package:sigest/stock/units.dart';
 import 'package:stock/stock.dart';
 
-import '../../api.dart';
+import '../../api/api.dart';
 import '../../models/unit.dart';
 import '../../models/units.dart';
 import '../../stock/user.dart';
@@ -18,48 +18,35 @@ import '../main_cubit.dart';
 part 'splash_state.dart';
 
 class SplashCubit extends MainCubit {
-  late Map<String, AbstractStock> repos;
-  late Map<String, StreamSubscription<StockResponse<dynamic>>> streams;
-  late int loaded = 0;
+  SplashCubit() : super();
 
-  SplashCubit() : super() {
-    init();
-  }
+  @override
+  List<String> get preloadStores => ['user', 'units'];
 
-  void init() {
-    repos = {
-      'units': UnitsRepository(),
-      'user': UserRepository()
-    };
-    streams = {};
-  }
-
+  @override
   Future<void> load() async {
     emit(DataLoading());
-    repos.forEach((name, rep) {
-      log('update ' + rep.name.toString());
-      rep.stock.fresh(rep.name)
-          .onError((error, stacktrace) {
-            log(error.toString());
-            log(stacktrace.toString());
-            checkForError(error);
-      })
-          .whenComplete(() {
-        loaded ++;
-              checkIfLoadFinished();
-      });
+    store.reloadStatic().onError((error, stackTrace) {
+      log(error.toString());
+      log(stackTrace.toString());
+      checkForError(error);
+    }).whenComplete(() {
+      // loaded = ;
+      // checkIfLoadFinished();
+      log('static data loaded');
+      emit(DataLoaded());
     });
-  }
-
-  void checkIfLoadFinished() {
-    if (repos.length == loaded) {
-      emit(SplashLoaded());
-    }
-  }
-
-  void dispose() {
-    for(var stream in streams.values) {
-      stream.cancel();
-    }
+    // repos.forEach((name, rep) {
+    //   log('update ' + rep.name.toString());
+    //   rep.stock.fresh(rep.name).onError((error, stacktrace) {
+    //     log(error.toString());
+    //     log(stacktrace.toString());
+    //     checkForError(error);
+    //   }).whenComplete(() {
+    //     log('complete');
+    //     loaded++;
+    //     checkIfLoadFinished();
+    //   });
+    // });
   }
 }

@@ -19,7 +19,7 @@ class UnitModelAdapter extends TypeAdapter<UnitModel> {
     return UnitModel(
       id: fields[0] as String,
       order: fields[1] as int,
-      lessons: (fields[2] ?? []).cast<LessonModel>(),
+      lessons: (fields[2] as List).cast<LessonModel>(),
     );
   }
 
@@ -53,9 +53,10 @@ class UnitModelAdapter extends TypeAdapter<UnitModel> {
 UnitModel _$UnitModelFromJson(Map<String, dynamic> json) => UnitModel(
       id: json['id'] as String,
       order: json['order'] as int,
-      lessons: (json['lessons'] as List<dynamic>)
-          .map((e) => LessonModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      lessons: (json['lessons'] as List<dynamic>?)
+              ?.map((e) => LessonModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
 
 Map<String, dynamic> _$UnitModelToJson(UnitModel instance) => <String, dynamic>{

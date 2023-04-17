@@ -13,6 +13,7 @@ class UnitModel extends HiveObject {
   String id;
   @HiveField(1)
   int order;
+  @JsonKey(defaultValue: [])
   @HiveField(2)
   List<LessonModel> lessons;
 

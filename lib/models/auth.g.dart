@@ -17,8 +17,8 @@ class AuthModelAdapter extends TypeAdapter<AuthModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AuthModel(
-      access_token: fields[0] as String,
-      refresh_token: fields[1] as String,
+      accessToken: fields[0] as String,
+      refreshToken: (fields[1] as Map).cast<String, String>(),
     );
   }
 
@@ -27,9 +27,9 @@ class AuthModelAdapter extends TypeAdapter<AuthModel> {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.access_token)
+      ..write(obj.accessToken)
       ..writeByte(1)
-      ..write(obj.refresh_token);
+      ..write(obj.refreshToken);
   }
 
   @override
@@ -48,11 +48,14 @@ class AuthModelAdapter extends TypeAdapter<AuthModel> {
 // **************************************************************************
 
 AuthModel _$AuthModelFromJson(Map<String, dynamic> json) => AuthModel(
-      access_token: json['access_token'] as String,
-      refresh_token: json['refresh_token'] as String,
+      accessToken: json['access_token'] as String? ?? '',
+      refreshToken: (json['refresh_token'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, e as String),
+          ) ??
+          {},
     );
 
 Map<String, dynamic> _$AuthModelToJson(AuthModel instance) => <String, dynamic>{
-      'access_token': instance.access_token,
-      'refresh_token': instance.refresh_token,
+      'access_token': instance.accessToken,
+      'refresh_token': instance.refreshToken,
     };

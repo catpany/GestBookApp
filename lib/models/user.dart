@@ -10,6 +10,7 @@ class UserModel  extends HiveObject {
   String id;
   @HiveField(1)
   String username;
+  @JsonKey(defaultValue: '')
   @HiveField(2)
   String email;
 

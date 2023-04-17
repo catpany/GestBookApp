@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
+import 'package:sigest/locator.dart';
 import 'package:sigest/models/user.dart';
 import 'package:sigest/views/scenes/auth/login.dart';
 
@@ -13,14 +15,16 @@ import 'models/unit.dart';
 import 'models/units.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  await initLocator(dev);
+
   Hive.registerAdapter(UserModelAdapter());
   Hive.registerAdapter(AuthModelAdapter());
   Hive.registerAdapter(LessonModelAdapter());
   Hive.registerAdapter(UnitModelAdapter());
   Hive.registerAdapter(UnitsModelAdapter());
 
-  WidgetsFlutterBinding.ensureInitialized();
   cacheAssets();
 
   runApp(const MyApp());

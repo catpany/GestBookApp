@@ -9,6 +9,7 @@ part 'units.g.dart';
 @JsonSerializable()
 @HiveType(typeId: 4)
 class UnitsModel extends HiveObject {
+  @JsonKey(defaultValue: [])
   @HiveField(0)
   List<UnitModel> items;
 

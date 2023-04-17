@@ -12,7 +12,9 @@ class HiveSourceOfTruth<String, T> extends CachedSourceOfTruth<String, T> {
   @override
   @protected
   Stream<T?> reader(String key) async* {
-    final Box box = Hive.isBoxOpen(name.toString())? Hive.box(name.toString()) : await Hive.openBox(name.toString());
+    final Box box = Hive.box<T>(name.toString());
+    // log();
+    // Hive.isBoxOpen(name.toString())? Hive.box(name.toString()) : await Hive.openBox(name.toString());
     // Read data from an non-stream source
     var value = box.get(key);
     setCachedValue(key, value);
@@ -22,7 +24,8 @@ class HiveSourceOfTruth<String, T> extends CachedSourceOfTruth<String, T> {
   @override
   @protected
   Future<void> write(String key, T? value) async {
-    final Box box = Hive.isBoxOpen(name.toString())? Hive.box(name.toString()) : await Hive.openBox(name.toString());
+    final Box box = Hive.box<T>(name.toString());
+    // Hive.isBoxOpen(name.toString())? Hive.box(name.toString()) : await Hive.openBox(name.toString());
     box.put(key, value);
     await super.write(key, value);
   }

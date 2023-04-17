@@ -53,7 +53,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
 UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       id: json['id'] as String,
       username: json['username'] as String,
-      email: json['email'] as String,
+      email: json['email'] as String? ?? '',
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{

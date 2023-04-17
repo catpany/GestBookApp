@@ -47,8 +47,7 @@ class LessonModelAdapter extends TypeAdapter<LessonModel> {
       ..writeByte(6)
       ..write(obj.levelsFinished)
       ..writeByte(7)
-      ..write(obj.theory)
-    ;
+      ..write(obj.theory);
   }
 
   @override
@@ -67,15 +66,15 @@ class LessonModelAdapter extends TypeAdapter<LessonModel> {
 // **************************************************************************
 
 LessonModel _$LessonModelFromJson(Map<String, dynamic> json) => LessonModel(
-    id: json['id'] as String,
-    order: json['order'] as int,
-    name: json['name'] as String,
-    progress: (json['progress'] as num).toDouble(),
-    icon: json['icon'] as int,
-  levelsTotal: json['levels_total'] as int,
-  levelsFinished: json['levels_finished'] as int,
-  theory: json['theory'] as bool,
-);
+      id: json['id'] as String,
+      order: json['order'] as int,
+      name: json['name'] as String,
+      progress: (json['progress'] as num).toDouble(),
+      icon: json['icon'] as int,
+      levelsTotal: json['levels_total'] as int,
+      levelsFinished: json['levels_finished'] as int,
+      theory: json['theory'] as bool,
+    );
 
 Map<String, dynamic> _$LessonModelToJson(LessonModel instance) =>
     <String, dynamic>{
@@ -86,5 +85,5 @@ Map<String, dynamic> _$LessonModelToJson(LessonModel instance) =>
       'icon': instance.icon,
       'levels_total': instance.levelsTotal,
       'levels_finished': instance.levelsFinished,
-      'theory': instance.theory
+      'theory': instance.theory,
     };

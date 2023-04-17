@@ -1,28 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
+import 'package:sigest/api/abstract_api.dart';
+import 'package:sigest/locator.dart';
 import 'package:stock/stock.dart';
 
+import '../api/params.dart';
+import 'abstract_repository.dart';
 import 'hive_source_of_truth.dart';
 
 abstract class AbstractStock<T> {
-  final String name = 'default';
-  // final T mockObj;
   late Fetcher<String, T> fetcher;
-
-  late HiveSourceOfTruth<String, T> sourceOfTruth;
+  late CachedSourceOfTruth<String, T> sourceOfTruth;
   late Stock<String, T> stock;
 
-  AbstractStock() {
-    fetcher = Fetcher.ofFuture<String, T>((key) => load(key));
-    sourceOfTruth = HiveSourceOfTruth(name: name);
-    stock = Stock<String, T>(
-      fetcher: fetcher,
-      sourceOfTruth: sourceOfTruth,
-    );
-  }
-
-
+  // AbstractStock() {
+  //   fetcher = Fetcher.ofFuture<String, T>((key) => loadModel(key));
+  //   sourceOfTruth = HiveSourceOfTruth(name: name);
+  //   stock = Stock<String, T>(
+  //     fetcher: fetcher,
+  //     sourceOfTruth: sourceOfTruth,
+  //   );
+  //   // api = locator<AbstractApi>();
+  // }
 
   @protected
-  Future<T> load(String key);
+  Future<T> loadModel(String key);
 }

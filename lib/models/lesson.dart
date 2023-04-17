@@ -18,8 +18,10 @@ class LessonModel extends HiveObject {
   double progress;
   @HiveField(4)
   int icon;
+  @JsonKey(name: 'levels_total')
   @HiveField(5)
   int levelsTotal;
+  @JsonKey(name: 'levels_finished')
   @HiveField(6)
   int levelsFinished;
   @HiveField(7)

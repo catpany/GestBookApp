@@ -58,8 +58,8 @@ class _UnitsScreenState extends State<UnitsScreen> {
   }
 
   Widget _renderBody(BuildContext context, MainState state) {
-    if (state is UnitsLoaded && cubit.getUnits() != null) {
-      return UnitListWidget(units: cubit.getUnits() as UnitsModel);
+    if (state is DataLoaded) {
+      return UnitListWidget(units: cubit.store.units.units);
     }
 
     return const SizedBox.shrink();

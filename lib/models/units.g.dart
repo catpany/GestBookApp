@@ -17,7 +17,7 @@ class UnitsModelAdapter extends TypeAdapter<UnitsModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return UnitsModel(
-      items: (fields[0] ?? []).cast<UnitModel>(),
+      items: (fields[0] as List).cast<UnitModel>(),
     );
   }
 
@@ -45,9 +45,10 @@ class UnitsModelAdapter extends TypeAdapter<UnitsModel> {
 // **************************************************************************
 
 UnitsModel _$UnitsModelFromJson(Map<String, dynamic> json) => UnitsModel(
-      items: (json['items'] as List<dynamic>)
-          .map((e) => UnitModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      items: (json['items'] as List<dynamic>?)
+              ?.map((e) => UnitModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
 
 Map<String, dynamic> _$UnitsModelToJson(UnitsModel instance) =>

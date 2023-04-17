@@ -13,26 +13,8 @@ import '../main_cubit.dart';
 part 'units_state.dart';
 
 class UnitsCubit extends MainCubit {
-  late Map<String, AbstractStock> repos;
-  late Map<String, HiveObject> data;
-  UnitsCubit() : super() {
-    init();
-  }
+  UnitsCubit() : super();
 
-  void init() {
-    repos = {
-      'units': UnitsRepository(),
-    };
-    data = {};
-  }
-
-  void load() async {
-    emit(DataLoading());
-    data['units'] = await repos['units']?.stock.get(repos['units']?.name ?? '');
-    emit(UnitsLoaded());
-  }
-
-  HiveObject? getUnits() {
-    return data['units'];
-  }
+  @override
+  List<String> get preloadStores => ['units'];
 }

@@ -94,7 +94,7 @@ class ResetPasswordScreen extends AuthScreen {
           context.read<AuthCubit>().resendCode(params['username']);
         },
         text: 'Отправить код еще раз',
-        color: Colors.white,
+        color: ColorStyles.white,
         backgroundColor: Colors.transparent,
         splashColor: Colors.white12,
         minWidth: 248,

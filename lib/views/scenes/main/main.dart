@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:sigest/bloc/main_cubit.dart';
 import 'package:sigest/views/scenes/auth/login.dart';
 import 'package:sigest/views/scenes/main/page_navigators.dart';
+import 'package:sigest/views/scenes/main/profile.dart';
 import 'package:sigest/views/scenes/main/units.dart';
 import 'package:sigest/views/styles.dart';
 
@@ -59,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
       PageNavigator(
           navigatorKey: navigatorKeys[pages[3].index],
           builder: (BuildContext context) {
-            return UnitsScreen();
+            return ProfileScreen();
           }),
     ];
   }
