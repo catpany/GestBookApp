@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:hive/hive.dart';
 import 'package:sigest/models/auth.dart';
 import 'package:sigest/stock/abstract_repository.dart';
@@ -6,7 +8,6 @@ import 'package:sigest/stock/units.dart';
 import 'package:sigest/stock/user.dart';
 
 import '../locator.dart';
-import 'abstract_stock.dart';
 
 class Store {
   late Map<String, AbstractRepository> _stores = {};
@@ -29,7 +30,6 @@ class Store {
   Future<void> loadStatic() async {
     for(final store in _stores.entries) {
       if (staticStores.contains(store.key)) {
-        // await store.value.init();
         await store.value.load(store.key, null);
       }
     }
@@ -38,10 +38,10 @@ class Store {
   Future<void> reloadStatic() async {
     for(final store in _stores.entries) {
       if (staticStores.contains(store.key)) {
-        // await store.value.init();
         await store.value.reload(store.key, null);
-        // await store.reload(name, null);
+        log('reload ' + store.key);
       }
     }
+
   }
 }

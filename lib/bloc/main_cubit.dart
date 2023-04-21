@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
+import 'package:stock/stock.dart';
 
 import '../api/api.dart';
 import '../api/response.dart';
@@ -16,8 +17,6 @@ part 'main_state.dart';
 class MainCubit extends Cubit<MainState> {
   late Store store;
   List<String> preloadStores = [];
-  // late Map<String, HiveObject> data;
-  // late int loaded = 0;
 
   MainCubit() : super(MainInitial()) {
     init();
@@ -29,42 +28,27 @@ class MainCubit extends Cubit<MainState> {
 
   Future<void> load() async {
     emit(DataLoading());
-    store.loadStatic().onError((error, stackTrace) {
-        log(error.toString());
-        log(stackTrace.toString());
-        checkForError(error);
-    }).whenComplete(() {
-      // loaded = ;
-      // checkIfLoadFinished();
+    store.loadStatic().then((value) {
       log('static data loaded');
       emit(DataLoaded());
+    }, onError: (error, StackTrace stackTrace) {
+      log('error!');
+      log(error.toString());
+      checkForError(error.error as ErrorResponse);
     });
-    // preloadStores.forEach((name, rep) async {
-    //   log('get ' + rep.name.toString());
-    //   data[name] = await rep.stock.get(rep.name).onError((error, stacktrace) {
-    //     log(error.toString());
-    //     log(stacktrace.toString());
-    //     checkForError(error);
-    //   }).whenComplete(() {
-    //     loaded++;
-    //     checkIfLoadFinished();
-    //   });
-    // });
   }
 
-  // void checkIfLoadFinished() {
-  //   if (preloadStores.length == loaded) {
-  //     emit(DataLoaded());
-  //   }
-  // }
-
-  bool checkForError(response) {
+  bool checkForError(Response response) {
+    log('check for error');
+    log(response.toString());
     if (response is ErrorResponse) {
-      if (response.code < 200) {
+      if (codeErrors.keys.contains(response.code)) {
+        log('Error');
         if (ApiErrors.notActivated != codeErrors[response.code]) {
           emit(Error(response));
         }
       } else {
+        log('DataLoadingError');
         emit(DataLoadingError(response.message));
       }
 

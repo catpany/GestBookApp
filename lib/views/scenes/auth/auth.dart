@@ -6,7 +6,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sigest/views/widgets/link_button.dart';
 import 'package:sigest/views/widgets/notification.dart';
 
-import '../../../api/api.dart';
 import '../../../api/response.dart';
 import '../../../bloc/auth/auth_cubit.dart';
 import '../../../bloc/main_cubit.dart';
@@ -19,7 +18,9 @@ class AuthScreen extends StatelessWidget {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final Map<String, TextEditingController> bindControllers;
 
-  AuthScreen({Key? key, required this.bindControllers}) : super(key: key);
+  AuthScreen({Key? key, required this.bindControllers}) : super(key: key) {
+    log('init auth screen');
+  }
 
   List<Widget> renderFields([Map<String, dynamic>? errors]) {
     return [];

@@ -13,7 +13,8 @@ class ApiMock implements AbstractApi {
         'access_token':
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiaWF0IjoxNTE2MjM5MDIyfQ.NdmXS9NOiE6j8T1wcPMR_75r5FLrGmjdSoPZN-smTsU',
         'refresh_token': {
-          'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiaWF0IjoxNTE2MjM0ODk3fQ.ddM2LN2IFHdlq3OYbXeWrBH40etmiyoug8TGpEbr0Dw',
+          'token':
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiaWF0IjoxNTE2MjM0ODk3fQ.ddM2LN2IFHdlq3OYbXeWrBH40etmiyoug8TGpEbr0Dw',
           'family': 'lhshdfkjshdfkjshdfkjsdhfkjd'
         }
       }
@@ -32,7 +33,7 @@ class ApiMock implements AbstractApi {
   }
 
   @override
-  Future<Response> forgotPassword(Params params) async {
+  Future<Response> sendCode(Params params) async {
     const body = {
       'data': {
         'code': 456122,
@@ -46,20 +47,44 @@ class ApiMock implements AbstractApi {
 
   @override
   Future<Response> resetPassword(Params params) async {
+    const body = {
+      'data': {
+        'access_token':
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiaWF0IjoxNTE2MjM5MDIyfQ.NdmXS9NOiE6j8T1wcPMR_75r5FLrGmjdSoPZN-smTsU',
+        'refresh_token': {
+          'token':
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiaWF0IjoxNTE2MjM0ODk3fQ.ddM2LN2IFHdlq3OYbXeWrBH40etmiyoug8TGpEbr0Dw',
+          'family': 'lhshdfkjshdfkjshdfkjsdhfkjd'
+        }
+      }
+    };
+
     return Future<Response>.delayed(const Duration(seconds: 2), () {
-      return SuccessResponse(data: {});
+      return SuccessResponse(data: body);
     });
   }
 
   @override
   Future<Response> activateProfile(Params params) async {
+    const body = {
+      'data': {
+        'access_token':
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiaWF0IjoxNTE2MjM5MDIyfQ.NdmXS9NOiE6j8T1wcPMR_75r5FLrGmjdSoPZN-smTsU',
+        'refresh_token': {
+          'token':
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiaWF0IjoxNTE2MjM0ODk3fQ.ddM2LN2IFHdlq3OYbXeWrBH40etmiyoug8TGpEbr0Dw',
+          'family': 'lhshdfkjshdfkjshdfkjsdhfkjd'
+        }
+      }
+    };
+
     return Future<Response>.delayed(const Duration(seconds: 2), () {
-      return SuccessResponse(data: {});
+      return SuccessResponse(data: body);
     });
   }
 
   @override
-  Future<Response> user(String id) async {
+  Future<Response> user() async {
     const body = {
       'data': {'id': 'jhdfj', 'username': 'user N', 'email': 'aaa@mail.ru'}
     };

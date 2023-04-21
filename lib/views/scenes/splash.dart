@@ -52,7 +52,6 @@ class _SplashScreenState extends State<SplashScreen> {
               body: BlocListener<SplashCubit, MainState>(
                 listener: (context, state) {
                   if (state is DataLoaded) {
-                    log('loaded');
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) {
                       return const MainScreen();
                     }));

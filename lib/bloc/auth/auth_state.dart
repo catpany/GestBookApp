@@ -4,37 +4,13 @@ part of 'auth_cubit.dart';
 class AuthState extends MainState {
 }
 
-// class AuthDataLoading extends AuthState {
-// }
-//
-// class AuthDataReceived extends AuthState {
-//   final dynamic data;
-//
-//   AuthDataReceived({required this.data});
-// }
-//
-// class AuthDataLoadingError extends AuthState {
-//   final String message;
-//
-//   AuthDataLoadingError(this.message);
-// }
-//
-// class AuthError extends AuthState {
-//   final ErrorResponse error;
-//
-//   AuthError(this.error);
-//
-//   @override
-//   List<Object> get props => [error];
-// }
-
 class CodeSent extends AuthState {
-  final String username;
+  final String login;
 
-  CodeSent(this.username);
+  CodeSent(this.login);
 
   @override
-  List<Object> get props => [username];
+  List<Object> get props => [login];
 }
 
 class CodeResent extends AuthState {
@@ -47,13 +23,13 @@ class CodeResent extends AuthState {
 }
 
 class NeedToActivate extends AuthState {
-  final String username;
+  final String login;
   final String password;
 
-  NeedToActivate(this.username, this.password);
+  NeedToActivate(this.login, this.password);
 
   @override
-  List<Object> get props => [username, password];
+  List<Object> get props => [login, password];
 }
 
 class AuthSuccess extends AuthState {}

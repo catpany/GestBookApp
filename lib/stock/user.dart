@@ -18,18 +18,11 @@ import 'abstract_repository.dart';
 class UserRepository extends HiveStock<UserModel> {
   @override
   String get name => 'user';
-
-  // static const String name = 'user';
   UserModel get user => get('user') as UserModel;
-
-  // @override
-  // Box<UnitsModel> get store => Hive.box(name);
 
   @override
   Future<UserModel> loadModel(String key) async {
-    // final box = Hive.isBoxOpen(name.toString())? Hive.box<UserModel>(name.toString()) : await Hive.openBox<UserModel>(name.toString());
-    // box.clear();
-    Response response = await api.user(key);
+    Response response = await api.user();
 
     if (response is ErrorResponse) {
       log('Load Error');

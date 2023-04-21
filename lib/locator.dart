@@ -8,4 +8,4 @@ const production = Environment('prod');
 final GetIt locator = GetIt.instance;
 
 @injectableInit
-Future<void> initLocator(Environment environment) async => locator.init(environment: environment.name);
+Future<void> initLocator(String environment) async => locator.init(environment: environment);

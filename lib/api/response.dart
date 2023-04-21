@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 
@@ -23,7 +24,7 @@ const Map<int, ApiErrors> codeErrors = {
   109: ApiErrors.userNotFound,
   110: ApiErrors.invalidValue,
   111: ApiErrors.notificationsNotAvailable,
-  112: ApiErrors.notAuthorized,
+  401: ApiErrors.notAuthorized,
 };
 
 abstract class Response {}
@@ -31,7 +32,7 @@ abstract class Response {}
 class ErrorResponse extends Response {
   final int code;
   final String message;
-  final Map<String, dynamic>? messages;
+  final dynamic messages;
 
   ErrorResponse({required this.code, required this.message, this.messages});
 }
@@ -45,7 +46,8 @@ class SuccessResponse extends Response {
 extension ApiResponse on http.Response {
   bool isError() {
     if (200 == statusCode) {
-      if (!body.contains('data')) {
+      log(body);
+      if ('' != body && null == jsonDecode(body)['data']) {
         return true;
       }
 
@@ -66,14 +68,14 @@ extension ApiResponse on http.Response {
 
       return ErrorResponse(
           code: response['code'],
-          message: response['message'],
-          messages: response['messages']);
+          message: '',
+          messages: response['message']);
     }
 
     return ErrorResponse(code: statusCode, message: 'Network error');
   }
 
   SuccessResponse getSuccessResponse() {
-    return SuccessResponse(data: jsonDecode(body)['data']);
+    return SuccessResponse(data: body.isEmpty ? '' : jsonDecode(body)['data']);
   }
 }

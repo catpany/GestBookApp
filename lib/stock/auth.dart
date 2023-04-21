@@ -12,7 +12,7 @@ import '../api/response.dart';
 import 'abstract_repository.dart';
 
 @Named('auth')
-@LazySingleton(as: AbstractRepository)
+@Singleton(as: AbstractRepository)
 class AuthRepository extends HiveRepository<AuthModel> {
   @override
   String get name => 'auth';
@@ -22,19 +22,13 @@ class AuthRepository extends HiveRepository<AuthModel> {
   String get accessToken => get('auth')?.accessToken ?? '';
   set tokens(AuthModel auth) => update('auth', auth);
 
-  // void setAuth(Map<String, dynamic> data) {
-  //   // final authBox = await Hive.openBox<AuthModel>(name);
-  //   AuthModel model = AuthModel.fromJson(data);
-  //   store.put('auth', model);
-  // }
-  //
-  // AuthModel? getAuth() {
-  //   // final authBox = await Hive.openBox<AuthModel>('auth');
-  //   return store.get('auth');
-  // }
-
   Future<Response> login(Params params) async {
     Response response = await api.login(params);
+
+    if (response is SuccessResponse) {
+      tokens = AuthModel.fromJson(response.data);
+    }
+
     return response;
   }
 
@@ -43,48 +37,28 @@ class AuthRepository extends HiveRepository<AuthModel> {
     // return response;
   }
 
-  Future<Response> forgotPassword(Params params) async {
-    Response response = await api.forgotPassword(params);
+  Future<Response> sendCode(Params params) async {
+    Response response = await api.sendCode(params);
     return response;
   }
 
-  Future<Response> resendCode(Params params) async {
-    Response response = await api.forgotPassword(params);
-    return response;
-  }
-
-  Future<Response> resetPassword(Params resetParams, Params loginParams) async {
+  Future<Response> resetPassword(Params resetParams) async {
     Response response = await api.resetPassword(resetParams);
 
     if (response is SuccessResponse) {
-      // response = await api.login(loginParams);
-      //
-      // if (response is SuccessResponse) {
         tokens = AuthModel.fromJson(response.data);
-      // }
     }
 
     return response;
   }
 
-  Future<Response> activateProfile(Params activateParams, loginParams) async {
+  Future<Response> activateProfile(Params activateParams) async {
     Response response = await api.activateProfile(activateParams);
 
     if (response is SuccessResponse) {
-      response = await api.login(loginParams);
-
-      if (response is SuccessResponse) {
         tokens = AuthModel.fromJson(response.data);
-      }
     }
 
     return response;
   }
-  //
-  // Future<void> setTokens(SuccessResponse response) async {
-  //   AuthRepository auth = AuthRepository();
-  //
-  //   auth.setAuth(response.data);
-  // }
-
 }

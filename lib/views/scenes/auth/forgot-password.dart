@@ -33,7 +33,7 @@ class ForgotPasswordScreen extends AuthScreen {
     if (state is CodeSent) {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return ResetPasswordScreen(
-          params: {'username': state.username},
+          params: {'login': state.login},
         );
       }));
     }

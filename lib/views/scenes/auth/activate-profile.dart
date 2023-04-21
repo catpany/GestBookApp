@@ -6,11 +6,8 @@ import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/views/scenes/auth/login.dart';
 import 'package:sigest/views/scenes/auth/registration.dart';
-import 'package:sigest/views/scenes/auth/reset-password.dart';
 
 import '../../../bloc/auth/auth_cubit.dart';
-import '../../../bloc/main_cubit.dart';
-import '../../styles.dart';
 import '../../widgets/button.dart';
 import '../../widgets/input.dart';
 import '../../widgets/link_button.dart';
@@ -21,7 +18,9 @@ class ActivateProfileScreen extends AuthScreen {
   ActivateProfileScreen({Key? key, this.params = const {}})
       : super(
             key: key,
-            bindControllers: {'code': TextEditingController(text: '')});
+            bindControllers: {
+              'code': TextEditingController(text: '')
+            });
 
   @override
   String get title => 'Активация профиля';
@@ -71,7 +70,7 @@ class ActivateProfileScreen extends AuthScreen {
 
               context
                   .read<AuthCubit>()
-                  .activateProfile(params['username'], params['password']);
+                  .activateProfile(params['login']);
               log('success!!');
             },
             text: 'Активировать',
@@ -84,7 +83,7 @@ class ActivateProfileScreen extends AuthScreen {
           )),
       ButtonWidget(
         onClick: () {
-          context.read<AuthCubit>().resendCode(params['username']);
+          context.read<AuthCubit>().resendActivateProfileCode(params['login']);
         },
         text: 'Отправить код еще раз',
         color: Colors.white,

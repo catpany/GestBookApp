@@ -40,7 +40,7 @@ class LoginScreen extends AuthScreen {
     } else if (state is NeedToActivate) {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return ActivateProfileScreen(
-          params: {'username': state.username, 'password': state.password},
+          params: {'login': state.login},
         );
       }));
     }
@@ -66,9 +66,6 @@ class LoginScreen extends AuthScreen {
         controller: bindControllers['password'],
         obscureText: true,
         errorText: errors != null ? errors['password'] : null,
-        onFieldTap: () {
-          log('tap!');
-        },
       ),
     ];
   }
@@ -78,6 +75,7 @@ class LoginScreen extends AuthScreen {
     return [
       ButtonWidget(
         onClick: () {
+          log('press on login button');
           if (!formKey.currentState!.validate()) {
             return;
           }

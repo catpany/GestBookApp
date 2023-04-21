@@ -15,15 +15,18 @@ class AuthCubit extends MainCubit {
   List<String> get preloadStores => ['auth'];
 
   AuthCubit(this.bindControllers) : super(){
+    log('auth cubit');
     super.init();
   }
 
   Future<void> login() async {
     emit(DataLoading());
+    log(bindControllers['login']!.text);
+    log(bindControllers['password']!.text);
 
     Response response = await store.auth.login(Params({}, {
-      'login': bindControllers['login'],
-      'password': bindControllers['password']
+      'login': bindControllers['login']!.text,
+      'password': bindControllers['password']!.text
     }));
 
     if (isNeedToActivate(response)) {
@@ -38,13 +41,15 @@ class AuthCubit extends MainCubit {
     emit(DataLoading());
 
     Response response = await store.auth.register(Params({}, {
-      'username': bindControllers['username'],
-      'email': bindControllers['email'],
-      'password': bindControllers['password']
+      'username': bindControllers['username']!.text,
+      'email': bindControllers['email']!.text,
+      'password': bindControllers['password']!.text
     }));
 
+    log(response.toString());
+
     if (!checkForError(response)) {
-      emit(NeedToActivate(bindControllers['username']!.text,
+      emit(NeedToActivate(bindControllers['email']!.text,
           bindControllers['password']!.text));
     }
   }
@@ -52,8 +57,9 @@ class AuthCubit extends MainCubit {
   Future<void> forgotPassword() async {
     emit(DataLoading());
 
-    Response response = await store.auth.forgotPassword(Params({}, {
+    Response response = await store.auth.sendCode(Params({}, {
       'login': bindControllers['login']?.text,
+      'type': 'reset'
     }));
 
     if (!checkForError(response)) {
@@ -61,11 +67,12 @@ class AuthCubit extends MainCubit {
     }
   }
 
-  Future<void> resendCode(String username) async {
+  Future<void> resendForgotPasswordCode(String login) async {
     emit(DataLoading());
 
-    Response response = await store.auth.forgotPassword(Params({}, {
-      'login': username,
+    Response response = await store.auth.sendCode(Params({}, {
+      'login': login,
+      'type': 'reset'
     }));
 
     if (!checkForError(response)) {
@@ -73,33 +80,44 @@ class AuthCubit extends MainCubit {
     }
   }
 
-  Future<void> resetPassword(String username) async {
+  Future<void> resetPassword() async {
     emit(DataLoading());
 
     Response response = await store.auth.resetPassword(
         Params({}, {
-          'code': bindControllers['code'],
-          'password': bindControllers['password']
-        }),
-        Params(
-            {}, {'login': username, 'password': bindControllers['password']}));
+          'code': bindControllers['code']!.text,
+          'password': bindControllers['password']!.text
+        }),);
 
     if (!checkForError(response)) {
       emit(AuthSuccess());
     }
   }
 
-  Future<void> activateProfile(String username, String password) async {
+  Future<void> activateProfile(String login) async {
     emit(DataLoading());
 
     Response response = await store.auth.activateProfile(
         Params({}, {
-          'code': bindControllers['code'],
-        }),
-        Params({}, {'login': username, 'password': password}));
+          'code': bindControllers['code']!.text,
+          'login': login,
+        }));
 
     if (!checkForError(response)) {
       emit(AuthSuccess());
+    }
+  }
+
+  Future<void> resendActivateProfileCode(String login) async {
+    emit(DataLoading());
+
+    Response response = await store.auth.sendCode(Params({}, {
+      'login': login,
+      'type': 'verification'
+    }));
+
+    if (!checkForError(response)) {
+      emit(CodeResent('Код успешно отправлен'));
     }
   }
 
