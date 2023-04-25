@@ -7,6 +7,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
 import 'package:sigest/helpers/hexcolor.dart';
 import 'package:sigest/models/units.dart';
 import 'package:sigest/views/styles.dart';
@@ -17,8 +18,9 @@ import 'lesson_dialog.dart';
 
 class UnitListWidget extends StatefulWidget {
   final UnitsModel units;
+  final Function onStartLesson;
 
-  const UnitListWidget({Key? key, required this.units}) : super(key: key);
+  const UnitListWidget({Key? key, required this.units, required this.onStartLesson}) : super(key: key);
 
   @override
   _UnitListState createState() => _UnitListState();
@@ -165,14 +167,15 @@ class _UnitListState extends State<UnitListWidget> {
     await showDialog<void>(
         context: context,
       builder: (BuildContext context) {
-          return LessonDialog(
-            lesson: lesson
+          return LessonDialogWidget(
+            lesson: lesson,
+            onStartLesson: widget.onStartLesson,
           );
       }
     );
   }
 
-  Widget _renderLessonList(List<LessonModel> lessons, int unitIndex) {
+  Widget _renderLessonList(HiveList<LessonModel> lessons, int unitIndex) {
     return GridView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,

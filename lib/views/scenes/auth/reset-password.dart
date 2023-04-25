@@ -79,7 +79,7 @@ class ResetPasswordScreen extends AuthScreen {
                 return;
               }
 
-              context.read<AuthCubit>().resetPassword(params['username']);
+              context.read<AuthCubit>().resetPassword();
               log('success!!');
             },
             text: 'Сбросить пароль',
@@ -91,10 +91,10 @@ class ResetPasswordScreen extends AuthScreen {
           )),
       ButtonWidget(
         onClick: () {
-          context.read<AuthCubit>().resendCode(params['username']);
+          context.read<AuthCubit>().resendForgotPasswordCode(params['login']);
         },
         text: 'Отправить код еще раз',
-        color: Colors.white,
+        color: ColorStyles.white,
         backgroundColor: Colors.transparent,
         splashColor: Colors.white12,
         minWidth: 248,

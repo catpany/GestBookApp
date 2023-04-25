@@ -20,19 +20,22 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       id: fields[0] as String,
       username: fields[1] as String,
       email: fields[2] as String,
+      stat: (fields[3] as Map).cast<String, int>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.username)
       ..writeByte(2)
-      ..write(obj.email);
+      ..write(obj.email)
+      ..writeByte(3)
+      ..write(obj.stat);
   }
 
   @override
@@ -53,11 +56,13 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
 UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       id: json['id'] as String,
       username: json['username'] as String,
-      email: json['email'] as String,
+      email: json['email'] as String? ?? '',
+      stat: Map<String, int>.from(json['stat'] as Map),
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'id': instance.id,
       'username': instance.username,
       'email': instance.email,
+      'stat': instance.stat,
     };

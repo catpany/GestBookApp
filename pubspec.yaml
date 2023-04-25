@@ -47,11 +47,14 @@ dependencies:
   flutter_svg: ^1.1.6
   hexcolor: ^2.0.4
   carousel_slider: ^4.2.1
+  get_it: ^7.2.0
+  injectable: ^2.1.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable: ^6.6.1
+  injectable_generator: ^2.1.5
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -87,6 +90,7 @@ flutter:
   assets:
     - assets/images/triangle.svg
     - assets/images/unit.svg
+    - assets/config/
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

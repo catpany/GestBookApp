@@ -1,16 +1,35 @@
-# sigest
 
-A new Flutter application.
+# Мобильное приложение "Книга жестов"
 
-## Getting Started
+## Запуск
 
-This project is a starting point for a Flutter application.
+##### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+Перед запуском программы необходимо установить:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- [Flutter SDK](https://docs.flutter.dev/get-started/install)
+- [Android Studio](https://developer.android.com/studio) (для запуска на андроид устройствах и эмуляторах)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Конфигурационный файл приложения app_settings.json расположен в директории assets/config. По умолчанию приложение запускается в режиме dev (переменная среды "env"), в котором api запросы не выполняются. Для запуска приложения в режиме работы с сетью нужно изменить значение переменной на "prod" и указать адрес сервера в переменной "domain".
+
+##### Команды
+
+Перед запуском выполнить:
+`flutter pub get`
+Запуск приложения на подключенном устройстве:
+`flutter run`
+
+*Подключение устройства (с помощью командной строки)*
+Показать список доступных устройств для подключения:
+`flutter devices`
+Подключить устройство:
+`flutter attach -d device_id` ,  где device_id - id подключаемого устройства
+
+### Дополнительно
+
+Очистить папки  build/ and .dart_tool/:
+`flutter clean`
+Генерация файлов:
+`flutter packages pub run build_runner build --delete-conflicting-outputs`
+Включить наблюдатель для автоматического ребилда файлов:
+`flutter packages pub run build_runner watch`

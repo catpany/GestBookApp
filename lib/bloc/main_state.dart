@@ -11,6 +11,9 @@ class MainInitial  extends MainState {}
 class DataLoading extends MainState {
 }
 
+class DataLoaded extends MainState {
+}
+
 class DataReceived extends MainState {
   final dynamic data;
 

@@ -29,7 +29,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void dispose() {
-    cubit.dispose();
     super.dispose();
   }
 
@@ -52,8 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               body: BlocListener<SplashCubit, MainState>(
                 listener: (context, state) {
-                  if (state is SplashLoaded) {
-                    log('loaded');
+                  if (state is DataLoaded) {
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) {
                       return const MainScreen();
                     }));

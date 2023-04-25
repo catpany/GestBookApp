@@ -1,30 +1,37 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:sigest/api.dart';
 import 'package:sigest/bloc/main_cubit.dart';
-import 'package:sigest/stock/auth.dart';
+
+import '../../api/params.dart';
+import '../../api/response.dart';
 
 part 'auth_state.dart';
 
 class AuthCubit extends MainCubit {
   final Map<String, TextEditingController> bindControllers;
 
-  AuthCubit(this.bindControllers) : super();
+  @override
+  List<String> get preloadStores => ['auth'];
+
+  AuthCubit(this.bindControllers) : super(){
+    log('auth cubit');
+    super.init();
+  }
 
   Future<void> login() async {
     emit(DataLoading());
+    log(bindControllers['login']!.text);
+    log(bindControllers['password']!.text);
 
-    Response response = await Api().login({
-      'login': bindControllers['login'],
-      'password': bindControllers['password']
-    });
+    Response response = await store.auth.login(Params({}, {
+      'login': bindControllers['login']!.text,
+      'password': bindControllers['password']!.text
+    }));
 
     if (isNeedToActivate(response)) {
-      emit(NeedToActivate(bindControllers['login']!.text,
-          bindControllers['password']!.text));
+      emit(NeedToActivate(
+          bindControllers['login']!.text, bindControllers['password']!.text));
     } else if (!checkForError(response)) {
       emit(AuthSuccess());
     }
@@ -33,14 +40,16 @@ class AuthCubit extends MainCubit {
   Future<void> register() async {
     emit(DataLoading());
 
-    Response response = await Api().register({
-      'username': bindControllers['username'],
-      'email': bindControllers['email'],
-      'password': bindControllers['password']
-    });
+    Response response = await store.auth.register(Params({}, {
+      'username': bindControllers['username']!.text,
+      'email': bindControllers['email']!.text,
+      'password': bindControllers['password']!.text
+    }));
 
-    if (!checkForError(response)){
-      emit(NeedToActivate(bindControllers['username']!.text,
+    log(response.toString());
+
+    if (!checkForError(response)) {
+      emit(NeedToActivate(bindControllers['email']!.text,
           bindControllers['password']!.text));
     }
   }
@@ -48,80 +57,79 @@ class AuthCubit extends MainCubit {
   Future<void> forgotPassword() async {
     emit(DataLoading());
 
-    Response response = await Api().forgotPassword({
-      'username': bindControllers['username']?.text,
-    });
+    Response response = await store.auth.sendCode(Params({}, {
+      'login': bindControllers['login']?.text,
+      'type': 'reset'
+    }));
 
     if (!checkForError(response)) {
-      emit(CodeSent(bindControllers['username']!.text));
+      emit(CodeSent(bindControllers['login']!.text));
     }
   }
 
-  Future<void> resendCode(String username) async {
+  Future<void> resendForgotPasswordCode(String login) async {
     emit(DataLoading());
 
-    Response response = await Api().forgotPassword({
-      'username': username,
-    });
+    Response response = await store.auth.sendCode(Params({}, {
+      'login': login,
+      'type': 'reset'
+    }));
 
     if (!checkForError(response)) {
       emit(CodeResent('Код успешно отправлен'));
     }
   }
 
-  Future<void> resetPassword(String username) async {
+  Future<void> resetPassword() async {
     emit(DataLoading());
 
-    Response response = await Api().resetPassword({
-      'code': bindControllers['code'],
-      'password': bindControllers['password']
-    });
+    Response response = await store.auth.resetPassword(
+        Params({}, {
+          'code': bindControllers['code']!.text,
+          'password': bindControllers['password']!.text
+        }),);
 
     if (!checkForError(response)) {
-      response = await Api().login(
-          {'login': username, 'password': bindControllers['password']});
-
-      if (!checkForError(response)) {
-        await setTokens(response as SuccessResponse);
-        emit(AuthSuccess());
-      }
+      emit(AuthSuccess());
     }
   }
 
-  Future<void> activateProfile(String username, String password) async {
+  Future<void> activateProfile(String login) async {
     emit(DataLoading());
 
-    Response response = await Api().activateProfile({
-      'code': username,
-    });
+    Response response = await store.auth.activateProfile(
+        Params({}, {
+          'code': bindControllers['code']!.text,
+          'login': login,
+        }));
 
     if (!checkForError(response)) {
-      response = await Api().login(
-          {'login': username, 'password': password});
+      emit(AuthSuccess());
+    }
+  }
 
-      if (!checkForError(response)) {
-        await setTokens(response as SuccessResponse);
-        emit(AuthSuccess());
-      }
+  Future<void> resendActivateProfileCode(String login) async {
+    emit(DataLoading());
+
+    Response response = await store.auth.sendCode(Params({}, {
+      'login': login,
+      'type': 'verification'
+    }));
+
+    if (!checkForError(response)) {
+      emit(CodeResent('Код успешно отправлен'));
     }
   }
 
   bool isNeedToActivate(Response response) {
     if (response is ErrorResponse) {
-
       if (response.code < 200) {
-        if (ApiErrors.notActivated == Api.codeErrors[response.code]) {
+        if (ApiErrors.notActivated == codeErrors[response.code]) {
           return true;
         }
       }
     }
 
     return false;
-  }
-
-  Future<void> setTokens(SuccessResponse response) async {
-    AuthRepository auth = AuthRepository();
-
-    auth.setAuth(response.data);
   }
 }

@@ -31,7 +31,7 @@ class RegistrationScreen extends AuthScreen {
     if (state is NeedToActivate) {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return ActivateProfileScreen(
-          params: {'username': state.username, 'password': state.password},
+          params: {'login': state.login},
         );
       }));
     }
@@ -46,6 +46,7 @@ class RegistrationScreen extends AuthScreen {
         hintText: 'Имя пользователя',
         controller: bindControllers['username'],
         rules: 'required|username|min:1|max:256',
+        errorText: errors != null ? errors['username'] : null,
       ),
       TextFormFieldWidget(
         title: 'Почта',
@@ -53,6 +54,7 @@ class RegistrationScreen extends AuthScreen {
         hintText: 'Почта',
         controller: bindControllers['email'],
         rules: 'required|email|max:256',
+        errorText: errors != null ? errors['email'] : null,
       ),
       TextFormFieldWidget(
         title: 'Пароль',
@@ -62,6 +64,7 @@ class RegistrationScreen extends AuthScreen {
         type: FieldType.password,
         controller: bindControllers['password'],
         rules: 'required|min:8|max:22|password',
+        errorText: errors != null ? errors['password'] : null,
       ),
     ];
   }

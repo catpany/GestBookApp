@@ -2,13 +2,24 @@ import 'package:flutter/rendering.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class TextStyles {
+  static const TextStyle? text12Regular = TextStyle(
+    color: ColorStyles.grayDark,
+    fontSize: 12.0,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+    fontFamily: 'Jost',
+    // letterSpacing: 1.1,
+    height: 1.4,
+  );
+
   static const TextStyle? text14Regular = TextStyle(
     color: ColorStyles.black,
     fontSize: 14.0,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
     fontFamily: 'Jost',
-    letterSpacing: 1.2,
+    // letterSpacing: 1.1,
+    height: 1.4,
   );
 
   static const TextStyle? text14Medium = TextStyle(
@@ -17,7 +28,18 @@ class TextStyles {
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
     fontFamily: 'Jost',
-    letterSpacing: 1.2,
+    // letterSpacing: 1.1,
+    height: 1.4,
+  );
+
+  static const TextStyle? text16Medium = TextStyle(
+    color: ColorStyles.black,
+    fontSize: 16.0,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    fontFamily: 'Jost',
+    // letterSpacing: 1.1,
+    height: 1.4,
   );
 
   static const TextStyle? text14SemiBold = TextStyle(
@@ -26,7 +48,8 @@ class TextStyles {
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
     fontFamily: 'Jost',
-    letterSpacing: 1.2,
+    // letterSpacing: 1.1,
+    height: 1.4,
   );
 
   static const TextStyle? title18Medium = TextStyle(
@@ -35,7 +58,8 @@ class TextStyles {
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
     fontFamily: 'Jost',
-    letterSpacing: 1.2,
+    // letterSpacing: 1.1,
+    height: 1.4,
   );
 
   static const TextStyle? title21Regular = TextStyle(
@@ -44,7 +68,8 @@ class TextStyles {
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
     fontFamily: 'Jost',
-    letterSpacing: 1.2,
+    // letterSpacing: 1.1,
+    height: 1.4,
   );
 
   static const TextStyle? title20SemiBold = TextStyle(
@@ -53,7 +78,8 @@ class TextStyles {
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
     fontFamily: 'Jost',
-    letterSpacing: 1.2,
+    // letterSpacing: 1.1,
+    height: 1.4,
   );
 
   static const TextStyle? title60Bold = TextStyle(
@@ -62,7 +88,8 @@ class TextStyles {
     fontWeight: FontWeight.w700,
     fontStyle: FontStyle.normal,
     fontFamily: 'Jost',
-    letterSpacing: 1.2,
+    // letterSpacing: 1.1,
+    height: 1.4,
   );
 }
 
@@ -79,13 +106,34 @@ class PaletteTheme {
 
   PaletteTheme() {
     palette = [
-      Palette(color: ColorStyles.accent, dark: ColorStyles.accentDark, semi: ColorStyles.accentSemiDark),
-      Palette(color: ColorStyles.purple, dark: ColorStyles.purpleDark, semi: ColorStyles.purpleSemiDark),
-      Palette(color: ColorStyles.blue, dark: ColorStyles.blueDark, semi: ColorStyles.blueSemiDark),
-      Palette(color: ColorStyles.cyan, dark: ColorStyles.cyanDark, semi: ColorStyles.cyanSemiDark),
-      Palette(color: ColorStyles.green, dark: ColorStyles.greenDark, semi: ColorStyles.greenSemiDark),
-      Palette(color: ColorStyles.orange, dark: ColorStyles.orangeDark, semi: ColorStyles.orangeSemiDark),
-      Palette(color: ColorStyles.red, dark: ColorStyles.redDark, semi: ColorStyles.redSemiDark),
+      Palette(
+          color: ColorStyles.accent,
+          dark: ColorStyles.accentDark,
+          semi: ColorStyles.accentSemiDark),
+      Palette(
+          color: ColorStyles.purple,
+          dark: ColorStyles.purpleDark,
+          semi: ColorStyles.purpleSemiDark),
+      Palette(
+          color: ColorStyles.blue,
+          dark: ColorStyles.blueDark,
+          semi: ColorStyles.blueSemiDark),
+      Palette(
+          color: ColorStyles.cyan,
+          dark: ColorStyles.cyanDark,
+          semi: ColorStyles.cyanSemiDark),
+      Palette(
+          color: ColorStyles.green,
+          dark: ColorStyles.greenDark,
+          semi: ColorStyles.greenSemiDark),
+      Palette(
+          color: ColorStyles.orange,
+          dark: ColorStyles.orangeDark,
+          semi: ColorStyles.orangeSemiDark),
+      Palette(
+          color: ColorStyles.red,
+          dark: ColorStyles.redDark,
+          semi: ColorStyles.redSemiDark),
     ];
   }
 }

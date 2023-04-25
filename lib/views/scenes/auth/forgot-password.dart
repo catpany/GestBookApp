@@ -20,7 +20,7 @@ class ForgotPasswordScreen extends AuthScreen {
   ForgotPasswordScreen({Key? key})
       : super(
             key: key,
-            bindControllers: {'username': TextEditingController(text: '')});
+            bindControllers: {'login': TextEditingController(text: '')});
 
   @override
   String get title => 'Восстановление пароля';
@@ -33,7 +33,7 @@ class ForgotPasswordScreen extends AuthScreen {
     if (state is CodeSent) {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return ResetPasswordScreen(
-          params: {'username': state.username},
+          params: {'login': state.login},
         );
       }));
     }
@@ -43,12 +43,12 @@ class ForgotPasswordScreen extends AuthScreen {
   List<Widget> renderFields([Map<String, dynamic>? errors]) {
     return [
       TextFormFieldWidget(
-        title: 'Имя пользователя',
+        title: 'Логин',
         titleColor: Colors.white,
-        hintText: 'Имя пользователя',
-        controller: bindControllers['username'],
+        hintText: 'Логин',
+        controller: bindControllers['login'],
         rules: 'required',
-        errorText: errors != null ? errors['username'] : null,
+        errorText: errors != null ? errors['login'] : null,
       ),
     ];
   }

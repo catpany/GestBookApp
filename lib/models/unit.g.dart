@@ -19,20 +19,22 @@ class UnitModelAdapter extends TypeAdapter<UnitModel> {
     return UnitModel(
       id: fields[0] as String,
       order: fields[1] as int,
-      lessons: (fields[2] ?? []).cast<LessonModel>(),
-    );
+      lessons: (fields[2] as HiveList).castHiveList(),
+    )..available = fields[3] == null ? false : fields[3] as bool;
   }
 
   @override
   void write(BinaryWriter writer, UnitModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.order)
       ..writeByte(2)
-      ..write(obj.lessons);
+      ..write(obj.lessons)
+      ..writeByte(3)
+      ..write(obj.available);
   }
 
   @override
@@ -45,21 +47,3 @@ class UnitModelAdapter extends TypeAdapter<UnitModel> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
-
-// **************************************************************************
-// JsonSerializableGenerator
-// **************************************************************************
-
-UnitModel _$UnitModelFromJson(Map<String, dynamic> json) => UnitModel(
-      id: json['id'] as String,
-      order: json['order'] as int,
-      lessons: (json['lessons'] as List<dynamic>)
-          .map((e) => LessonModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-
-Map<String, dynamic> _$UnitModelToJson(UnitModel instance) => <String, dynamic>{
-      'id': instance.id,
-      'order': instance.order,
-      'lessons': instance.lessons,
-    };

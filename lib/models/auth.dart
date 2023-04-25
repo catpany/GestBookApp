@@ -6,14 +6,16 @@ part 'auth.g.dart';
 @JsonSerializable()
 @HiveType(typeId: 1)
 class AuthModel  extends HiveObject {
+  @JsonKey(name: 'access_token', defaultValue: '')
   @HiveField(0)
-  String access_token;
+  String accessToken;
+  @JsonKey(name: 'refresh_token', defaultValue: {})
   @HiveField(1)
-  String refresh_token;
+  Map<String, String> refreshToken;
 
   AuthModel({
-    required this.access_token,
-    required this.refresh_token,
+    required this.accessToken,
+    required this.refreshToken,
   });
 
   factory AuthModel.fromJson(Map<String, dynamic> json) => _$AuthModelFromJson(json);

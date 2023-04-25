@@ -2,23 +2,27 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:hive/hive.dart';
+import 'package:injectable/injectable.dart';
 import 'package:sigest/stock/abstract_stock.dart';
 import 'package:sigest/models/user.dart';
+import 'package:sigest/stock/hive_stock.dart';
 import 'package:stock/stock.dart';
 
-import '../api.dart';
+import '../api/api.dart';
+import '../api/params.dart';
+import '../api/response.dart';
+import 'abstract_repository.dart';
 
-class UserRepository extends AbstractStock<UserModel> {
-  UserRepository() : super();
-
+@Named('user')
+@LazySingleton(as: AbstractRepository)
+class UserRepository extends HiveStock<UserModel> {
   @override
   String get name => 'user';
+  UserModel get user => get('user') as UserModel;
 
   @override
-  Future<UserModel> load(String key) async {
-    // final box = Hive.isBoxOpen(name.toString())? Hive.box<UserModel>(name.toString()) : await Hive.openBox<UserModel>(name.toString());
-    // box.clear();
-    Response response = await Api().user();
+  Future<UserModel> loadModel(String key) async {
+    Response response = await api.user();
 
     if (response is ErrorResponse) {
       log('Load Error');
@@ -27,6 +31,4 @@ class UserRepository extends AbstractStock<UserModel> {
     response = response as SuccessResponse;
     return UserModel.fromJson(response.data);
   }
-
-  void updateUser(String id, Object data) {}
 }
