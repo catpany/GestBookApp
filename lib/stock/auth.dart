@@ -20,7 +20,7 @@ class AuthRepository extends HiveRepository<AuthModel> {
   String get refreshToken => get('auth')?.refreshToken['token'] ?? '';
   String get family => get('auth')?.refreshToken['family'] ?? '';
   String get accessToken => get('auth')?.accessToken ?? '';
-  set tokens(AuthModel auth) => update('auth', auth);
+  set tokens(AuthModel auth) => put('auth', auth);
 
   Future<Response> login(Params params) async {
     Response response = await api.login(params);

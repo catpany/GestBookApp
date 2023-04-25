@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:sigest/models/auth.dart';
 import 'package:sigest/stock/abstract_repository.dart';
 import 'package:sigest/stock/auth.dart';
+import 'package:sigest/stock/lessons.dart';
 import 'package:sigest/stock/units.dart';
 import 'package:sigest/stock/user.dart';
 
@@ -15,7 +16,8 @@ class Store {
   AuthRepository get auth => _stores['auth'] as AuthRepository;
   UnitsRepository get units => _stores['units'] as UnitsRepository;
   UserRepository get user => _stores['user'] as UserRepository;
-  final List<String> staticStores = ['auth', 'units', 'user'];
+  LessonRepository get lessons => _stores['lessons'] as LessonRepository;
+  final List<String> staticStores = ['auth', 'units', 'user', 'lessons'];
 
   Store(this.preloadStores) {
     init();

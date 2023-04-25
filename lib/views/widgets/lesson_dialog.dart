@@ -7,15 +7,25 @@ import 'package:sigest/views/styles.dart';
 import '../../models/lesson.dart';
 import 'button.dart';
 
-class LessonDialog extends StatelessWidget {
+class LessonDialogWidget extends StatefulWidget {
   final LessonModel lesson;
+  final Function onStartLesson;
 
-  const LessonDialog({Key? key, required this.lesson}) : super(key: key);
+  const LessonDialogWidget(
+      {Key? key, required this.lesson, required this.onStartLesson})
+      : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _LessonDialogState();
+  }
+}
+ class _LessonDialogState extends State<LessonDialogWidget> {
 
   List<Widget> _renderActionButtons() {
     List<Widget> list = <Widget>[];
 
-    if (true == lesson.theory) {
+    if (true == widget.lesson.theory) {
       list.add(Container(
           margin: const EdgeInsets.only(bottom: 4),
           child: ButtonWidget(
@@ -32,7 +42,7 @@ class LessonDialog extends StatelessWidget {
           )));
     }
 
-    if (lesson.levelsFinished == lesson.levelsTotal) {
+    if (widget.lesson.levelsFinished == widget.lesson.levelsTotal) {
       list.add(ButtonWidget(
         onClick: () {
           log('press on repeat');
@@ -46,10 +56,12 @@ class LessonDialog extends StatelessWidget {
       ));
     }
 
-    if (0 == lesson.levelsFinished) {
+    if (0 == widget.lesson.levelsFinished) {
       list.add(ButtonWidget(
         onClick: () {
           log('press on start');
+          widget.onStartLesson(widget.lesson.id);
+          setState(() {});
         },
         color: ColorStyles.white,
         backgroundColor: ColorStyles.green,
@@ -60,11 +72,13 @@ class LessonDialog extends StatelessWidget {
       ));
     }
 
-    if (0 != lesson.levelsFinished &&
-        lesson.levelsFinished < lesson.levelsTotal) {
+    if (0 != widget.lesson.levelsFinished &&
+        widget.lesson.levelsFinished < widget.lesson.levelsTotal) {
       list.add(ButtonWidget(
         onClick: () {
           log('press on continue');
+          widget.onStartLesson(widget.lesson.id);
+          setState(() {});
         },
         color: ColorStyles.white,
         backgroundColor: ColorStyles.green,
@@ -80,10 +94,10 @@ class LessonDialog extends StatelessWidget {
 
   List<Widget> _renderLevels() {
     List<Widget> list = <Widget>[];
-    for (var i = 0; i < lesson.levelsTotal; i++) {
+    for (var i = 0; i < widget.lesson.levelsTotal; i++) {
       list.add(_renderLevel(
-          isFinished: (i < lesson.levelsFinished),
-          isActive: (i <= lesson.levelsFinished)));
+          isFinished: (i < widget.lesson.levelsFinished),
+          isActive: (i <= widget.lesson.levelsFinished)));
     }
 
     return list;

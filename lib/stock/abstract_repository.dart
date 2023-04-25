@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 
 import '../api/abstract_api.dart';
@@ -18,7 +19,9 @@ abstract class AbstractRepository {
 
   void clear();
 
-  void update(String key, Object item);
+  void put(String key, Object item);
+
+  void putAll(Map<dynamic, Object> items);
 
   dynamic get(String key);
 

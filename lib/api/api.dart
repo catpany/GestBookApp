@@ -42,7 +42,7 @@ class Api implements AbstractApi {
     SuccessResponse successResponse = response.getSuccessResponse();
 
     await auth.init();
-    auth.update('auth', successResponse.data);
+    auth.put('auth', successResponse.data);
 
     return true;
   }

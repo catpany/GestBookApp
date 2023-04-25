@@ -13,11 +13,14 @@ class UserModel  extends HiveObject {
   @JsonKey(defaultValue: '')
   @HiveField(2)
   String email;
+  @HiveField(3)
+  Map<String, int> stat;
 
   UserModel({
     required this.id,
     required this.username,
     required this.email,
+    required this.stat
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);

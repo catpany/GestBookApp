@@ -3,12 +3,16 @@ import 'dart:developer';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sigest/api/abstract_api.dart';
+import 'package:sigest/models/lesson.dart';
 import 'package:sigest/stock/abstract_stock.dart';
 import 'package:sigest/stock/hive_source_of_truth.dart';
 import 'package:sigest/stock/hive_stock.dart';
+import 'package:sigest/stock/lessons.dart';
 import 'package:stock/stock.dart';
 
 import '../api/response.dart';
+import '../locator.dart';
+import '../models/unit.dart';
 import '../models/units.dart';
 import 'abstract_repository.dart';
 
@@ -18,18 +22,7 @@ class UnitsRepository extends HiveStock<UnitsModel> {
   @override
   String get name => 'units';
 
-  // static const String name = 'units';
   UnitsModel get units => get('units') as UnitsModel;
-
-  //
-  // @override
-  // Box<UnitsModel> get store => Hive.box(name);
-
-  // @override
-  // Future<UnitsModel> load(String key, Params params) async {
-  //   this.params = params;
-  //   return stock.get(key) as UnitsModel;
-  // }
 
   @override
   Future<UnitsModel> loadModel(String key) async {
@@ -41,6 +34,27 @@ class UnitsRepository extends HiveStock<UnitsModel> {
     }
 
     response = response as SuccessResponse;
-    return UnitsModel.fromJson({'items': response.data['units']});
+
+    List<UnitModel> units = [];
+    log('for units');
+
+    for(var unit in response.data['list']) {
+      LessonRepository rep = locator.get<AbstractRepository>(instanceName: 'lessons') as LessonRepository;
+      await rep.init();
+      List<LessonModel> lessons = [];
+      log('for lessons');
+      for(var lesson in unit['lessons']) {
+        LessonModel lessonItem = LessonModel.fromJson(lesson);
+        rep.put(lessonItem.id, lessonItem);
+        lessons.add(lessonItem);
+      }
+
+      UnitModel unitItem = UnitModel(id: unit['id'], order: unit['order'], lessons: HiveList(rep.store, objects: lessons));
+      // unitItem.lessons = HiveList(box as Box, objects: lessons);
+      units.add(unitItem);
+    }
+    // return UnitsModel.fromJson({'items': response.data['units']});
+
+    return UnitsModel(items: units);
   }
 }

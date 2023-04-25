@@ -10,9 +10,6 @@ import '../locator.dart';
 
 class HiveRepository<T extends HiveObject> implements AbstractRepository {
   late Box<T> store;
-  // @preResolve
-  // Future<Box<T>> get store async => Hive.isBoxOpen(name.toString())? Hive.box(name.toString()) : await Hive.openBox(name.toString());
-
   late AbstractApi api;
 
   Params? params;
@@ -59,17 +56,18 @@ class HiveRepository<T extends HiveObject> implements AbstractRepository {
   }
 
   @override
-  void update(String key, Object item) {
+  void put(String key, Object item) {
     store.put(key, item as T);
+  }
+
+  @override
+  void putAll(Map<dynamic, Object> items) {
+    store.putAll(items as Map<dynamic, T>);
   }
 
   @override
   Future<void> init() async {
     log('open box ' + name);
-    // log(Hive.isBoxOpen(name.toString()).toString());
-    // if (Hive.isBoxOpen(name.toString())) {
-    //   store = await Hive.openBox(name.toString());
-    // }
     store = Hive.isBoxOpen(name.toString())? Hive.box<T>(name.toString()) : await Hive.openBox<T>(name.toString());
   }
 }

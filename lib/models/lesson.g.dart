@@ -20,11 +20,11 @@ class LessonModelAdapter extends TypeAdapter<LessonModel> {
       id: fields[0] as String,
       order: fields[1] as int,
       name: fields[2] as String,
-      progress: fields[3] as double,
-      icon: fields[4] as int,
-      levelsTotal: fields[5] as int,
-      levelsFinished: fields[6] as int,
-      theory: fields[7] as bool,
+      icon: fields[3] as int,
+      levelsTotal: fields[4] as int,
+      levelsFinished: fields[5] as int,
+      theory: fields[6] as bool,
+      available: fields[7] == null ? false : fields[7] as bool,
     );
   }
 
@@ -39,15 +39,15 @@ class LessonModelAdapter extends TypeAdapter<LessonModel> {
       ..writeByte(2)
       ..write(obj.name)
       ..writeByte(3)
-      ..write(obj.progress)
-      ..writeByte(4)
       ..write(obj.icon)
-      ..writeByte(5)
+      ..writeByte(4)
       ..write(obj.levelsTotal)
-      ..writeByte(6)
+      ..writeByte(5)
       ..write(obj.levelsFinished)
+      ..writeByte(6)
+      ..write(obj.theory)
       ..writeByte(7)
-      ..write(obj.theory);
+      ..write(obj.available);
   }
 
   @override
@@ -69,11 +69,10 @@ LessonModel _$LessonModelFromJson(Map<String, dynamic> json) => LessonModel(
       id: json['id'] as String,
       order: json['order'] as int,
       name: json['name'] as String,
-      progress: (json['progress'] as num).toDouble(),
-      icon: json['icon'] as int,
+      icon: LessonModel._hexStringToInt(json['icon'] as String),
       levelsTotal: json['levels_total'] as int,
       levelsFinished: json['levels_finished'] as int,
-      theory: json['theory'] as bool,
+      theory: json['theory'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$LessonModelToJson(LessonModel instance) =>
@@ -81,8 +80,7 @@ Map<String, dynamic> _$LessonModelToJson(LessonModel instance) =>
       'id': instance.id,
       'order': instance.order,
       'name': instance.name,
-      'progress': instance.progress,
-      'icon': instance.icon,
+      'icon': LessonModel._intToHexString(instance.icon),
       'levels_total': instance.levelsTotal,
       'levels_finished': instance.levelsFinished,
       'theory': instance.theory,
