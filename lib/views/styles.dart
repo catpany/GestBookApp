@@ -42,6 +42,16 @@ class TextStyles {
     height: 1.4,
   );
 
+  static const TextStyle? text16SemiBold = TextStyle(
+    color: ColorStyles.black,
+    fontSize: 16.0,
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.normal,
+    fontFamily: 'Jost',
+    // letterSpacing: 1.1,
+    height: 1.4,
+  );
+
   static const TextStyle? text14SemiBold = TextStyle(
     color: ColorStyles.black,
     fontSize: 14.0,

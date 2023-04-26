@@ -29,8 +29,7 @@ void main() async {
   Hive.registerAdapter(LessonModelAdapter());
   Hive.registerAdapter(UnitModelAdapter());
   Hive.registerAdapter(UnitsModelAdapter());
-
-  cacheAssets();
+  await cacheAssets();
 
   runApp(const MyApp());
 }
@@ -43,7 +42,7 @@ Future<void> loadConfig() async {
   config = jsonDecode(contents);
 }
 
-Future<List<void>> cacheAssets() {
+Future<List<void>> cacheAssets() async {
   List<String> assets = [
     'assets/images/triangle.svg',
     'assets/images/unit.svg'

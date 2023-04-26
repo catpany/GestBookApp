@@ -5,8 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/bloc/profile/profile_cubit.dart';
+import 'package:sigest/views/scenes/auth/login.dart';
 import 'package:sigest/views/widgets/button.dart';
 import 'package:sigest/views/widgets/notice.dart';
+import 'package:sigest/views/widgets/popup_window.dart';
 import 'package:sigest/views/widgets/statistic.dart';
 
 import '../../../bloc/main_cubit.dart';
@@ -46,6 +48,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     //   MaterialPageRoute(builder: (BuildContext context) {
     //     return SplashScreen();
     //   }));
+  }
+
+  void _navigateToLogin() {
+    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (BuildContext context) {
+        return LoginScreen();
+      }),
+        (r) => false
+    );
   }
 
   Widget _renderUserBlock() {
@@ -117,18 +128,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               StatisticWidget(
                 type: StatisticType.days,
-                title: '14 дней',
+                title: cubit.store.user.user.stat['impact_mode'].toString() + ' дней',
                 subtitle: 'ударный режим',
               ),
               // Spacer(),
               StatisticWidget(
                 type: StatisticType.gestures,
-                title: '15/20 жестов',
+                title: cubit.store.user.user.stat['goal_achieved'].toString() + '/' + cubit.store.user.user.stat['goal'].toString() + ' жестов',
                 subtitle: 'ежедн. цель',
               ),
               StatisticWidget(
                 type: StatisticType.lessons,
-                title: '30/70 уроков',
+                title: cubit.store.user.user.stat['goal_achieved'].toString() + '/' + cubit.getAllLessonsNumber().toString() + ' уроков',
                 subtitle: 'пройдено',
               ),
             ]),
@@ -261,19 +272,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
           minWidth: 200,
           height: 40,
           borderSideColor: ColorStyles.red,
-          onClick: () => print('tap on quit'),
+          onClick: () => _renderQuitDialog(),
         ));
   }
 
-  Widget _renderBody(BuildContext context, MainState state) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 18),
-      child: Column(
-          children: [_renderUserBlock()] +
-              _renderStatisticsBlock() +
-              _renderNotificationsBlock() +
-              [_renderQuitButton()]),
+  Future<void> _renderQuitDialog() async {
+    print('render quit dialog');
+    await showDialog<void>(
+        context: context,
+        builder: (context) {
+          return PopupWindowWidget(
+            title: 'Выход из профиля',
+            text: 'Вы уверены, что хотите выйти?',
+            onAcceptButtonPress: () => cubit.quit(),
+            onRejectButtonPress: () => Navigator.pop(context),
+          );
+        }
     );
+  }
+
+  Widget _renderBody(BuildContext context, MainState state) {
+    if(state is DataLoaded) {
+      return SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 18),
+        child: Column(
+            children: [_renderUserBlock()] +
+                _renderStatisticsBlock() +
+                _renderNotificationsBlock() +
+                [_renderQuitButton()]),
+      );
+    }
+    return const SizedBox.shrink();
   }
 
   @override
@@ -281,8 +310,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return BlocProvider(
         create: (_) => cubit,
         child: BlocConsumer<ProfileCubit, MainState>(
-            listener: (context, state) {},
-            builder: (context, state) {
+            listener: (BuildContext context, state) {
+              if (state is ProfileQuited) {
+                print('navigate to login');
+                _navigateToLogin();
+              }
+            },
+            builder: (BuildContext context, state) {
               return Scaffold(
                   resizeToAvoidBottomInset: false,
                   backgroundColor: Colors.white,
