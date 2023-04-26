@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/bloc/main_cubit.dart';
 import 'package:sigest/bloc/units/units_cubit.dart';
-import 'package:sigest/models/units.dart';
 import 'package:sigest/views/styles.dart';
 import 'package:sigest/views/widgets/unit_list.dart';
 
@@ -44,7 +43,7 @@ class _UnitsScreenState extends State<UnitsScreen> {
                   margin: const EdgeInsets.only(right: 2),
                 ),
                 Container(
-                  child: Text('40/20', style: TextStyles.text14Regular),
+                  child: Text(cubit.store.user.user.stat['goal_achieved'].toString() + '/' + cubit.store.user.user.stat['goal'].toString(), style: TextStyles.text14Regular),
                   margin: const EdgeInsets.only(right: 30),
                 ),
                 Container(
@@ -52,7 +51,7 @@ class _UnitsScreenState extends State<UnitsScreen> {
                       color: ColorStyles.orange, size: 27),
                   margin: const EdgeInsets.only(right: 2),
                 ),
-                Text('14', style: TextStyles.text14Regular),
+                Text(cubit.store.user.user.stat['impact_mode'].toString(), style: TextStyles.text14Regular),
               ],
             )));
   }

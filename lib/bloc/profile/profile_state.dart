@@ -6,3 +6,5 @@ abstract class ProfileState extends MainState {}
 class ProfileInitial extends ProfileState {}
 
 class ProfileLoaded extends ProfileState {}
+
+class ProfileQuited extends ProfileState {}

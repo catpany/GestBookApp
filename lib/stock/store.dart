@@ -18,6 +18,7 @@ class Store {
   UserRepository get user => _stores['user'] as UserRepository;
   LessonRepository get lessons => _stores['lessons'] as LessonRepository;
   final List<String> staticStores = ['auth', 'units', 'user', 'lessons'];
+  List<String> clearStores = ['lessons', 'units', 'auth', 'user'];
 
   Store(this.preloadStores) {
     init();
@@ -45,5 +46,13 @@ class Store {
       }
     }
 
+  }
+
+  clear() {
+    for (final store in _stores.entries) {
+      if (clearStores.contains(store.key)) {
+        store.value.clear();
+      }
+    }
   }
 }
