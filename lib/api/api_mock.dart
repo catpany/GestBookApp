@@ -86,7 +86,7 @@ class ApiMock implements AbstractApi {
   @override
   Future<Response> user() async {
     const body = {
-      'data': {'id': 'jhdfj', 'username': 'user N', 'email': 'aaa@mail.ru', 'stat': {
+      'data': {'id': 'jhdfj', 'username': 'userN', 'email': 'aaa@mail.ru', 'stat': {
         'impact_mode': 0,
         'goal': 30,
         'goal_achieved': 12,
@@ -330,6 +330,30 @@ class ApiMock implements AbstractApi {
 
     return Future<Response>.delayed(const Duration(seconds: 1), () {
       return ErrorResponse(code: 101, message: 'Error');
+    });
+  }
+
+  @override
+  Future<Response> updateUser(Params params) async {
+    const body = {
+      'data': {
+        'id': '917e13a3-ac72-4d7e-ac85-25fb4c45fda4',
+        'username': 'alice74',
+        'email': 'mraz.gerhard@example.org',
+        'role': 'user'
+      }
+    };
+
+    return Future<Response>.delayed(const Duration(seconds: 2), () {
+      return SuccessResponse(data: body);
+    });
+  }
+
+  @override
+  Future<Response> deleteUser() async {
+
+    return Future<Response>.delayed(const Duration(seconds: 2), () {
+      return SuccessResponse(data: {});
     });
   }
 }

@@ -14,7 +14,7 @@ class UserModel  extends HiveObject {
   @HiveField(2)
   String email;
   @HiveField(3)
-  Map<String, int> stat;
+  Map<String, int?> stat;
 
   UserModel({
     required this.id,

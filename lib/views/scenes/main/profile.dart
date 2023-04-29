@@ -1,18 +1,17 @@
 import 'dart:developer';
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/bloc/profile/profile_cubit.dart';
 import 'package:sigest/views/scenes/auth/login.dart';
+import 'package:sigest/views/scenes/profile-settings.dart';
 import 'package:sigest/views/widgets/button.dart';
 import 'package:sigest/views/widgets/notice.dart';
 import 'package:sigest/views/widgets/popup_window.dart';
 import 'package:sigest/views/widgets/statistic.dart';
 
 import '../../../bloc/main_cubit.dart';
-import '../../../models/user.dart';
 import '../../styles.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -32,22 +31,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   PreferredSizeWidget _renderTopBar(BuildContext context, MainState state) {
-    return PreferredSize(
-        preferredSize: const Size(double.infinity, 60),
-        child: Container(
-          color: ColorStyles.accent,
-          alignment: AlignmentDirectional.center,
-          // padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 33),
-          child: const Text('ПРОФИЛЬ', style: TextStyles.title18Medium),
-        ));
+    return AppBar(
+      title: const Text('ПРОФИЛЬ', style: TextStyles.title18Medium),
+      backgroundColor: ColorStyles.accent,
+      shadowColor: Colors.transparent,
+      centerTitle: true,
+    );
   }
 
   void _navigateToSettings() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (BuildContext context) {
-    //     return SplashScreen();
-    //   }));
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (BuildContext context) {
+        return ProfileSettingsScreen();
+      }));
   }
 
   void _navigateToLogin() {
@@ -75,11 +72,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Container(
                   margin: const EdgeInsets.only(bottom: 4),
                   child: Text(cubit.store.user.user.username.toUpperCase(),
-                      style: TextStyles.text16Medium),
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
                 '' != cubit.store.user.user.email
                     ? Text(cubit.store.user.user.email.toLowerCase(),
-                        style: TextStyles.text14Regular
+                        style: Theme.of(context).textTheme.bodySmall
                             ?.apply(color: ColorStyles.grayDark))
                     : const SizedBox.shrink(),
               ],
@@ -113,14 +110,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ));
   }
 
-  List<Widget> _renderStatisticsBlock() {
+  List<Widget> _renderStatisticsBlock(BuildContext context) {
     return [
       Container(
         margin: const EdgeInsets.only(top: 22, bottom: 17),
         alignment: AlignmentDirectional.centerStart,
-        child: const Text('СТАТИСТИКА', style: TextStyles.text16Medium),
+        child: Text('СТАТИСТИКА', style: Theme.of(context).textTheme.headlineMedium),
       ),
-      Container(
+      SizedBox(
         width: double.infinity,
         child: Wrap(
             alignment: WrapAlignment.spaceBetween,
@@ -134,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // Spacer(),
               StatisticWidget(
                 type: StatisticType.gestures,
-                title: cubit.store.user.user.stat['goal_achieved'].toString() + '/' + cubit.store.user.user.stat['goal'].toString() + ' жестов',
+                title: cubit.store.user.user.stat['goal_achieved'].toString() + '/' + (cubit.store.user.user.stat['goal']?? 10).toString() + ' жестов',
                 subtitle: 'ежедн. цель',
               ),
               StatisticWidget(
@@ -147,7 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ];
   }
 
-  List<Widget> _renderNotificationsBlock() {
+  List<Widget> _renderNotificationsBlock(BuildContext context) {
     return [
       Container(
         margin: const EdgeInsets.only(top: 22, bottom: 17),
@@ -157,8 +154,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Row(
               children: [
-                const Text('УВЕДОМЛЕНИЯ', style: TextStyles.text16Medium),
-                Padding(padding: const EdgeInsets.symmetric(horizontal: 10), child: Text('9', style: TextStyles.text16Medium?.apply(color: ColorStyles.red))),
+                Text('УВЕДОМЛЕНИЯ', style: Theme.of(context).textTheme.headlineMedium),
+                Padding(padding: const EdgeInsets.symmetric(horizontal: 10), child: Text('9', style: Theme.of(context).textTheme.headlineMedium?.apply(color: ColorStyles.red))),
               ],
             ),
             Positioned(
@@ -184,9 +181,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text('смотреть все', style: TextStyles.text14Regular),
-                    Icon(Icons.chevron_right, size: 22, color: ColorStyles.black)
+                  children: [
+                    Text('смотреть все', style: Theme.of(context).textTheme.bodySmall),
+                    const Icon(Icons.chevron_right, size: 22, color: ColorStyles.grayDark)
                   ]
                 )
               )
@@ -231,7 +228,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Text(
                 "НЕТ НОВЫХ \n УВЕДОМЛЕНИЙ",
-                style: TextStyles.text16Medium?.apply(color: ColorStyles.gray),
+                style: Theme.of(context).textTheme.headlineMedium?.apply(color: ColorStyles.gray),
                 textAlign: TextAlign.center,
               ),
               const Padding(
@@ -251,7 +248,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     for(var index = 0; index < length; index++){
       noticeWidgets.add(Padding(
-          padding: EdgeInsets.symmetric(vertical: 8.5),
+          padding: const EdgeInsets.symmetric(vertical: 8.5),
           child: NoticeWidget(
               title: notices[index]['title'] ?? '',
               text: notices[index]['text'] ?? ''))
@@ -266,9 +263,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         margin: const EdgeInsets.only(top: 28),
         child: ButtonWidget(
           text: 'ВЫЙТИ ИЗ ПРОФИЛЯ',
-          backgroundColor: ColorStyles.white,
+          backgroundColor: Colors.transparent,
           color: ColorStyles.red,
-          splashColor: ColorStyles.white,
           minWidth: 200,
           height: 40,
           borderSideColor: ColorStyles.red,
@@ -286,6 +282,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             text: 'Вы уверены, что хотите выйти?',
             onAcceptButtonPress: () => cubit.quit(),
             onRejectButtonPress: () => Navigator.pop(context),
+            acceptButtonText: 'выйти',
+            rejectButtonText: 'отмена',
           );
         }
     );
@@ -297,8 +295,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 18),
         child: Column(
             children: [_renderUserBlock()] +
-                _renderStatisticsBlock() +
-                _renderNotificationsBlock() +
+                _renderStatisticsBlock(context) +
+                _renderNotificationsBlock(context) +
                 [_renderQuitButton()]),
       );
     }
@@ -319,7 +317,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             builder: (BuildContext context, state) {
               return Scaffold(
                   resizeToAvoidBottomInset: false,
-                  backgroundColor: Colors.white,
+                  // backgroundColor: Colors.white,
                   appBar: _renderTopBar(context, state),
                   body: _renderBody(context, state));
             }));

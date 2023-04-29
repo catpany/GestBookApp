@@ -18,7 +18,7 @@ class AuthModelAdapter extends TypeAdapter<AuthModel> {
     };
     return AuthModel(
       accessToken: fields[0] as String,
-      refreshToken: (fields[1] as Map).cast<String, String>(),
+      refreshToken: (fields[1] as Map).cast<String, dynamic>(),
     );
   }
 
@@ -49,10 +49,7 @@ class AuthModelAdapter extends TypeAdapter<AuthModel> {
 
 AuthModel _$AuthModelFromJson(Map<String, dynamic> json) => AuthModel(
       accessToken: json['access_token'] as String? ?? '',
-      refreshToken: (json['refresh_token'] as Map<String, dynamic>?)?.map(
-            (k, e) => MapEntry(k, e as String),
-          ) ??
-          {},
+      refreshToken: json['refresh_token'] as Map<String, dynamic>? ?? {},
     );
 
 Map<String, dynamic> _$AuthModelToJson(AuthModel instance) => <String, dynamic>{

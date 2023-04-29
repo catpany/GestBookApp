@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:injectable/injectable.dart';
 import 'package:sigest/api/abstract_api.dart';
 import 'package:sigest/api/params.dart';
 import 'package:sigest/stock/abstract_repository.dart';
@@ -34,8 +33,6 @@ class HiveRepository<T extends HiveObject> implements AbstractRepository {
 
   @override
   dynamic load(String key, Params? params) async {
-    // store = Hive.isBoxOpen(name.toString())? Hive.box(name.toString()) : await Hive.openBox(name.toString());
-    await init();
     this.params = params;
     return store.get(key);
   }

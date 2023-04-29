@@ -11,7 +11,7 @@ class AuthModel  extends HiveObject {
   String accessToken;
   @JsonKey(name: 'refresh_token', defaultValue: {})
   @HiveField(1)
-  Map<String, String> refreshToken;
+  Map<String, dynamic> refreshToken;
 
   AuthModel({
     required this.accessToken,

@@ -85,18 +85,16 @@ class ResetPasswordScreen extends AuthScreen {
             text: 'Сбросить пароль',
             color: ColorStyles.accent,
             backgroundColor: ColorStyles.white,
-            splashColor: Colors.white12,
             minWidth: 248,
             height: 41,
           )),
       ButtonWidget(
         onClick: () {
-          context.read<AuthCubit>().resendForgotPasswordCode(params['login']);
+          cubit.resendForgotPasswordCode(params['login']);
         },
         text: 'Отправить код еще раз',
         color: ColorStyles.white,
         backgroundColor: Colors.transparent,
-        splashColor: Colors.white12,
         minWidth: 248,
         height: 41,
         borderSideColor: Colors.white,

@@ -9,19 +9,19 @@ class Validator {
 
       switch (ruleRes[0]) {
         case 'password':
-          if (value.isValidPassword()) {
+          if (value.isEmpty || value.isValidPassword()) {
             break;
           }
 
           return 'Неверный формат пароля';
         case 'username':
-          if (value.isValidUsername()) {
+          if (value.isEmpty || value.isValidUsername()) {
             break;
           }
 
           return 'Только латиница и -._\'+';
         case 'email':
-          if (value.isValidEmail()) {
+          if (value.isEmpty || value.isValidEmail()) {
             break;
           }
 
@@ -33,7 +33,7 @@ class Validator {
 
           break;
         case 'numeric':
-          if (value.isNumeric()) {
+          if (value.isEmpty || value.isNumeric()) {
             break;
           }
           
@@ -46,7 +46,7 @@ class Validator {
 
           final int min = int.parse(ruleRes[1]);
 
-          if (value.length < min) {
+          if (value.isNotEmpty && value.length < min) {
             return 'Минимальная длина $min символов';
           }
 
@@ -59,7 +59,7 @@ class Validator {
 
           final int max = int.parse(ruleRes[1]);
 
-          if (value.length > max) {
+          if (value.isNotEmpty && value.length > max) {
             return 'Максимальная длина $max символов';
           }
 

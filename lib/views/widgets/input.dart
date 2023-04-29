@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../helpers/validator.dart';
@@ -16,18 +15,20 @@ class TextFormFieldWidget extends StatefulWidget {
   final String hintText;
   final Widget? prefixIcon;
   final FocusNode? focusNode;
-  bool obscureText;
+  final bool obscureText;
   final TextEditingController? controller;
   final TextInputAction actionKeyboard;
   final Function? onSubmitField;
   final Function? onFieldTap;
   final String title;
-  final Color titleColor;
+  final Color? titleColor;
+  final Color borderColor;
   final FieldType type;
   final String rules;
   final String? errorText;
+  final Function(String)? onChanged;
 
-  TextFormFieldWidget({
+  const TextFormFieldWidget({
     Key? key,
     required this.hintText,
     this.focusNode,
@@ -39,10 +40,12 @@ class TextFormFieldWidget extends StatefulWidget {
     this.onFieldTap,
     this.prefixIcon,
     this.title = '',
-    this.titleColor = Colors.black,
+    this.titleColor,
     this.type = FieldType.text,
     this.rules = '',
-    this.errorText
+    this.errorText,
+    this.borderColor = Colors.white,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -51,22 +54,30 @@ class TextFormFieldWidget extends StatefulWidget {
 
 class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
   double bottomPaddingToError = 20;
+  bool obscureText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    obscureText = widget.obscureText;
+  }
+
 
   Widget renderIcon() {
     if (widget.type == FieldType.password) {
       return IconButton(
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
-        icon: true == widget.obscureText ?
-        const Icon(
+        icon: true == obscureText ?
+        Icon(
           Icons.visibility,
           size: 24,
-          color: ColorStyles.white,
+          color: widget.borderColor,
         ) :
-        const Icon(
+        Icon(
           Icons.visibility_off,
           size: 24,
-          color: ColorStyles.white,
+          color: widget.borderColor,
         ),
         onPressed: () => toggleTextShow(),
       );
@@ -78,7 +89,7 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
 
   void toggleTextShow() {
     setState(() {
-      widget.obscureText = !widget.obscureText;
+      obscureText = !obscureText;
     });
   }
 
@@ -91,39 +102,33 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
       child:
       Container(
       margin: const EdgeInsets.only(bottom: 12),
-      constraints: const BoxConstraints(
-        minHeight: 0,
-        minWidth: 200,
-        maxHeight: 93,
-        maxWidth: 248,
-      ),
       child:
         Stack(
             children: <Widget>[
               TextFormField(
-                  obscureText: widget.obscureText,
+                  obscureText: obscureText,
                   obscuringCharacter: "\u25cf", // or "\u2b24"
                   keyboardType: widget.textInputType,
                   textInputAction: widget.actionKeyboard,
                   focusNode: widget.focusNode,
-                  style: widget.type == FieldType.password && widget.obscureText ? TextStyles.text14Regular?.apply(color: ColorStyles.white) : TextStyles.text14Regular,
+                  style: widget.type == FieldType.password && obscureText ? Theme.of(context).textTheme.bodySmall?.apply(color: widget.borderColor) : Theme.of(context).textTheme.bodySmall,
                   decoration: InputDecoration(
                     prefixIcon: widget.prefixIcon,
                     hintText: widget.hintText.toUpperCase(),
                     errorText: widget.errorText,
-                    enabledBorder: const UnderlineInputBorder(
+                    enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
-                        color: ColorStyles.white,
-                        width: 1,
-                      ),
-                    ),
-                    focusedBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: ColorStyles.white,
+                        color: widget.borderColor,
                         width: 2,
                       ),
                     ),
-                    hintStyle: TextStyles.text14Regular?.apply(color: widget.titleColor),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: widget.borderColor,
+                        width: 4,
+                      ),
+                    ),
+                    hintStyle: Theme.of(context).textTheme.bodySmall?.apply(color: widget.titleColor),
                     contentPadding: const EdgeInsets.only(
                         top: 10,
                         bottom: 10,
@@ -132,7 +137,7 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
                     ),
                     isDense: true,
                     errorMaxLines: 2,
-                    errorStyle: TextStyles.text14Regular?.apply(color: ColorStyles.red, overflow: TextOverflow.visible),
+                    errorStyle: Theme.of(context).textTheme.bodySmall?.apply(color: ColorStyles.red, overflow: TextOverflow.visible),
                     errorBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: ColorStyles.red,
@@ -156,6 +161,9 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
                   onTap: () {
                     widget.onFieldTap != null ? widget.onFieldTap!() : {};
                   },
+                onChanged: (value)  {
+                widget.onChanged != null ? widget.onChanged!(value) : {};
+                },
                 ),
               Positioned(
                 right: 0,

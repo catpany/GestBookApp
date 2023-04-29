@@ -8,8 +8,10 @@ class PopupWindowWidget extends StatelessWidget {
   final String text;
   final Function onAcceptButtonPress;
   final Function onRejectButtonPress;
+  final String acceptButtonText;
+  final String rejectButtonText;
 
-  const PopupWindowWidget({Key? key, required this.title, required this.text, required this.onAcceptButtonPress, required this.onRejectButtonPress}) : super(key: key);
+  const PopupWindowWidget({Key? key, required this.title, required this.text, required this.onAcceptButtonPress, required this.onRejectButtonPress, required this.acceptButtonText, required this.rejectButtonText}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +30,8 @@ class PopupWindowWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.min,
               children:[
-                Text(title, style: TextStyles.text16SemiBold),
-                Text(text, style: TextStyles.text14Regular),
+                Text(title, style: Theme.of(context).textTheme.headlineLarge),
+                Text(text, style: Theme.of(context).textTheme.bodySmall, textAlign: TextAlign.center,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
@@ -37,9 +39,8 @@ class PopupWindowWidget extends StatelessWidget {
                     ButtonWidget(
                         onClick: onRejectButtonPress,
                         color: ColorStyles.gray,
-                        backgroundColor: ColorStyles.white,
-                        splashColor: ColorStyles.white,
-                        text: 'ОТМЕНА',
+                        backgroundColor: Colors.transparent,
+                        text: rejectButtonText.toUpperCase(),
                         minWidth: 110,
                         height: 37
                     ),
@@ -47,9 +48,8 @@ class PopupWindowWidget extends StatelessWidget {
                     ButtonWidget(
                         onClick: onAcceptButtonPress,
                         color: ColorStyles.red,
-                        backgroundColor: ColorStyles.white,
-                        splashColor: ColorStyles.white,
-                        text: 'ВЫЙТИ',
+                        backgroundColor: Colors.transparent,
+                        text: acceptButtonText.toUpperCase(),
                         minWidth: 100,
                         height: 37
                     )

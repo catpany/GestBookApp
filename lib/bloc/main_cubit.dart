@@ -28,7 +28,7 @@ class MainCubit extends Cubit<MainState> {
 
   Future<void> load() async {
     emit(DataLoading());
-    store.loadStatic().then((value) {
+    store.load().then((value) {
       log('static data loaded');
       emit(DataLoaded());
     }, onError: (error, StackTrace stackTrace) {
@@ -53,6 +53,18 @@ class MainCubit extends Cubit<MainState> {
       }
 
       return true;
+    }
+
+    return false;
+  }
+
+  bool isNeedToActivate(Response response) {
+    if (response is ErrorResponse) {
+      if (response.code < 200) {
+        if (ApiErrors.notActivated == codeErrors[response.code]) {
+          return true;
+        }
+      }
     }
 
     return false;

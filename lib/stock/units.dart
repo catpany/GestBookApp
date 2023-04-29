@@ -2,10 +2,7 @@ import 'dart:developer';
 
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sigest/api/abstract_api.dart';
 import 'package:sigest/models/lesson.dart';
-import 'package:sigest/stock/abstract_stock.dart';
-import 'package:sigest/stock/hive_source_of_truth.dart';
 import 'package:sigest/stock/hive_stock.dart';
 import 'package:sigest/stock/lessons.dart';
 import 'package:stock/stock.dart';
@@ -29,20 +26,17 @@ class UnitsRepository extends HiveStock<UnitsModel> {
     Response response = await api.units();
 
     if (response is ErrorResponse) {
-      log('Load Error');
       throw StockResponseError(ResponseOrigin.fetcher, response);
     }
 
     response = response as SuccessResponse;
 
     List<UnitModel> units = [];
-    log('for units');
 
     for(var unit in response.data['list']) {
       LessonRepository rep = locator.get<AbstractRepository>(instanceName: 'lessons') as LessonRepository;
       await rep.init();
       List<LessonModel> lessons = [];
-      log('for lessons');
       for(var lesson in unit['lessons']) {
         LessonModel lessonItem = LessonModel.fromJson(lesson);
         rep.put(lessonItem.id, lessonItem);
@@ -50,10 +44,8 @@ class UnitsRepository extends HiveStock<UnitsModel> {
       }
 
       UnitModel unitItem = UnitModel(id: unit['id'], order: unit['order'], lessons: HiveList(rep.store, objects: lessons));
-      // unitItem.lessons = HiveList(box as Box, objects: lessons);
       units.add(unitItem);
     }
-    // return UnitsModel.fromJson({'items': response.data['units']});
 
     return UnitsModel(items: units);
   }

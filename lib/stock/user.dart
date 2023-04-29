@@ -25,10 +25,32 @@ class UserRepository extends HiveStock<UserModel> {
     Response response = await api.user();
 
     if (response is ErrorResponse) {
-      log('Load Error');
+      log('Load Error 1');
+      log(response.message);
       throw StockResponseError(ResponseOrigin.fetcher, response);
     }
     response = response as SuccessResponse;
     return UserModel.fromJson(response.data);
+  }
+
+  Future<Response> deleteUser() async {
+    Response response = await api.deleteUser();
+
+    return response;
+  }
+
+  Future<Response> updateUser(Params userParams) async {
+    Response response = await api.updateUser(userParams);
+
+    if (response is SuccessResponse) {
+      log('update user');
+      log(response.data.toString());
+      UserModel user = this.user;
+      user.email = response.data['email'];
+      user.username = response.data['username'];
+      user.save();
+    }
+
+    return response;
   }
 }

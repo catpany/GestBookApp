@@ -1,8 +1,6 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/views/scenes/auth/login.dart';
 import 'package:sigest/views/scenes/auth/registration.dart';
@@ -20,7 +18,8 @@ class ActivateProfileScreen extends AuthScreen {
             key: key,
             bindControllers: {
               'code': TextEditingController(text: '')
-            });
+            },
+  );
 
   @override
   String get title => 'Активация профиля';
@@ -68,15 +67,12 @@ class ActivateProfileScreen extends AuthScreen {
                 return;
               }
 
-              context
-                  .read<AuthCubit>()
-                  .activateProfile(params['login']);
+              cubit.activateProfile(params['login']);
               log('success!!');
             },
             text: 'Активировать',
             color: const Color(0xffff6f91),
             backgroundColor: Colors.white,
-            splashColor: Colors.white12,
             minWidth: 248,
             height: 41,
             borderSideColor: Colors.white,
@@ -88,7 +84,6 @@ class ActivateProfileScreen extends AuthScreen {
         text: 'Отправить код еще раз',
         color: Colors.white,
         backgroundColor: Colors.transparent,
-        splashColor: Colors.white12,
         minWidth: 248,
         height: 41,
         borderSideColor: Colors.white,

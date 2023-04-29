@@ -1,12 +1,7 @@
 import 'dart:developer';
 
-import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
 import 'package:sigest/bloc/main_cubit.dart';
-
-import '../../models/unit.dart';
-import '../../models/user.dart';
-import '../../stock/user.dart';
 
 part 'profile_state.dart';
 
@@ -14,7 +9,7 @@ class ProfileCubit extends MainCubit {
   ProfileCubit() : super();
 
   @override
-  List<String> get preloadStores => ['units', 'lessons', 'user'];
+  List<String> get preloadStores => ['units', 'lessons', 'user', 'settings'];
 
   int getAllLessonsNumber() {
     int count = 0;
@@ -28,6 +23,8 @@ class ProfileCubit extends MainCubit {
   void quit() {
     log('quit');
     store.clear();
+    store.settings.delete('current');
+
     log('emit quit');
 
     emit(ProfileQuited());

@@ -7,6 +7,7 @@ import 'package:sigest/api/params.dart';
 import 'package:sigest/api/response.dart';
 import 'package:sigest/locator.dart';
 import 'package:sigest/main.dart';
+import 'package:sigest/models/auth.dart';
 import 'package:sigest/stock/auth.dart';
 
 import '../stock/abstract_repository.dart';
@@ -35,6 +36,7 @@ class Api implements AbstractApi {
 
     if (response.isError()) {
       log('not refreshed');
+      log(response.body.toString());
       return false;
     }
     log('refresh');
@@ -42,7 +44,7 @@ class Api implements AbstractApi {
     SuccessResponse successResponse = response.getSuccessResponse();
 
     await auth.init();
-    auth.put('auth', successResponse.data);
+    auth.tokens = AuthModel.fromJson(successResponse.data);
 
     return true;
   }
@@ -101,20 +103,32 @@ class Api implements AbstractApi {
       required String uri,
       required Map<String, String> headers,
       Params? params}) async {
-    if ('post' == method) {
-      if (params != null) log(jsonEncode(params?.body).toString());
-      log(Uri.http(_host, _prefix + _version + uri, params?.query).toString());
-      return await http.post(
+    if (params != null) log(jsonEncode(params?.body).toString());
+    switch (method) {
+      case 'post':
+        log(Uri.http(_host, _prefix + _version + uri, params?.query)
+            .toString());
+        return await http.post(
+            Uri.http(_host, _prefix + _version + uri, params?.query),
+            headers: headers,
+            body: jsonEncode(params?.body));
+      case 'get':
+        return await http.get(
           Uri.http(_host, _prefix + _version + uri, params?.query),
           headers: headers,
-          body: jsonEncode(params?.body));
-    } else if ('get' == method) {
-      return await http.get(
-        Uri.http(_host, _prefix + _version + uri, params?.query),
-        headers: headers,
-      );
-    } else {
-      throw Exception('Invalid method');
+        );
+      case 'put':
+        return await http.put(
+            Uri.http(_host, _prefix + _version + uri, params?.query),
+            headers: headers,
+            body: jsonEncode(params?.body));
+      case 'delete':
+        return await http.delete(
+            Uri.http(_host, _prefix + _version + uri, params?.query),
+            headers: headers,
+            body: jsonEncode(params?.body));
+      default:
+        throw Exception('Invalid method');
     }
   }
 
@@ -160,6 +174,16 @@ class Api implements AbstractApi {
 
   @override
   Future<Response> units() async {
-    return make(method: 'get', uri: '/units', headers: {});
+    return make(method: 'get', uri: '/unit', headers: {});
+  }
+
+  @override
+  Future<Response> updateUser(Params params) async {
+    return make(method: 'put', uri: '/user', headers: {}, params: params);
+  }
+
+  @override
+  Future<Response> deleteUser() async {
+    return make(method: 'delete', uri: '/user', headers: {});
   }
 }

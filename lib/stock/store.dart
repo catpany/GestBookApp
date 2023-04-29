@@ -5,6 +5,7 @@ import 'package:sigest/models/auth.dart';
 import 'package:sigest/stock/abstract_repository.dart';
 import 'package:sigest/stock/auth.dart';
 import 'package:sigest/stock/lessons.dart';
+import 'package:sigest/stock/settings.dart';
 import 'package:sigest/stock/units.dart';
 import 'package:sigest/stock/user.dart';
 
@@ -16,6 +17,7 @@ class Store {
   AuthRepository get auth => _stores['auth'] as AuthRepository;
   UnitsRepository get units => _stores['units'] as UnitsRepository;
   UserRepository get user => _stores['user'] as UserRepository;
+  SettingsRepository get settings => _stores['settings'] as SettingsRepository;
   LessonRepository get lessons => _stores['lessons'] as LessonRepository;
   final List<String> staticStores = ['auth', 'units', 'user', 'lessons'];
   List<String> clearStores = ['lessons', 'units', 'auth', 'user'];
@@ -30,16 +32,20 @@ class Store {
     }
   }
 
-  Future<void> loadStatic() async {
+  Future<void> load() async {
     for(final store in _stores.entries) {
+      await store.value.init();
+
       if (staticStores.contains(store.key)) {
         await store.value.load(store.key, null);
       }
     }
   }
 
-  Future<void> reloadStatic() async {
+  Future<void> reload() async {
     for(final store in _stores.entries) {
+      await store.value.init();
+
       if (staticStores.contains(store.key)) {
         await store.value.reload(store.key, null);
         log('reload ' + store.key);

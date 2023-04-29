@@ -20,7 +20,7 @@ class LessonModel extends HiveObject {
   @JsonKey(name: 'levels_total')
   @HiveField(4)
   int levelsTotal;
-  @JsonKey(name: 'levels_finished')
+  @JsonKey(name: 'levels_finished', defaultValue: 0)
   @HiveField(5)
   int levelsFinished;
   @JsonKey(defaultValue: false)

@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sigest/views/styles.dart';
 
@@ -34,9 +33,8 @@ class LessonDialogWidget extends StatefulWidget {
             },
             color: ColorStyles.accent,
             borderSideColor: ColorStyles.accent,
-            backgroundColor: ColorStyles.white,
+            backgroundColor: Colors.transparent,
             text: 'Теория',
-            splashColor: ColorStyles.white,
             minWidth: double.infinity,
             height: 41,
           )));
@@ -50,7 +48,6 @@ class LessonDialogWidget extends StatefulWidget {
         color: ColorStyles.white,
         backgroundColor: ColorStyles.purple,
         text: 'Повторить',
-        splashColor: ColorStyles.purple,
         minWidth: double.infinity,
         height: 41,
       ));
@@ -66,7 +63,6 @@ class LessonDialogWidget extends StatefulWidget {
         color: ColorStyles.white,
         backgroundColor: ColorStyles.green,
         text: 'Начать',
-        splashColor: ColorStyles.green,
         minWidth: double.infinity,
         height: 41,
       ));
@@ -83,7 +79,6 @@ class LessonDialogWidget extends StatefulWidget {
         color: ColorStyles.white,
         backgroundColor: ColorStyles.green,
         text: 'Продолжить',
-        splashColor: ColorStyles.green,
         minWidth: double.infinity,
         height: 41,
       ));

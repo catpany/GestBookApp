@@ -17,9 +17,11 @@ class AuthScreen extends StatelessWidget {
   final bool showSocials = true;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final Map<String, TextEditingController> bindControllers;
+  late final AuthCubit cubit;
 
   AuthScreen({Key? key, required this.bindControllers}) : super(key: key) {
-    log('init auth screen');
+    cubit = AuthCubit(bindControllers);
+    cubit.load();
   }
 
   List<Widget> renderFields([Map<String, dynamic>? errors]) {
@@ -130,7 +132,7 @@ class AuthScreen extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 4),
                   child: Text(
                     state.error.message,
-                    style: TextStyles.text14SemiBold
+                    style: Theme.of(context).textTheme.bodyLarge
                         ?.apply(color: ColorStyles.red),
                   ))
             ];
@@ -168,7 +170,7 @@ class AuthScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> _renderSocialsBlock() {
+  List<Widget> _renderSocialsBlock(BuildContext context) {
     return [
       Container(
         margin: const EdgeInsets.only(
@@ -177,7 +179,7 @@ class AuthScreen extends StatelessWidget {
         child: Text(
           socialsText,
           textAlign: TextAlign.center,
-          style: TextStyles.text14Regular?.apply(color: ColorStyles.white),
+          style: Theme.of(context).textTheme.bodySmall?.apply(color: ColorStyles.white),
         ),
       ),
       Container(
@@ -208,7 +210,7 @@ class AuthScreen extends StatelessWidget {
   @override
   build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AuthCubit(bindControllers),
+      create: (_) => cubit,
       child: Container(
           decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -224,9 +226,11 @@ class AuthScreen extends StatelessWidget {
               ),
               body: SafeArea(
                 child: BlocConsumer<AuthCubit, MainState>(
+                  bloc: cubit,
                     listener: (context, state) {
-                  navigateTo(context, state);
-                }, builder: (context, state) {
+                    navigateTo(context, state);
+                    },
+                    builder: (context, state) {
                   return Stack(
                     alignment: Alignment.topCenter,
                     children: [
@@ -241,7 +245,7 @@ class AuthScreen extends StatelessWidget {
                                   _renderFormBlock(context, state),
                                   _renderLinksBlock(),
                                 ] +
-                                _renderSocialsBlock(),
+                                _renderSocialsBlock(context),
                           ),
                         ),
                       ),
