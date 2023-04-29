@@ -16,7 +16,6 @@ import 'abstract_repository.dart';
 class AuthRepository extends HiveRepository<AuthModel> {
   @override
   String get name => 'auth';
-  // Box<AuthModel> store = Hive.box(name);
   String get refreshToken => get('auth')?.refreshToken['token'] ?? '';
   String get family => get('auth')?.refreshToken['family'] ?? '';
   String get accessToken => get('auth')?.accessToken ?? '';

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../styles.dart';
@@ -7,7 +8,6 @@ class ButtonWidget extends StatefulWidget {
   final String text;
   final Color color;
   final Color backgroundColor;
-  final Color splashColor;
   final double borderRadius;
   final double minWidth;
   final double height;
@@ -21,7 +21,6 @@ class ButtonWidget extends StatefulWidget {
     this.text = '',
     required this.color,
     required this.backgroundColor,
-    required this.splashColor,
     this.borderRadius = 5,
     required this.minWidth,
     required this.height,
@@ -59,7 +58,6 @@ class _ButtonWidgetState extends State<ButtonWidget> {
               Size(widget.minWidth, widget.height)),
           backgroundColor:
               MaterialStateProperty.all<Color>(widget.backgroundColor),
-          foregroundColor: MaterialStateProperty.all<Color>(widget.splashColor),
           side: MaterialStateProperty.all<BorderSide>(BorderSide(
             color: widget.borderSideColor,
             width: 2,
@@ -72,7 +70,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
           children: <Widget>[
             _buildLeadingIcon(widget.leadingIcon),
             Text(widget.text.toUpperCase(),
-                style: TextStyles.text14Medium?.apply(color: widget.color)),
+                style: Theme.of(context).textTheme.bodyMedium?.apply(color: widget.color)),
             _buildTrailingIcon(widget.trailingIcon)
           ],
         ));
@@ -80,22 +78,17 @@ class _ButtonWidgetState extends State<ButtonWidget> {
 
   Widget _buildLeadingIcon(Widget? leadingIcon) {
     if (null != leadingIcon) {
-      return Row(
-        children: <Widget>[leadingIcon, const SizedBox(width: 10)],
-      );
+      return leadingIcon;
     }
-    return Container();
+
+    return const SizedBox.shrink();
   }
 
   Widget _buildTrailingIcon(Widget? trailingIcon) {
     if (null != trailingIcon) {
-      return Row(
-        children: <Widget>[
-          const SizedBox(width: 10),
-          trailingIcon,
-        ],
-      );
+      return trailingIcon;
     }
-    return Container();
+
+    return const SizedBox.shrink();
   }
 }

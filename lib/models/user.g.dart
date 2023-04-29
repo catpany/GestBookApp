@@ -20,7 +20,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       id: fields[0] as String,
       username: fields[1] as String,
       email: fields[2] as String,
-      stat: (fields[3] as Map).cast<String, int>(),
+      stat: (fields[3] as Map).cast<String, int?>(),
     );
   }
 
@@ -57,7 +57,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       id: json['id'] as String,
       username: json['username'] as String,
       email: json['email'] as String? ?? '',
-      stat: Map<String, int>.from(json['stat'] as Map),
+      stat: Map<String, int?>.from(json['stat'] as Map),
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{

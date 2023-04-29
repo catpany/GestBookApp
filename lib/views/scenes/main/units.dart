@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/bloc/main_cubit.dart';
@@ -9,19 +8,19 @@ import 'package:sigest/views/styles.dart';
 import 'package:sigest/views/widgets/unit_list.dart';
 
 class UnitsScreen extends StatefulWidget {
-  const UnitsScreen({Key? key}) : super(key: key);
+  UnitsScreen({Key? key}) : super(key: key);
+  final UnitsCubit cubit = UnitsCubit();
 
   @override
   _UnitsScreenState createState() => _UnitsScreenState();
 }
 
 class _UnitsScreenState extends State<UnitsScreen> {
-  late UnitsCubit cubit = UnitsCubit();
 
   @override
   void initState() {
     super.initState();
-    cubit.load();
+    widget.cubit.load();
   }
 
   PreferredSizeWidget _renderTopBar() {
@@ -30,7 +29,6 @@ class _UnitsScreenState extends State<UnitsScreen> {
         child: Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 33),
             decoration: const BoxDecoration(
-                color: ColorStyles.white,
                 border: Border(
                     bottom: BorderSide(width: 2, color: ColorStyles.gray))),
             child: Row(
@@ -43,7 +41,7 @@ class _UnitsScreenState extends State<UnitsScreen> {
                   margin: const EdgeInsets.only(right: 2),
                 ),
                 Container(
-                  child: Text(cubit.store.user.user.stat['goal_achieved'].toString() + '/' + cubit.store.user.user.stat['goal'].toString(), style: TextStyles.text14Regular),
+                  child: Text(widget.cubit.store.user.user.stat['goal_achieved'].toString() + '/' + (widget.cubit.store.user.user.stat['goal']?? 10).toString(), style: Theme.of(context).textTheme.bodySmall),
                   margin: const EdgeInsets.only(right: 30),
                 ),
                 Container(
@@ -51,14 +49,14 @@ class _UnitsScreenState extends State<UnitsScreen> {
                       color: ColorStyles.orange, size: 27),
                   margin: const EdgeInsets.only(right: 2),
                 ),
-                Text(cubit.store.user.user.stat['impact_mode'].toString(), style: TextStyles.text14Regular),
+                Text(widget.cubit.store.user.user.stat['impact_mode'].toString(), style: Theme.of(context).textTheme.bodySmall),
               ],
             )));
   }
 
   Widget _renderBody(BuildContext context, MainState state) {
     if (state is DataLoaded) {
-      return UnitListWidget(units: cubit.store.units.units, onStartLesson: cubit.onStartLesson);
+      return UnitListWidget(units: widget.cubit.store.units.units, onStartLesson: widget.cubit.onStartLesson);
     }
 
     return const SizedBox.shrink();
@@ -67,10 +65,9 @@ class _UnitsScreenState extends State<UnitsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => cubit,
+        create: (_) => widget.cubit,
         child: Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: Colors.white,
             appBar: _renderTopBar(),
             body: BlocConsumer<UnitsCubit, MainState>(
                 listener: (context, state) {},

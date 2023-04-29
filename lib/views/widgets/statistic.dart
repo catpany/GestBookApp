@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sigest/views/widgets/widget_wrapper.dart';
 
 import '../styles.dart';
 
@@ -42,14 +43,10 @@ class StatisticWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return WidgetWrapper(
       width: 155,
       height: 75,
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: ColorStyles.gray, width: 2.0),
-      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,8 +56,8 @@ class StatisticWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(title, style: TextStyles.text14Medium),
-              Text(subtitle, style: TextStyles.text14Regular, softWrap: true, maxLines: 2,),
+              Text(title, style: Theme.of(context).textTheme.bodyMedium),
+              Text(subtitle, style: TextStyles.text12Regular, softWrap: true, maxLines: 2,),
             ],
           ))
         ],

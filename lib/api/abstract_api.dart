@@ -15,4 +15,8 @@ Future<Response> activateProfile(Params params);
 Future<Response> user();
 
 Future<Response> units();
+
+Future<Response> updateUser(Params params);
+
+Future<Response> deleteUser();
 }

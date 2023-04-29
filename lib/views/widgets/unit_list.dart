@@ -206,7 +206,6 @@ class _UnitListState extends State<UnitListWidget> {
       children: [
         Container(
           padding: const EdgeInsets.symmetric(vertical: 20),
-          color: Colors.white,
           height: 92,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

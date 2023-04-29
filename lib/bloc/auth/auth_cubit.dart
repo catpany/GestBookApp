@@ -104,6 +104,7 @@ class AuthCubit extends MainCubit {
         }));
 
     if (!checkForError(response)) {
+      log('auth success 0');
       emit(AuthSuccess());
     }
   }
@@ -119,17 +120,5 @@ class AuthCubit extends MainCubit {
     if (!checkForError(response)) {
       emit(CodeResent('Код успешно отправлен'));
     }
-  }
-
-  bool isNeedToActivate(Response response) {
-    if (response is ErrorResponse) {
-      if (response.code < 200) {
-        if (ApiErrors.notActivated == codeErrors[response.code]) {
-          return true;
-        }
-      }
-    }
-
-    return false;
   }
 }

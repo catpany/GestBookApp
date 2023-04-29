@@ -1,84 +1,163 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class TextStyles {
-  static const TextStyle? text12Regular = TextStyle(
+  // static const TextStyle text14Regular = TextStyle(
+  //   color: Colors.white,
+  //   fontSize: 14.0,
+  //   fontWeight: FontWeight.w400,
+  //   fontStyle: FontStyle.normal,
+  //   fontFamily: 'Jost',
+  //   height: 1.4,
+  // );
+  //
+  // static const TextStyle text14Medium = TextStyle(
+  //   fontSize: 14.0,
+  //   fontWeight: FontWeight.w500,
+  //   fontStyle: FontStyle.normal,
+  //   // fontFamily: 'Jost',
+  //   height: 1.4,
+  // );
+  //
+  // static const TextStyle text16Medium = TextStyle(
+  //   fontSize: 16.0,
+  //   fontWeight: FontWeight.w500,
+  //   fontStyle: FontStyle.normal,
+  //   // fontFamily: 'Jost',
+  //   height: 1.4,
+  // );
+  //
+  // static const TextStyle text14SemiBold = TextStyle(
+  //   fontSize: 14.0,
+  //   fontWeight: FontWeight.w600,
+  //   fontStyle: FontStyle.normal,
+  //   // fontFamily: 'Jost',
+  //   height: 1.4,
+  // );
+  //
+  // static const TextStyle text16SemiBold = TextStyle(
+  //   fontSize: 16.0,
+  //   fontWeight: FontWeight.w600,
+  //   fontStyle: FontStyle.normal,
+  //   // fontFamily: 'Jost',
+  //   height: 1.4,
+  // );
+
+  static const TextStyle text12Regular = TextStyle(
     color: ColorStyles.grayDark,
     fontSize: 12.0,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
-    fontFamily: 'Jost',
-    // letterSpacing: 1.1,
+    // fontFamily: 'Jost',
     height: 1.4,
   );
 
-  static const TextStyle? text14Regular = TextStyle(
+  static const TextStyle text14RegularLight = TextStyle(
     color: ColorStyles.black,
     fontSize: 14.0,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
-    fontFamily: 'Jost',
-    // letterSpacing: 1.1,
+    // fontFamily: 'Jost',
     height: 1.4,
   );
 
-  static const TextStyle? text14Medium = TextStyle(
+  static const TextStyle text14RegularDark = TextStyle(
+    color: ColorStyles.white,
+    fontSize: 14.0,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+    // fontFamily: 'Jost',
+    height: 1.4,
+  );
+
+  static const TextStyle text14MediumLight = TextStyle(
     color: ColorStyles.black,
     fontSize: 14.0,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
-    fontFamily: 'Jost',
-    // letterSpacing: 1.1,
+    // fontFamily: 'Jost',
     height: 1.4,
   );
 
-  static const TextStyle? text16Medium = TextStyle(
+  static const TextStyle text14MediumDark = TextStyle(
+    color: ColorStyles.white,
+    fontSize: 14.0,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    // fontFamily: 'Jost',
+    height: 1.4,
+  );
+
+  static const TextStyle text16MediumLight = TextStyle(
     color: ColorStyles.black,
     fontSize: 16.0,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
-    fontFamily: 'Jost',
-    // letterSpacing: 1.1,
+    // fontFamily: 'Jost',
     height: 1.4,
   );
 
-  static const TextStyle? text16SemiBold = TextStyle(
-    color: ColorStyles.black,
+  static const TextStyle text16MediumDark = TextStyle(
+    color: ColorStyles.white,
     fontSize: 16.0,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
-    fontFamily: 'Jost',
-    // letterSpacing: 1.1,
+    // fontFamily: 'Jost',
     height: 1.4,
   );
 
-  static const TextStyle? text14SemiBold = TextStyle(
+  static const TextStyle text14SemiBoldLight = TextStyle(
     color: ColorStyles.black,
     fontSize: 14.0,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
-    fontFamily: 'Jost',
-    // letterSpacing: 1.1,
+    // fontFamily: 'Jost',
     height: 1.4,
   );
 
-  static const TextStyle? title18Medium = TextStyle(
+  static const TextStyle text14SemiBoldDark = TextStyle(
+    color: ColorStyles.white,
+    fontSize: 14.0,
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.normal,
+    // fontFamily: 'Jost',
+    height: 1.4,
+  );
+
+  static const TextStyle text16SemiBoldLight = TextStyle(
+    color: ColorStyles.black,
+    fontSize: 16.0,
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.normal,
+    // fontFamily: 'Jost',
+    height: 1.4,
+  );
+
+  static const TextStyle text16SemiBoldDark = TextStyle(
+    color: ColorStyles.white,
+    fontSize: 16.0,
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.normal,
+    // fontFamily: 'Jost',
+    height: 1.4,
+  );
+
+  static const TextStyle title18Medium = TextStyle(
     color: ColorStyles.white,
     fontSize: 18.0,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
-    fontFamily: 'Jost',
-    // letterSpacing: 1.1,
+    // fontFamily: 'Jost',
     height: 1.4,
   );
 
-  static const TextStyle? title21Regular = TextStyle(
+  static const TextStyle title21Regular = TextStyle(
     color: ColorStyles.white,
     fontSize: 21.0,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
-    fontFamily: 'Jost',
-    // letterSpacing: 1.1,
+    // fontFamily: 'Jost',
     height: 1.4,
   );
 
@@ -87,8 +166,7 @@ class TextStyles {
     fontSize: 20.0,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
-    fontFamily: 'Jost',
-    // letterSpacing: 1.1,
+    // fontFamily: 'Jost',
     height: 1.4,
   );
 
@@ -97,8 +175,7 @@ class TextStyles {
     fontSize: 60.0,
     fontWeight: FontWeight.w700,
     fontStyle: FontStyle.normal,
-    fontFamily: 'Jost',
-    // letterSpacing: 1.1,
+    // fontFamily: 'Jost',
     height: 1.4,
   );
 }

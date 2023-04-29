@@ -77,13 +77,12 @@ class RegistrationScreen extends AuthScreen {
           if (!formKey.currentState!.validate()) {
             return;
           }
-          context.read<AuthCubit>().register();
+          cubit.register();
           log('success!!');
         },
         text: 'Зарегистрироваться',
         color: const Color(0xffff6f91),
         backgroundColor: Colors.white,
-        splashColor: Colors.white12,
         minWidth: 248,
         height: 41,
       )

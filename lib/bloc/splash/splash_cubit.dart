@@ -3,8 +3,7 @@ import 'dart:developer';
 
 import 'package:meta/meta.dart';
 import 'package:sigest/api/response.dart';
-
-import 'package:stock/stock.dart';
+import 'package:sigest/models/settings.dart';
 
 import '../main_cubit.dart';
 
@@ -14,22 +13,18 @@ class SplashCubit extends MainCubit {
   SplashCubit() : super();
 
   @override
-  List<String> get preloadStores => ['user'];
+  List<String> get preloadStores => ['user', 'settings'];
 
   @override
   Future<void> load() async {
     log('splash data load');
     emit(DataLoading());
     store
-        .reloadStatic()
-        //     .onError((StockResponseError error, stackTrace) {
-        //   log('error!!!');
-        //   log(error.toString());
-        //   log(stackTrace.toString());
-        //   checkForError(error.error as ErrorResponse);
-        // })
+        .reload()
         .then((value) {
         log('static data loaded');
+        updateSettings();
+
         emit(DataLoaded());
     }, onError: (error, StackTrace stackTrace) {
       log('error!!!');
@@ -37,5 +32,25 @@ class SplashCubit extends MainCubit {
       log(stackTrace.toString());
       checkForError(error.error as ErrorResponse);
     });
+  }
+
+  void updateSettings() {
+    SettingsModel currentSettings = store.settings.current;
+    SettingsModel userSettings = store.settings.get(store.user.user.id);
+    currentSettings.isDarkMode = userSettings.isDarkMode;
+    currentSettings.notificationTime = userSettings.notificationTime;
+    currentSettings.messagesEnabled = userSettings.messagesEnabled;
+    currentSettings.notificationsEnabled = userSettings.notificationsEnabled;
+    currentSettings.isRightHanded = userSettings.isRightHanded;
+
+    if (!store.settings.store.containsKey(store.user.user.id)) {
+      store.settings.put(store.user.user.id, userSettings);
+    }
+
+    if (store.settings.store.containsKey('current')) {
+      currentSettings.save();
+    } else {
+      store.settings.current = currentSettings;
+    }
   }
 }

@@ -17,8 +17,9 @@ import 'package:sigest/api/api_mock.dart' as _i5;
 import 'package:sigest/stock/abstract_repository.dart' as _i6;
 import 'package:sigest/stock/auth.dart' as _i7;
 import 'package:sigest/stock/lessons.dart' as _i8;
-import 'package:sigest/stock/units.dart' as _i9;
-import 'package:sigest/stock/user.dart' as _i10;
+import 'package:sigest/stock/settings.dart' as _i9;
+import 'package:sigest/stock/units.dart' as _i10;
+import 'package:sigest/stock/user.dart' as _i11;
 
 const String _prod = 'prod';
 const String _dev = 'dev';
@@ -50,12 +51,16 @@ extension GetItInjectableX on _i1.GetIt {
       () => _i8.LessonRepository(),
       instanceName: 'lessons',
     );
+    gh.singleton<_i6.AbstractRepository>(
+      _i9.SettingsRepository(),
+      instanceName: 'settings',
+    );
     gh.lazySingleton<_i6.AbstractRepository>(
-      () => _i9.UnitsRepository(),
+      () => _i10.UnitsRepository(),
       instanceName: 'units',
     );
     gh.lazySingleton<_i6.AbstractRepository>(
-      () => _i10.UserRepository(),
+      () => _i11.UserRepository(),
       instanceName: 'user',
     );
     return this;

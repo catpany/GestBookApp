@@ -64,7 +64,7 @@ class _LessonWidgetState extends State<LessonWidget> {
           ),
           Container(
             margin: const EdgeInsets.only(top: 12),
-            child: Text(widget.title.toUpperCase(), style: TextStyles.text14Regular, overflow: TextOverflow.visible, softWrap: true, textAlign: TextAlign.center,),
+            child: Text(widget.title.toUpperCase(), style: Theme.of(context).textTheme.bodySmall, overflow: TextOverflow.visible, softWrap: true, textAlign: TextAlign.center,),
           ),
         ],
       ),

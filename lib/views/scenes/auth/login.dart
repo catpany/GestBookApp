@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/views/scenes/auth/auth.dart';
 import 'package:sigest/views/scenes/auth/registration.dart';
 import 'package:sigest/views/widgets/button.dart';
@@ -33,7 +32,7 @@ class LoginScreen extends AuthScreen {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (BuildContext context) {
-          return SplashScreen();
+          return const SplashScreen();
         }),
         (Route<dynamic> route) => false,
       );
@@ -79,13 +78,12 @@ class LoginScreen extends AuthScreen {
           if (!formKey.currentState!.validate()) {
             return;
           }
-          context.read<AuthCubit>().login();
+          cubit.login();
           log('success!!');
         },
         text: 'Войти',
         color: const Color(0xffff6f91),
         backgroundColor: Colors.white,
-        splashColor: Colors.white12,
         minWidth: 248,
         height: 41,
       )

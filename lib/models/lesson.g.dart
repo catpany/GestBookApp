@@ -71,7 +71,7 @@ LessonModel _$LessonModelFromJson(Map<String, dynamic> json) => LessonModel(
       name: json['name'] as String,
       icon: LessonModel._hexStringToInt(json['icon'] as String),
       levelsTotal: json['levels_total'] as int,
-      levelsFinished: json['levels_finished'] as int,
+      levelsFinished: json['levels_finished'] as int? ?? 0,
       theory: json['theory'] as bool? ?? false,
     );
 

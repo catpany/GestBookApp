@@ -107,7 +107,7 @@ class NotificationState extends State<NotificationWidget>
                       children: [
                         Expanded(
                             child: Text(widget.text,
-                                style: TextStyles.text14Medium,
+                                style: Theme.of(context).textTheme.headlineMedium,
                                 textAlign: TextAlign.center)),
                         IconButton(
                           onPressed: disable,
