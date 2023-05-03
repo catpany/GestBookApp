@@ -53,8 +53,8 @@ class HiveRepository<T extends HiveObject> implements AbstractRepository {
   }
 
   @override
-  void put(String key, Object item) {
-    store.put(key, item as T);
+  Future<void> put(String key, Object item) {
+    return store.put(key, item as T);
   }
 
   @override

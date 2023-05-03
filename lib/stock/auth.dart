@@ -16,9 +16,13 @@ import 'abstract_repository.dart';
 class AuthRepository extends HiveRepository<AuthModel> {
   @override
   String get name => 'auth';
+
   String get refreshToken => get('auth')?.refreshToken['token'] ?? '';
+
   String get family => get('auth')?.refreshToken['family'] ?? '';
+
   String get accessToken => get('auth')?.accessToken ?? '';
+
   set tokens(AuthModel auth) => put('auth', auth);
 
   Future<Response> login(Params params) async {
@@ -45,7 +49,7 @@ class AuthRepository extends HiveRepository<AuthModel> {
     Response response = await api.resetPassword(resetParams);
 
     if (response is SuccessResponse) {
-        tokens = AuthModel.fromJson(response.data);
+      tokens = AuthModel.fromJson(response.data);
     }
 
     return response;
@@ -55,9 +59,17 @@ class AuthRepository extends HiveRepository<AuthModel> {
     Response response = await api.activateProfile(activateParams);
 
     if (response is SuccessResponse) {
-        tokens = AuthModel.fromJson(response.data);
+      tokens = AuthModel.fromJson(response.data);
     }
 
     return response;
+  }
+
+  Future<Response> authViaGoogle() async {
+    return await api.authViaGoogle();
+  }
+
+  Future<Response> authViaVK() async {
+    return await api.authViaVK();
   }
 }

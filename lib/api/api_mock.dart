@@ -356,4 +356,30 @@ class ApiMock implements AbstractApi {
       return SuccessResponse(data: {});
     });
   }
+
+  @override
+  Future<Response> authViaGoogle() {
+    const body = {
+      'data': {
+        'link': 'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&access_type=online&client_id=571118360099-0ktjk6evriu08tvsto5g7nff7tj75bg5.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fapi%2Fauth%2Flogin%2Fgoogle&state=52136c87877c55e284f91b97588af5d6&scope=openid%20email&prompt=select_account'
+      }
+    };
+
+    return Future<Response>.delayed(const Duration(seconds: 2), () {
+      return SuccessResponse(data: body['data']);
+    });
+  }
+
+  @override
+  Future<Response> authViaVK() {
+    const body = {
+      'data': {
+        'link': 'https://oauth.vk.com/authorize?client_id=51557636&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fapi%2Fv1%2Fauth%2Flogin%2Fvk&display=mobile&scope=4194304&state=52136c87877c55e284f91b97588af5d6&response_type=code&v=5.101'
+      }
+    };
+
+    return Future<Response>.delayed(const Duration(seconds: 2), () {
+      return SuccessResponse(data: body['data']);
+    });
+  }
 }

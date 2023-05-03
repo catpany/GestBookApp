@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -5,6 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sigest/views/widgets/link_button.dart';
 import 'package:sigest/views/widgets/notification.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'dart:io' show Platform;
 
 import '../../../api/response.dart';
 import '../../../bloc/auth/auth_cubit.dart';
@@ -18,6 +22,7 @@ class AuthScreen extends StatelessWidget {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final Map<String, TextEditingController> bindControllers;
   late final AuthCubit cubit;
+  final bool showAppBar = false;
 
   AuthScreen({Key? key, required this.bindControllers}) : super(key: key) {
     cubit = AuthCubit(bindControllers);
@@ -39,7 +44,10 @@ class AuthScreen extends StatelessWidget {
   List<Widget> renderSocials() {
     return [
       ElevatedButton(
-        onPressed: () => {log('press on google')},
+        onPressed: () {
+          log('press on google');
+          cubit.authViaGoogle();
+        },
         child: const Icon(
           FontAwesomeIcons.google,
           size: 30,
@@ -68,7 +76,10 @@ class AuthScreen extends StatelessWidget {
           width: 55,
           height: 55,
           child: ElevatedButton(
-            onPressed: () => {log('press on vk')},
+            onPressed: () {
+              log('press on vk');
+              cubit.authViaVK();
+            },
             style: ButtonStyle(
               overlayColor:
                   MaterialStateProperty.all<Color>(Colors.transparent),
@@ -89,10 +100,82 @@ class AuthScreen extends StatelessWidget {
     ];
   }
 
+  PreferredSizeWidget? _renderAppBar() {
+    if (showAppBar) {
+      return AppBar(
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+      );
+    }
+
+    return null;
+  }
+
+  Widget _renderBody(BuildContext context, MainState state) {
+    if (state is LinkReceived && (Platform.isAndroid || Platform.isIOS)) {
+      WebViewController _controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setBackgroundColor(Colors.white);
+        _controller.setNavigationDelegate(
+          NavigationDelegate(
+            onProgress: (int progress) {
+            },
+            onPageStarted: (String url) {
+            },
+            onPageFinished: (String url) async {
+                String? response = await _controller.runJavaScriptReturningResult("document.querySelector('pre').innerHTML") as String?;
+                if (response != null && jsonDecode(response) != null) {
+                  dynamic jsonTokens = jsonDecode(jsonDecode(response));
+                  print(jsonTokens['access_token'].toString());
+                  print(response.toString());
+                  cubit.setAuth(jsonTokens);
+                } else {
+                  print('empty response');
+                }
+            },
+            onWebResourceError: (WebResourceError error) {},
+            onNavigationRequest: (NavigationRequest request) {
+              return NavigationDecision.navigate;
+            },
+          ),
+        );
+        _controller.loadRequest(Uri.parse(state.link));
+      return SizedBox(
+          width: double.infinity,
+          child: WebViewWidget(
+            controller: _controller,
+          ));
+    }
+
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        _renderTitleBlock(),
+        Container(
+          height: double.infinity,
+          margin: const EdgeInsets.only(top: 144),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                    _renderFormBlock(context, state),
+                    _renderLinksBlock(),
+                  ] +
+                  _renderSocialsBlock(context),
+            ),
+          ),
+        ),
+        _renderNotificationBlock(state),
+        _renderLoadingBlock(context, state),
+      ],
+    );
+  }
+
   Widget _renderTitleBlock() {
     return SizedBox(
         width: double.infinity,
-        height: 100,
+        height: 144,
         child: Container(
           alignment: Alignment.bottomCenter,
           margin: const EdgeInsets.only(bottom: 13),
@@ -132,7 +215,9 @@ class AuthScreen extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 4),
                   child: Text(
                     state.error.message,
-                    style: Theme.of(context).textTheme.bodyLarge
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
                         ?.apply(color: ColorStyles.red),
                   ))
             ];
@@ -179,7 +264,10 @@ class AuthScreen extends StatelessWidget {
         child: Text(
           socialsText,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodySmall?.apply(color: ColorStyles.white),
+          style: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.apply(color: ColorStyles.white),
         ),
       ),
       Container(
@@ -207,6 +295,22 @@ class AuthScreen extends StatelessWidget {
 
   void navigateTo(BuildContext context, MainState state) {}
 
+  Widget _renderLoadingBlock(BuildContext context, MainState state) {
+    if (state is AuthLinkLoading) {
+      return Container(
+          alignment: AlignmentDirectional.center,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height + 44,
+          color: Colors.black12,
+          child: const SizedBox(
+              width: 100,
+              height: 100,
+              child: CircularProgressIndicator(color: ColorStyles.white, strokeWidth: 8,)));
+    }
+
+    return const SizedBox.shrink();
+  }
+
   @override
   build(BuildContext context) {
     return BlocProvider(
@@ -220,39 +324,16 @@ class AuthScreen extends StatelessWidget {
           child: Scaffold(
               resizeToAvoidBottomInset: false,
               backgroundColor: Colors.transparent,
-              appBar: AppBar(
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-              ),
+              appBar: _renderAppBar(),
               body: SafeArea(
                 child: BlocConsumer<AuthCubit, MainState>(
-                  bloc: cubit,
+                    bloc: cubit,
                     listener: (context, state) {
-                    navigateTo(context, state);
+                      navigateTo(context, state);
                     },
                     builder: (context, state) {
-                  return Stack(
-                    alignment: Alignment.topCenter,
-                    children: [
-                      _renderTitleBlock(),
-                      Container(
-                        margin: const EdgeInsets.only(top: 100),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                                  _renderFormBlock(context, state),
-                                  _renderLinksBlock(),
-                                ] +
-                                _renderSocialsBlock(context),
-                          ),
-                        ),
-                      ),
-                      _renderNotificationBlock(state),
-                    ],
-                  );
-                }),
+                      return _renderBody(context, state);
+                    }),
               ))),
     );
   }
