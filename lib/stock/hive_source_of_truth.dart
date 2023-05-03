@@ -24,8 +24,7 @@ class HiveSourceOfTruth<String, T> extends CachedSourceOfTruth<String, T> {
   @protected
   Future<void> write(String key, T? value) async {
     final Box box = Hive.box<T>(name.toString());
-    // Hive.isBoxOpen(name.toString())? Hive.box(name.toString()) : await Hive.openBox(name.toString());
-    box.put(key, value);
+    await box.put(key, value);
     await super.write(key, value);
   }
 }

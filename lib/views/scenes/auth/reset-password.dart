@@ -29,6 +29,9 @@ class ResetPasswordScreen extends AuthScreen {
   @override
   bool get showSocials => false;
 
+  @override
+  bool get showAppBar => true;
+
   Map<String, dynamic> params;
 
   @override

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
@@ -19,6 +20,7 @@ class Api implements AbstractApi {
   final String _prefix = '/api';
   final String _version = '/v1';
   final String _host = config["domain"];
+  var client = http.Client();
 
   AuthRepository get auth =>
       locator.get<AbstractRepository>(instanceName: 'auth') as AuthRepository;
@@ -104,29 +106,30 @@ class Api implements AbstractApi {
       required Map<String, String> headers,
       Params? params}) async {
     if (params != null) log(jsonEncode(params?.body).toString());
+    log(Uri.http(_host, _prefix + _version + uri, params?.query).toString());
     switch (method) {
       case 'post':
-        log(Uri.http(_host, _prefix + _version + uri, params?.query)
-            .toString());
-        return await http.post(
-            Uri.http(_host, _prefix + _version + uri, params?.query),
-            headers: headers,
-            body: jsonEncode(params?.body));
+        return await client
+            .post(Uri.http(_host, _prefix + _version + uri, params?.query),
+                headers: headers, body: jsonEncode(params?.body))
+            .timeout(const Duration(seconds: 60));
       case 'get':
-        return await http.get(
-          Uri.http(_host, _prefix + _version + uri, params?.query),
-          headers: headers,
-        );
+        return await client
+            .get(
+              Uri.http(_host, _prefix + _version + uri, params?.query),
+              headers: headers,
+            )
+            .timeout(const Duration(seconds: 60));
       case 'put':
-        return await http.put(
-            Uri.http(_host, _prefix + _version + uri, params?.query),
-            headers: headers,
-            body: jsonEncode(params?.body));
+        return await client
+            .put(Uri.http(_host, _prefix + _version + uri, params?.query),
+                headers: headers, body: jsonEncode(params?.body))
+            .timeout(const Duration(seconds: 60));
       case 'delete':
-        return await http.delete(
-            Uri.http(_host, _prefix + _version + uri, params?.query),
-            headers: headers,
-            body: jsonEncode(params?.body));
+        return await client
+            .delete(Uri.http(_host, _prefix + _version + uri, params?.query),
+                headers: headers, body: jsonEncode(params?.body))
+            .timeout(const Duration(seconds: 60));
       default:
         throw Exception('Invalid method');
     }
@@ -185,5 +188,23 @@ class Api implements AbstractApi {
   @override
   Future<Response> deleteUser() async {
     return make(method: 'delete', uri: '/user', headers: {});
+  }
+
+  @override
+  Future<Response> authViaGoogle() {
+    return make(
+        method: 'get',
+        uri: '/auth/login/google/link',
+        headers: {},
+        authorized: false);
+  }
+
+  @override
+  Future<Response> authViaVK() {
+    return make(
+        method: 'get',
+        uri: '/auth/login/vk/link',
+        headers: {},
+        authorized: false);
   }
 }

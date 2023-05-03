@@ -33,3 +33,14 @@ class NeedToActivate extends AuthState {
 }
 
 class AuthSuccess extends AuthState {}
+
+class LinkReceived extends AuthState {
+  final String link;
+
+  LinkReceived(this.link);
+
+  @override
+  List<Object> get props => [link];
+}
+
+class AuthLinkLoading extends AuthState {}

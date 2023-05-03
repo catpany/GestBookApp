@@ -43,7 +43,7 @@ class UnitsRepository extends HiveStock<UnitsModel> {
         lessons.add(lessonItem);
       }
 
-      UnitModel unitItem = UnitModel(id: unit['id'], order: unit['order'], lessons: HiveList(rep.store, objects: lessons));
+      UnitModel unitItem = UnitModel(id: unit['id'], order: unit['order'], lessons: HiveList<LessonModel>(rep.store, objects: lessons));
       units.add(unitItem);
     }
 

@@ -19,4 +19,8 @@ Future<Response> units();
 Future<Response> updateUser(Params params);
 
 Future<Response> deleteUser();
+
+Future<Response> authViaGoogle();
+
+Future<Response> authViaVK();
 }

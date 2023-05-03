@@ -5,6 +5,7 @@ import 'package:sigest/bloc/main_cubit.dart';
 
 import '../../api/params.dart';
 import '../../api/response.dart';
+import '../../models/auth.dart';
 
 part 'auth_state.dart';
 
@@ -120,5 +121,30 @@ class AuthCubit extends MainCubit {
     if (!checkForError(response)) {
       emit(CodeResent('Код успешно отправлен'));
     }
+  }
+
+  Future<void> authViaGoogle() async {
+    emit(AuthLinkLoading());
+
+    Response response = await store.auth.authViaGoogle();
+
+    if (!checkForError(response)) {
+      emit(LinkReceived((response as SuccessResponse).data['link']));
+    }
+  }
+
+  Future<void> authViaVK() async {
+    emit(AuthLinkLoading());
+
+    Response response = await store.auth.authViaVK();
+
+    if (!checkForError(response)) {
+      emit(LinkReceived((response as SuccessResponse).data['link']));
+    }
+  }
+
+  void setAuth(dynamic jsonTokens) {
+    store.auth.tokens = AuthModel.fromJson(jsonTokens);
+    emit(AuthSuccess());
   }
 }

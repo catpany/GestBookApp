@@ -13,7 +13,7 @@ class SplashCubit extends MainCubit {
   SplashCubit() : super();
 
   @override
-  List<String> get preloadStores => ['user', 'settings'];
+  List<String> get preloadStores => ['user', 'settings', 'units'];
 
   @override
   Future<void> load() async {
@@ -22,7 +22,7 @@ class SplashCubit extends MainCubit {
     store
         .reload()
         .then((value) {
-        log('static data loaded');
+        log('static splash data loaded');
         updateSettings();
 
         emit(DataLoaded());
