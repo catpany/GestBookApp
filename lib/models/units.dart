@@ -6,7 +6,6 @@ import 'package:sigest/models/unit.dart';
 
 part 'units.g.dart';
 
-// @JsonSerializable()
 @HiveType(typeId: 4)
 class UnitsModel extends HiveObject {
   @JsonKey(defaultValue: [])
@@ -14,8 +13,4 @@ class UnitsModel extends HiveObject {
   List<UnitModel> items;
 
   UnitsModel({required this.items});
-
-  // factory UnitsModel.fromJson(Map<String, dynamic> json) => _$UnitsModelFromJson(json);
-  //
-  // Map<String, dynamic> toJson() => _$UnitsModelToJson(this);
 }

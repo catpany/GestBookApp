@@ -177,6 +177,7 @@ class _UnitListState extends State<UnitListWidget> {
 
   Widget _renderLessonList(HiveList<LessonModel> lessons, int unitIndex) {
     return GridView.builder(
+        physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         primary: true,

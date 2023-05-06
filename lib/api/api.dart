@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
@@ -105,7 +104,7 @@ class Api implements AbstractApi {
       required String uri,
       required Map<String, String> headers,
       Params? params}) async {
-    if (params != null) log(jsonEncode(params?.body).toString());
+    if (params != null) log(jsonEncode(params.body).toString());
     log(Uri.http(_host, _prefix + _version + uri, params?.query).toString());
     switch (method) {
       case 'post':
@@ -206,5 +205,35 @@ class Api implements AbstractApi {
         uri: '/auth/login/vk/link',
         headers: {},
         authorized: false);
+  }
+
+  @override
+  Future<Response> favorites(Params params) {
+    return make(
+        method: 'get',
+        uri: '/dictionary/favorite',
+        headers: {},
+        params: params
+    );
+  }
+
+  @override
+  Future<Response> search(Params params) {
+    return make(
+        method: 'get',
+        uri: '/gesture/search',
+        headers: {},
+        params: params
+    );
+  }
+
+  @override
+  Future<Response> gesture(String id, Params params) {
+    return make(
+        method: 'get',
+        uri: '/gesture/' + id,
+        headers: {},
+        params: params
+    );
   }
 }
