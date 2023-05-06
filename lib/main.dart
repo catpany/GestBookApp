@@ -13,6 +13,9 @@ import 'package:sigest/views/scenes/splash.dart';
 import 'package:sigest/views/styles.dart';
 
 import 'models/auth.dart';
+import 'models/dictionary.dart';
+import 'models/gesture-info.dart';
+import 'models/gesture.dart';
 import 'models/lesson.dart';
 import 'models/unit.dart';
 import 'models/units.dart';
@@ -31,6 +34,9 @@ void main() async {
   Hive.registerAdapter(UnitModelAdapter());
   Hive.registerAdapter(UnitsModelAdapter());
   Hive.registerAdapter(SettingsModelAdapter());
+  Hive.registerAdapter(GestureInfoModelAdapter());
+  Hive.registerAdapter(GestureModelAdapter());
+  Hive.registerAdapter(DictionaryModelAdapter());
   await cacheAssets();
   await Hive.openBox<SettingsModel>('settings');
 
@@ -110,11 +116,6 @@ class MyApp extends StatelessWidget {
             home: const SplashScreen()
         );
       },
-    );
-    return MaterialApp(
-      title: 'Книга Жестов',
-        theme: ThemeData(scaffoldBackgroundColor: Colors.pink, colorScheme: const ColorScheme.light(secondary: ColorStyles.gray, primary: ColorStyles.black),),
-      home: SplashScreen(),
     );
   }
 }

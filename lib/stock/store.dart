@@ -1,15 +1,15 @@
 import 'dart:developer';
 
-import 'package:hive/hive.dart';
-import 'package:sigest/models/auth.dart';
 import 'package:sigest/stock/abstract_repository.dart';
 import 'package:sigest/stock/auth.dart';
 import 'package:sigest/stock/lessons.dart';
+import 'package:sigest/stock/saved.dart';
 import 'package:sigest/stock/settings.dart';
 import 'package:sigest/stock/units.dart';
 import 'package:sigest/stock/user.dart';
 
 import '../locator.dart';
+import 'gestures.dart';
 
 class Store {
   late Map<String, AbstractRepository> _stores = {};
@@ -19,6 +19,8 @@ class Store {
   UserRepository get user => _stores['user'] as UserRepository;
   SettingsRepository get settings => _stores['settings'] as SettingsRepository;
   LessonRepository get lessons => _stores['lessons'] as LessonRepository;
+  SavedRepository get saved => _stores['saved'] as SavedRepository;
+  GestureRepository get gestures => _stores['gestures'] as GestureRepository;
   final List<String> staticStores = ['auth', 'units', 'user', 'lessons'];
   List<String> clearStores = ['lessons', 'units', 'auth', 'user'];
 

@@ -39,8 +39,11 @@ class ErrorResponse extends Response {
 
 class SuccessResponse extends Response {
   final dynamic data;
+  final int? page;
+  final int? perPage;
+  final int? total;
 
-  SuccessResponse({this.data});
+  SuccessResponse({this.data, this.page, this.perPage, this.total});
 }
 
 extension ApiResponse on http.Response {
@@ -76,6 +79,7 @@ extension ApiResponse on http.Response {
   }
 
   SuccessResponse getSuccessResponse() {
-    return SuccessResponse(data: body.isEmpty ? '' : jsonDecode(body)['data']);
+    dynamic data = jsonDecode(body);
+    return SuccessResponse(data: body.isEmpty ? '' : data['data'], page: data['page'], total: data['total'], perPage: data['per_page']);
   }
 }

@@ -16,7 +16,9 @@ import 'package:sigest/api/api.dart' as _i4;
 import 'package:sigest/api/api_mock.dart' as _i5;
 import 'package:sigest/stock/abstract_repository.dart' as _i6;
 import 'package:sigest/stock/auth.dart' as _i7;
+import 'package:sigest/stock/gestures.dart' as _i12;
 import 'package:sigest/stock/lessons.dart' as _i8;
+import 'package:sigest/stock/saved.dart' as _i13;
 import 'package:sigest/stock/settings.dart' as _i9;
 import 'package:sigest/stock/units.dart' as _i10;
 import 'package:sigest/stock/user.dart' as _i11;
@@ -62,6 +64,14 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i6.AbstractRepository>(
       () => _i11.UserRepository(),
       instanceName: 'user',
+    );
+    gh.singleton<_i6.AbstractRepository>(
+      _i12.GestureRepository(),
+      instanceName: 'gestures',
+    );
+    gh.singleton<_i6.AbstractRepository>(
+      _i13.SavedRepository(),
+      instanceName: 'saved',
     );
     return this;
   }

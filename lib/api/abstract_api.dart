@@ -23,4 +23,10 @@ Future<Response> deleteUser();
 Future<Response> authViaGoogle();
 
 Future<Response> authViaVK();
+
+Future<Response> search(Params params);
+
+Future<Response> favorites(Params params);
+
+Future<Response> gesture(String id, Params params);
 }
