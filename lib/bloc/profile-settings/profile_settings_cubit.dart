@@ -105,7 +105,6 @@ class ProfileSettingsCubit extends MainCubit {
     Response response = await store.user.deleteUser();
 
     if (!checkForError(response)) {
-      log('profile deleted');
       store.settings.delete(store.user.user.id);
       store.clear();
       emit(ProfileDeleteSuccess());

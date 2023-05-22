@@ -30,7 +30,6 @@ class _LearnedScreenState extends State<LearnedScreen> {
     super.initState();
     context.read<LearnedCubit>().load();
     _pagingController.addPageRequestListener((pageKey) {
-      log('update list 4');
       search(pageKey);
     });
   }
@@ -43,7 +42,7 @@ class _LearnedScreenState extends State<LearnedScreen> {
   }
 
   void search(int pageKey) {
-    context.read<LearnedCubit>().search(_searchController.text, pageKey);
+    context.read<LearnedCubit>().getFavorites(pageKey);
   }
 
   Widget _renderStartButton() {

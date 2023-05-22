@@ -1,14 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sigest/stock/abstract_stock.dart';
 import 'package:sigest/models/user.dart';
 import 'package:sigest/stock/hive_stock.dart';
 import 'package:stock/stock.dart';
 
-import '../api/api.dart';
 import '../api/params.dart';
 import '../api/response.dart';
 import 'abstract_repository.dart';
@@ -25,10 +22,9 @@ class UserRepository extends HiveStock<UserModel> {
     Response response = await api.user();
 
     if (response is ErrorResponse) {
-      log('Load Error 1');
-      log(response.message);
       throw StockResponseError(ResponseOrigin.fetcher, response);
     }
+
     response = response as SuccessResponse;
     return UserModel.fromJson(response.data);
   }
@@ -43,8 +39,6 @@ class UserRepository extends HiveStock<UserModel> {
     Response response = await api.updateUser(userParams);
 
     if (response is SuccessResponse) {
-      log('update user');
-      log(response.data.toString());
       UserModel user = this.user;
       user.email = response.data['email'];
       user.username = response.data['username'];

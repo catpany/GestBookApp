@@ -71,7 +71,6 @@ class ActivateProfileScreen extends AuthScreen {
               }
 
               cubit.activateProfile(params['login']);
-              log('success!!');
             },
             text: 'Активировать',
             color: const Color(0xffff6f91),

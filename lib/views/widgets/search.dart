@@ -7,8 +7,9 @@ import '../styles.dart';
 class SearchWidget extends StatefulWidget {
   final TextEditingController searchController;
   final Function onSearch;
+  final Function(String)? onChange;
 
-  const SearchWidget({Key? key, required this.searchController, required this.onSearch}) : super(key: key);
+  const SearchWidget({Key? key, required this.searchController, required this.onSearch, this.onChange}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => SearchWidgetState();
@@ -18,7 +19,6 @@ class SearchWidgetState extends State<SearchWidget> {
   bool _validated = true;
 
   void submit(value) {
-    log(value);
     if (value != '') {
       setState(() {
         _validated = true;
@@ -43,7 +43,6 @@ class SearchWidgetState extends State<SearchWidget> {
           suffixIcon: IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              log('tap on search');
               submit(widget.searchController.text);
               // _pagingController.refresh();
             },
@@ -81,12 +80,9 @@ class SearchWidgetState extends State<SearchWidget> {
           ),
           suffixIconColor: ColorStyles.gray),
       onSubmitted: (String value) {
-        log(value);
-        log('submit');
         submit(value);
-          // _pagingController.itemList = null;
-          // search(1);
       },
+      onChanged: (String val) => null == widget.onChange? {} : widget.onChange!(val),
     );
   }
 

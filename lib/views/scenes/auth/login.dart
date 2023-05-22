@@ -74,12 +74,10 @@ class LoginScreen extends AuthScreen {
     return [
       ButtonWidget(
         onClick: () {
-          log('press on login button');
           if (!formKey.currentState!.validate()) {
             return;
           }
           cubit.login();
-          log('success!!');
         },
         text: 'Войти',
         color: const Color(0xffff6f91),

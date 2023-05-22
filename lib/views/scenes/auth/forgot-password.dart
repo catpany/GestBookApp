@@ -60,7 +60,6 @@ class ForgotPasswordScreen extends AuthScreen {
           }
 
           context.read<AuthCubit>().forgotPassword();
-          log('success!!');
         },
         text: 'Получить код',
         color: const Color(0xffff6f91),

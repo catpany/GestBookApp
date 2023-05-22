@@ -9,6 +9,8 @@ import 'package:sigest/stock/units.dart';
 import 'package:sigest/stock/user.dart';
 
 import '../locator.dart';
+import 'favorites.dart';
+import 'gesture-info.dart';
 import 'gestures.dart';
 
 class Store {
@@ -20,7 +22,9 @@ class Store {
   SettingsRepository get settings => _stores['settings'] as SettingsRepository;
   LessonRepository get lessons => _stores['lessons'] as LessonRepository;
   SavedRepository get saved => _stores['saved'] as SavedRepository;
+  FavoritesRepository get favorites => _stores['favorites'] as FavoritesRepository;
   GestureRepository get gestures => _stores['gestures'] as GestureRepository;
+  GestureInfoRepository get gestureInfo => _stores['gestureInfo'] as GestureInfoRepository;
   final List<String> staticStores = ['auth', 'units', 'user', 'lessons'];
   List<String> clearStores = ['lessons', 'units', 'auth', 'user'];
 

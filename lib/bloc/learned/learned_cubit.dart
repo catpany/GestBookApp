@@ -11,38 +11,46 @@ part 'learned_state.dart';
 
 class LearnedCubit extends MainCubit {
   List<GestureModel> searchResults = [];
+
+  @override
+  List<String> get preloadStores => ['user', 'gestures', 'favorites'];
+
   int page = 1;
   int total = 0;
-  int perPage = 0;
+  int perPage = 30;
   late AbstractApi api;
 
   LearnedCubit() : super() {
     api = locator<AbstractApi>();
   }
 
-  Future<void> search(String word, int pageKey) async {
+  Future<void> getFavorites(int pageKey) async {
     emit(Loading());
 
-    Response response = await api.favorites(Params({
-      'page': page.toString(),
-    }, {}));
+    searchResults = await store.favorites.getFavorites(store.user.user.id, Params({}, {'page': pageKey}));
+    page = store.favorites.page;
+    total = store.favorites.total;
+    perPage = store.favorites.perPage;
 
-    if (!checkForError(response)) {
-      response as SuccessResponse;
-      page = response.page?? 1;
-      total = response.total?? 0;
-      perPage = response.perPage?? 1;
-      searchResults = [];
-      for (var res in (response.data as List<dynamic>)) {
-        searchResults.add(GestureModel.fromJson(res));
-      }
-
-      emit(Loaded());
-    }
+    emit(Loaded());
   }
+
+  // Future<void> search(String word, int pageKey) async {
+  //   emit(Loading());
+  //
+  //   searchResults = await store.favorites.search(store.user.user.id, word, pageKey);
+  //
+  //   page = pageKey;
+  //   total = searchResults.length;
+  //   perPage = searchResults.length;
+  //
+  //   emit(Loaded());
+  // }
 
   bool isLastPage() {
     int totalPages = (total/perPage).ceil();
+    totalPages = totalPages == 0 ? 1 : totalPages;
+
     return page == totalPages;
   }
 }

@@ -273,7 +273,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _renderQuitDialog() async {
-    print('render quit dialog');
     await showDialog<void>(
         context: context,
         builder: (context) {
@@ -310,14 +309,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: BlocConsumer<ProfileCubit, MainState>(
             listener: (BuildContext context, state) {
               if (state is ProfileQuited) {
-                print('navigate to login');
                 _navigateToLogin();
               }
             },
             builder: (BuildContext context, state) {
               return Scaffold(
                   resizeToAvoidBottomInset: false,
-                  // backgroundColor: Colors.white,
                   appBar: _renderTopBar(context, state),
                   body: _renderBody(context, state));
             }));

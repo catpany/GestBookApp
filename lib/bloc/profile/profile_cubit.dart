@@ -21,12 +21,8 @@ class ProfileCubit extends MainCubit {
   }
 
   void quit() {
-    log('quit');
     store.clear();
     store.settings.delete('current');
-
-    log('emit quit');
-
     emit(ProfileQuited());
   }
 }

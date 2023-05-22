@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../styles.dart';
 
@@ -6,13 +6,13 @@ class WidgetWrapper extends StatelessWidget {
   final Widget child;
   final EdgeInsets padding;
   final EdgeInsets margin;
-  final double width;
+  final double? width;
   final double? height;
 
   const WidgetWrapper(
       {Key? key,
       required this.child,
-      required this.width,
+      this.width,
       this.height,
       this.padding = const EdgeInsets.all(0),
       this.margin = const EdgeInsets.all(0)})

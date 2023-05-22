@@ -15,9 +15,9 @@ class GestureInfoModel  extends HiveObject {
   @HiveField(3)
   String description;
   @HiveField(4)
-  String src;
+  String? src;
   @HiveField(5)
-  String img;
+  String? img;
 
   GestureInfoModel({
     required this.id, required this.name, required this.context, required this.description, required this.img, required this.src

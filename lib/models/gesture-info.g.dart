@@ -21,8 +21,8 @@ class GestureInfoModelAdapter extends TypeAdapter<GestureInfoModel> {
       name: fields[1] as String,
       context: fields[2] as String,
       description: fields[3] as String,
-      img: fields[5] as String,
-      src: fields[4] as String,
+      img: fields[5] as String?,
+      src: fields[4] as String?,
     );
   }
 
@@ -65,8 +65,8 @@ GestureInfoModel _$GestureInfoModelFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       context: json['context'] as String,
       description: json['description'] as String,
-      img: json['img'] as String,
-      src: json['src'] as String,
+      img: json['img'] as String?,
+      src: json['src'] as String?,
     );
 
 Map<String, dynamic> _$GestureInfoModelToJson(GestureInfoModel instance) =>

@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart' as http;
 import 'package:injectable/injectable.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sigest/api/params.dart';
 import 'package:sigest/api/response.dart';
 import 'package:sigest/locator.dart';
@@ -19,7 +21,21 @@ class Api implements AbstractApi {
   final String _prefix = '/api';
   final String _version = '/v1';
   final String _host = config["domain"];
-  var client = http.Client();
+  var client = http.Dio();
+  String saveVideoPath = '';
+  String saveImagePath = '';
+
+  Api() {
+    loadPaths();
+  }
+
+  Future<void> loadPaths() async {
+    Directory savePath = await getApplicationDocumentsDirectory();
+    saveVideoPath = savePath.path + '/video/';
+    saveImagePath = savePath.path + '/image/';
+    log(saveVideoPath);
+    log(saveImagePath);
+  }
 
   AuthRepository get auth =>
       locator.get<AbstractRepository>(instanceName: 'auth') as AuthRepository;
@@ -37,9 +53,9 @@ class Api implements AbstractApi {
 
     if (response.isError()) {
       log('not refreshed');
-      log(response.body.toString());
       return false;
     }
+
     log('refresh');
 
     SuccessResponse successResponse = response.getSuccessResponse();
@@ -61,7 +77,6 @@ class Api implements AbstractApi {
     if (authorized) {
       await auth.init();
       headers['Authorization'] = 'Bearer ' + auth.accessToken;
-      log(headers['Authorization'].toString());
     }
 
     headers['Content-Type'] = 'application/json';
@@ -82,6 +97,8 @@ class Api implements AbstractApi {
 
         if (isRefreshed) {
           log('refreshed');
+          headers['Authorization'] = 'Bearer ' + auth.accessToken;
+
           response = await request(
               method: method, uri: uri, headers: headers, params: params);
 
@@ -99,38 +116,51 @@ class Api implements AbstractApi {
     return response.getSuccessResponse();
   }
 
-  Future<http.Response> request(
+  Future<http.Response<dynamic>> request(
       {required String method,
       required String uri,
       required Map<String, String> headers,
       Params? params}) async {
     if (params != null) log(jsonEncode(params.body).toString());
-    log(Uri.http(_host, _prefix + _version + uri, params?.query).toString());
-    switch (method) {
-      case 'post':
-        return await client
-            .post(Uri.http(_host, _prefix + _version + uri, params?.query),
-                headers: headers, body: jsonEncode(params?.body))
-            .timeout(const Duration(seconds: 60));
-      case 'get':
-        return await client
-            .get(
-              Uri.http(_host, _prefix + _version + uri, params?.query),
-              headers: headers,
-            )
-            .timeout(const Duration(seconds: 60));
-      case 'put':
-        return await client
-            .put(Uri.http(_host, _prefix + _version + uri, params?.query),
-                headers: headers, body: jsonEncode(params?.body))
-            .timeout(const Duration(seconds: 60));
-      case 'delete':
-        return await client
-            .delete(Uri.http(_host, _prefix + _version + uri, params?.query),
-                headers: headers, body: jsonEncode(params?.body))
-            .timeout(const Duration(seconds: 60));
-      default:
-        throw Exception('Invalid method');
+    log('http://' + _host + _prefix + _version + uri);
+    try {
+      switch (method) {
+        case 'post':
+          return await client
+              .post('http://' + _host + _prefix + _version + uri,
+                  queryParameters: params?.query,
+                  options: http.Options(headers: headers),
+                  data: jsonEncode(params?.body))
+              .timeout(const Duration(seconds: 60));
+        case 'get':
+          return await client
+              .get(
+                'http://' + _host + _prefix + _version + uri,
+                queryParameters: params?.query,
+                options: http.Options(headers: headers),
+              )
+              .timeout(const Duration(seconds: 60));
+        case 'put':
+          return await client
+              .put('http://' + _host + _prefix + _version + uri,
+                  queryParameters: params?.query,
+                  options: http.Options(headers: headers),
+                  data: jsonEncode(params?.body))
+              .timeout(const Duration(seconds: 60));
+        case 'delete':
+          return await client
+              .delete('http://' + _host + _prefix + _version + uri,
+                  queryParameters: params?.query,
+                  options: http.Options(headers: headers),
+                  data: jsonEncode(params?.body))
+              .timeout(const Duration(seconds: 60));
+        default:
+          throw Exception('Invalid method');
+      }
+    } on http.DioError catch (error) {
+      log(error.toString());
+      return error.response ??
+          http.Response(requestOptions: http.RequestOptions());
     }
   }
 
@@ -213,27 +243,82 @@ class Api implements AbstractApi {
         method: 'get',
         uri: '/dictionary/favorite',
         headers: {},
-        params: params
-    );
+        params: params);
   }
 
   @override
   Future<Response> search(Params params) {
     return make(
-        method: 'get',
-        uri: '/gesture/search',
-        headers: {},
-        params: params
+        method: 'get', uri: '/gesture/search', headers: {}, params: params);
+  }
+
+  @override
+  Future<Response> gesture(String id) {
+    return make(
+      method: 'get',
+      uri: '/gesture/' + id,
+      headers: {},
     );
   }
 
   @override
-  Future<Response> gesture(String id, Params params) {
+  Future<Response> addToFavorites(Params params) {
+    return make(
+        method: 'post',
+        uri: '/dictionary/gesture',
+        headers: {},
+        params: params);
+  }
+
+  @override
+  Future<Response> removeFromFavorites(Params params) {
+    return make(
+        method: 'delete',
+        uri: '/dictionary/gesture',
+        headers: {},
+        params: params);
+  }
+
+  @override
+  Future<Response> downloadVideo(String url) async {
+    log('load video'+ url);
+
+    try {
+      String fileName = url.split('/').last;
+      String path = saveVideoPath + fileName;
+      log(path);
+      await client.download(url.replaceAll('localhost:8000', config["domain"]), path);
+      log('video loaded');
+      return SuccessResponse(data: {'path': path});
+    } on http.DioError catch (error) {
+      log(error.toString());
+      return ErrorResponse(code: error.response?.statusCode ?? 500, message: error.response?.statusMessage ?? '');
+    }
+  }
+
+  @override
+  Future<Response> downloadImage(String url) async {
+    log('load image'+ url);
+
+    try {
+      String fileName = url.split('/').last;
+      String path = saveImagePath + fileName;
+      log(path);
+      await client.download(url.replaceAll('localhost:8000', config["domain"]), path);
+      log('image loaded');
+      return SuccessResponse(data: {'path': path});
+    } on http.DioError catch (error) {
+      log(error.toString());
+      return ErrorResponse(code: error.response?.statusCode ?? 500, message: error.response?.statusMessage ?? '');
+    }
+  }
+
+  @override
+  Future<Response> searchFavorites(Params params) {
     return make(
         method: 'get',
-        uri: '/gesture/' + id,
+        uri: '/gesture',
         headers: {},
-        params: params
-    );
+        params: params);
   }
 }

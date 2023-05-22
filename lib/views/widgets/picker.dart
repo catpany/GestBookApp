@@ -79,8 +79,6 @@ class _PickerWidgetState extends State<PickerWidget> {
     value = widget.current;
     prevSelectedValue = widget.current;
     _timer = Timer.periodic(const Duration(seconds: 3), (_) {
-      log(prevSelectedValue);
-      log(value);
       if (widget.onTimer && prevSelectedValue != value) {
         prevSelectedValue = value;
         widget.onPick(value);

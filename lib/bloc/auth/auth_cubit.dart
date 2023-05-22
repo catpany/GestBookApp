@@ -16,7 +16,6 @@ class AuthCubit extends MainCubit {
   List<String> get preloadStores => ['auth'];
 
   AuthCubit(this.bindControllers) : super(){
-    log('auth cubit');
     super.init();
   }
 
@@ -105,7 +104,6 @@ class AuthCubit extends MainCubit {
         }));
 
     if (!checkForError(response)) {
-      log('auth success 0');
       emit(AuthSuccess());
     }
   }
