@@ -78,7 +78,6 @@ class RegistrationScreen extends AuthScreen {
             return;
           }
           cubit.register();
-          log('success!!');
         },
         text: 'Зарегистрироваться',
         color: const Color(0xffff6f91),

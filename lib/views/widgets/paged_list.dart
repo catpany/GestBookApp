@@ -34,11 +34,24 @@ class PagedListWidget extends StatelessWidget {
         },
       ),
       child: PagedListView(
-        physics: const BouncingScrollPhysics(),
-        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         pagingController: pagingController,
         builderDelegate: PagedChildBuilderDelegate(
           firstPageProgressIndicatorBuilder: (BuildContext context) {
+            log('first page');
+            if (isLoading) {
+              return Center(
+                  child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 15),
+                      width: 40,
+                      height: 40,
+                      child: const CircularProgressIndicator(
+                          color: ColorStyles.grayDark)));
+            }
+            return const SizedBox.shrink();
+          },
+          newPageProgressIndicatorBuilder: (BuildContext context) {
+            log('new page');
             if (isLoading) {
               return Center(
                   child: Container(

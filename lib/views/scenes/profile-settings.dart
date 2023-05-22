@@ -93,11 +93,9 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
       canChangePassword: widget.cubit.canChangePassword(),
       canChangeEmail: widget.cubit.canChangeEmail(),
       onDelete: () {
-        log('delete');
         widget.cubit.deleteUser();
       },
       onSave: (bindControllers) {
-        log('save');
         widget.cubit.updateUser(bindControllers);
       },
       user: widget.cubit.store.user.user,
@@ -126,7 +124,6 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                       widget.cubit.store.settings.current.isRightHanded
                     ],
                     onSelect: (val) {
-                      log('set ' + val.toString());
                       widget.cubit.updateIsRightHanded(val);
                     },
                   ),
@@ -144,7 +141,6 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                           ),
                           SwitchWidget(
                               onSwitch: (val) {
-                                log('change value to ' + val.toString());
                                 widget.cubit.updateIsDarkMode(val);
                               },
                               value: widget
@@ -183,7 +179,6 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                       ),
                       SwitchWidget(
                           onSwitch: (val) {
-                            log('switch reminder to ' + val.toString());
                             widget.cubit.updateNotificationsEnabled(val);
                           },
                           value: widget.cubit.store.settings.current
@@ -232,7 +227,6 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                       style: Theme.of(context).textTheme.bodyMedium),
                   SwitchWidget(
                       onSwitch: (val) {
-                        log('switch motivation to ' + val.toString());
                         widget.cubit.updateMessagesEnabled(val);
                       },
                       value:

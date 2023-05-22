@@ -69,10 +69,10 @@ class ApiMock implements AbstractApi {
     const body = {
       'data': {
         'access_token':
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiaWF0IjoxNTE2MjM5MDIyfQ.NdmXS9NOiE6j8T1wcPMR_75r5FLrGmjdSoPZN-smTsU',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiaWF0IjoxNTE2MjM5MDIyfQ.NdmXS9NOiE6j8T1wcPMR_75r5FLrGmjdSoPZN-smTsU',
         'refresh_token': {
           'token':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiaWF0IjoxNTE2MjM0ODk3fQ.ddM2LN2IFHdlq3OYbXeWrBH40etmiyoug8TGpEbr0Dw',
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOiIxIiwiaWF0IjoxNTE2MjM0ODk3fQ.ddM2LN2IFHdlq3OYbXeWrBH40etmiyoug8TGpEbr0Dw',
           'family': 'lhshdfkjshdfkjshdfkjsdhfkjd'
         }
       }
@@ -86,12 +86,17 @@ class ApiMock implements AbstractApi {
   @override
   Future<Response> user() async {
     const body = {
-      'data': {'id': 'jhdfj', 'username': 'userN', 'email': 'aaa@mail.ru', 'stat': {
-        'impact_mode': 0,
-        'goal': 30,
-        'goal_achieved': 12,
-        'lessons_total': 1
-      }}
+      'data': {
+        'id': 'jhdfj',
+        'username': 'userN',
+        'email': 'aaa@mail.ru',
+        'stat': {
+          'impact_mode': 0,
+          'goal': 30,
+          'goal_achieved': 12,
+          'lessons_total': 1
+        }
+      }
     };
 
     // return Future<Response>.delayed(const Duration(seconds: 1), () {
@@ -351,7 +356,6 @@ class ApiMock implements AbstractApi {
 
   @override
   Future<Response> deleteUser() async {
-
     return Future<Response>.delayed(const Duration(seconds: 2), () {
       return SuccessResponse(data: {});
     });
@@ -361,7 +365,8 @@ class ApiMock implements AbstractApi {
   Future<Response> authViaGoogle() {
     const body = {
       'data': {
-        'link': 'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&access_type=online&client_id=571118360099-0ktjk6evriu08tvsto5g7nff7tj75bg5.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fapi%2Fauth%2Flogin%2Fgoogle&state=52136c87877c55e284f91b97588af5d6&scope=openid%20email&prompt=select_account'
+        'link':
+            'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&access_type=online&client_id=571118360099-0ktjk6evriu08tvsto5g7nff7tj75bg5.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fapi%2Fauth%2Flogin%2Fgoogle&state=52136c87877c55e284f91b97588af5d6&scope=openid%20email&prompt=select_account'
       }
     };
 
@@ -374,7 +379,8 @@ class ApiMock implements AbstractApi {
   Future<Response> authViaVK() {
     const body = {
       'data': {
-        'link': 'https://oauth.vk.com/authorize?client_id=51557636&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fapi%2Fv1%2Fauth%2Flogin%2Fvk&display=mobile&scope=4194304&state=52136c87877c55e284f91b97588af5d6&response_type=code&v=5.101'
+        'link':
+            'https://oauth.vk.com/authorize?client_id=51557636&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fapi%2Fv1%2Fauth%2Flogin%2Fvk&display=mobile&scope=4194304&state=52136c87877c55e284f91b97588af5d6&response_type=code&v=5.101'
       }
     };
 
@@ -579,40 +585,62 @@ class ApiMock implements AbstractApi {
     // });
 
     return Future<Response>.delayed(const Duration(seconds: 2), () {
-      return SuccessResponse(data: body['data'], page: 1, perPage: 30, total: 30);
+      return SuccessResponse(
+          data: body['data'], page: 1, perPage: 30, total: 30);
     });
   }
 
   @override
   Future<Response> favorites(Params params) async {
     const body = {
-      "data": [
-        {
-          "id": "70cc2bd4-9246-4913-8fc5-c140329a6eab",
-          "name": "Гомель",
-          "context": ""
+      "data": {
+        "id": "6cc50649-74f2-4fb0-a852-0a5f77240b44",
+        "gestures": {
+          "data": [
+            {
+              "id": "482ff4ba-ba95-4b22-b0ce-60af1e56222f",
+              "name": "гармония",
+              "context": ""
+            },
+            {
+              "id": "020ac345-1cca-45a7-9bfb-00762074072b",
+              "name": "орбита",
+              "context":
+                  "Nobis asperiores sed tempore tenetur. A harum suscipit doloremque labore consequatur. Perferendis beatae et alias aperiam. Exercitationem incidunt dicta repellat dolorum et quae."
+            },
+            {
+              "id": "4b028834-fac2-40b0-a28a-bcd3d1f3ab14",
+              "name": "помогать",
+              "context":
+                  "Quaerat dolor unde atque. Provident voluptas fuga autem itaque velit qui tenetur sit. Vero qui optio optio repellat aliquam."
+            }
+          ],
+          "page": 1,
+          "per_page": 30,
+          "total": 3
         }
-      ],
+      }
     };
 
     // return Future<Response>.delayed(const Duration(seconds: 2), () {
     //   return SuccessResponse(data: [], page: 1, perPage: 30, total: 0);
     // });
 
-
     return Future<Response>.delayed(const Duration(seconds: 2), () {
-      return SuccessResponse(data: body['data'], page: 1, perPage: 30, total: 1);
+      return SuccessResponse(
+          data: body['data'], page: 1, perPage: 30, total: 1);
     });
   }
 
   @override
-  Future<Response> gesture(String id, Params params) async {
+  Future<Response> gesture(String id) async {
     const body = {
       "data": {
         "id": "70cc2bd4-9246-4913-8fc5-c140329a6eab",
         "name": "Гомель",
         "context": "",
-        "description": "Quia voluptates minima exercitationem nemo pariatur ratione sit id. Fugit aperiam est iusto praesentium eum sapiente. Facere maiores ipsum autem quis inventore molestiae mollitia. Est illum at qui.",
+        "description":
+            "Quia voluptates minima exercitationem nemo pariatur ratione sit id. Fugit aperiam est iusto praesentium eum sapiente. Facere maiores ipsum autem quis inventore molestiae mollitia. Est illum at qui.",
         "src": "http://localhost:8000/storage/gestures/gomel-rsl.mp4",
         "img": null,
         "aud": "user",
@@ -633,6 +661,71 @@ class ApiMock implements AbstractApi {
             "context": "Prof."
           }
         ]
+      }
+    };
+
+    return Future<Response>.delayed(const Duration(seconds: 2), () {
+      return SuccessResponse(data: body['data']);
+    });
+  }
+
+  @override
+  Future<Response> addToFavorites(Params params) {
+    return Future<Response>.delayed(const Duration(seconds: 2), () {
+      return SuccessResponse(data: {});
+    });
+  }
+
+  @override
+  Future<Response> removeFromFavorites(Params params) {
+    return Future<Response>.delayed(const Duration(seconds: 2), () {
+      return SuccessResponse(data: {});
+    });
+  }
+
+  @override
+  Future<Response> downloadVideo(String url) {
+    return Future<Response>.delayed(const Duration(seconds: 2), () {
+      return ErrorResponse(code: 404, message: 'Not Found');
+    });
+  }
+
+  @override
+  Future<Response> downloadImage(String url) {
+    return Future<Response>.delayed(const Duration(seconds: 2), () {
+      return ErrorResponse(code: 404, message: 'Not Found');
+    });
+  }
+
+  @override
+  Future<Response> searchFavorites(Params params) {
+    const body = {
+      "data": {
+        "id": "6cc50649-74f2-4fb0-a852-0a5f77240b44",
+        "gestures": {
+          "data": [
+            {
+              "id": "482ff4ba-ba95-4b22-b0ce-60af1e56222f",
+              "name": "гармония",
+              "context": ""
+            },
+            {
+              "id": "020ac345-1cca-45a7-9bfb-00762074072b",
+              "name": "орбита",
+              "context":
+              "Nobis asperiores sed tempore tenetur. A harum suscipit doloremque labore consequatur. Perferendis beatae et alias aperiam. Exercitationem incidunt dicta repellat dolorum et quae."
+            },
+            {
+              "id": "4b028834-fac2-40b0-a28a-bcd3d1f3ab14",
+              "name": "помогать",
+              "context":
+              "Quaerat dolor unde atque. Provident voluptas fuga autem itaque velit qui tenetur sit. Vero qui optio optio repellat aliquam."
+            }
+          ],
+          "page": 1,
+          "per_page": 30,
+          "total": 3
+        }
       }
     };
 

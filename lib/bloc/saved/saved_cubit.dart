@@ -1,21 +1,21 @@
 import 'dart:developer';
 
 import 'package:meta/meta.dart';
+import 'package:sigest/models/saved.dart';
 
 import '../../api/response.dart';
-import '../../models/dictionary.dart';
-import '../../models/gesture.dart';
+import '../../models/gesture-info.dart';
 import '../main_cubit.dart';
 
 part 'saved_state.dart';
 
 class SavedCubit extends MainCubit {
   @override
-  List<String> preloadStores = ['user', 'gestures', 'saved'];
-  List<GestureModel> searchResults = [];
+  List<String> get preloadStores => ['user', 'gestureInfo', 'saved'];
+  List<GestureInfoModel> searchResults = [];
   int page = 1;
   int total = 0;
-  int perPage = 0;
+  int perPage = 30;
 
   SavedCubit() : super();
 
@@ -36,7 +36,7 @@ class SavedCubit extends MainCubit {
   void search(String word) {
     emit(Searching());
 
-    searchResults = store.saved.find(store.user.user.id, word);
+    searchResults = store.saved.findByName(store.user.user.id, word);
     page = 1;
     total = searchResults.length;
     perPage = searchResults.length;
@@ -44,11 +44,11 @@ class SavedCubit extends MainCubit {
     emit(Searched());
   }
 
-   void loadDictionary() {
+  void loadDictionary() {
     emit(Searching());
-    DictionaryModel? dictionary = store.saved.get(store.user.user.id);
+    SavedModel? saved = store.saved.get(store.user.user.id);
 
-    searchResults = dictionary == null? [] : dictionary.items;
+    searchResults = saved == null ? [] : saved.items;
     page = 1;
     total = searchResults.length;
     perPage = searchResults.length;
@@ -58,15 +58,17 @@ class SavedCubit extends MainCubit {
 
   bool isLastPage() {
     int totalPages = perPage == 0 ? 1 : (total / perPage).ceil();
+    totalPages = totalPages == 0 ? 1 : totalPages;
+
     return page == totalPages;
   }
 
-  bool delete(GestureModel gesture) {
-    DictionaryModel? dictionary = store.saved.get(store.user.user.id);
-    if (dictionary == null) {
-      return false;
-    }
+  void delete(String gestureId) async {
+    emit(Deleting());
 
-    return  dictionary.items.remove(gesture);
+    bool deleted =
+        await store.saved.removeFromSaved(store.user.user.id, gestureId);
+
+    deleted ? emit(Deleted()) : emit(NotDeleted());
   }
 }

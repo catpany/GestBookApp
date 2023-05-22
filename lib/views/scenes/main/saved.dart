@@ -6,10 +6,11 @@ import 'package:sigest/bloc/main_cubit.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../bloc/saved/saved_cubit.dart';
-import '../../../models/gesture.dart';
+import '../../../models/gesture-info.dart';
 import '../../styles.dart';
 import '../../widgets/paged_list.dart';
 import '../../widgets/search.dart';
+import '../gesture.dart';
 
 class SavedScreen extends StatefulWidget {
   const SavedScreen({Key? key}) : super(key: key);
@@ -20,9 +21,9 @@ class SavedScreen extends StatefulWidget {
 
 class _SavedScreenState extends State<SavedScreen> {
   final TextEditingController _searchController =
-  TextEditingController(text: '');
+      TextEditingController(text: '');
   final PagingController _pagingController =
-  PagingController<int, GestureModel>(firstPageKey: 1);
+      PagingController<int, GestureInfoModel>(firstPageKey: 1);
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
@@ -30,8 +31,7 @@ class _SavedScreenState extends State<SavedScreen> {
     super.initState();
     context.read<SavedCubit>().load();
     _pagingController.addPageRequestListener((pageKey) {
-      log('update list 2');
-        load();
+      load();
     });
   }
 
@@ -40,6 +40,12 @@ class _SavedScreenState extends State<SavedScreen> {
     _searchController.dispose();
     _pagingController.dispose();
     super.dispose();
+  }
+
+  void _navigateToGestureScreen(String gestureId) {
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+      return GestureScreen(gestureId: gestureId);
+    }));
   }
 
   void search() {
@@ -52,7 +58,13 @@ class _SavedScreenState extends State<SavedScreen> {
     }
   }
 
-  Widget _renderMenuPopup() {
+  void onSearchChange(String word) {
+    if ('' == word) {
+      _pagingController.refresh();
+    }
+  }
+
+  Widget _renderMenuPopup(GestureInfoModel gesture) {
     return PopupMenuButton(
       iconSize: 20,
       elevation: 3,
@@ -60,9 +72,14 @@ class _SavedScreenState extends State<SavedScreen> {
       itemBuilder: (context) {
         return [
           PopupMenuItem(
-              value: 'delete',
-              child: Text('Удалить', style: Theme.of(context).textTheme.bodySmall),
-            onTap: () => log('tap on delete'),
+            value: 'delete',
+            child:
+                Text('Удалить', style: Theme.of(context).textTheme.bodySmall),
+            onTap: () {
+              log('tap on delete');
+              context.read<SavedCubit>().delete(gesture.id);
+              _pagingController.itemList?.remove(gesture);
+            },
           ),
         ];
       },
@@ -81,15 +98,11 @@ class _SavedScreenState extends State<SavedScreen> {
       }
 
       if (state is Searched) {
-        log('searched');
-        // final previouslyFetchedItemsCount =
-        //     _pagingController.itemList?.length ?? 0;
-
         final isLastPage = context.read<SavedCubit>().isLastPage();
         final newItems = context.read<SavedCubit>().searchResults;
 
         if (context.read<SavedCubit>().page == 1) {
-          _pagingController.itemList = <GestureModel>[];
+          _pagingController.itemList = <GestureInfoModel>[];
         }
 
         if (isLastPage) {
@@ -112,26 +125,31 @@ class _SavedScreenState extends State<SavedScreen> {
                   child: SearchWidget(
                     searchController: _searchController,
                     onSearch: () => search(),
-                  )
-              ),
+                    onChange: onSearchChange,
+                  )),
               Expanded(
                   child: PagedListWidget(
                       refreshKey: refreshKey,
                       onEmptyText: 'НЕТ СОХРАНЕННЫХ ЖЕСТОВ',
                       pagingController: _pagingController,
                       buildItem: (item) {
-                        item as GestureModel;
+                        item as GestureInfoModel;
                         return ListTile(
                           dense: true,
                           contentPadding: const EdgeInsets.only(left: 10),
-                          title: Text(item.name + getContext(item.context), style: Theme.of(context).textTheme.bodySmall),
-                          onTap: () => log('tap on gesture'),
-                          trailing: _renderMenuPopup(),
+                          title: Text(item.name + getContext(item.context),
+                              style: Theme.of(context).textTheme.bodySmall,
+                              maxLines: 2,
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis),
+                          onTap: () {
+                            log('tap on gesture');
+                            _navigateToGestureScreen(item.id);
+                          },
+                          trailing: _renderMenuPopup(item),
                         );
                       },
-                      isLoading: context.read<SavedCubit>().state is Searching
-                  )
-              )
+                      isLoading: context.read<SavedCubit>().state is Searching))
             ],
           ));
     });

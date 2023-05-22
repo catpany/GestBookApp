@@ -13,7 +13,7 @@ class SearchCubit extends MainCubit {
   List<WordModel> searchResults = [];
   int page = 1;
   int total = 0;
-  int perPage = 0;
+  int perPage = 30;
   late AbstractApi api;
 
   SearchCubit() : super() {
@@ -30,11 +30,14 @@ class SearchCubit extends MainCubit {
 
     if (!checkForError(response)) {
       response as SuccessResponse;
+
       this.page = response.page?? 1;
       total = response.total?? 0;
       perPage = response.perPage?? 1;
+
       searchResults = [];
-      for (var res in (response.data as List<dynamic>)) {
+
+      for (var res in (response.data['list'] as List<dynamic>)) {
         searchResults.add(WordModel.fromJson(res));
       }
       // searchResults = (response.data as List<dynamic>).cast();
@@ -44,6 +47,8 @@ class SearchCubit extends MainCubit {
 
   bool isLastPage() {
     int totalPages = (total/perPage).ceil();
+    totalPages = totalPages == 0 ? 1 : totalPages;
+
     return page == totalPages;
   }
 }

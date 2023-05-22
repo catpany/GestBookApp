@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart' as http;
 
 enum ApiErrors {
   usernameTaken,
@@ -49,8 +48,7 @@ class SuccessResponse extends Response {
 extension ApiResponse on http.Response {
   bool isError() {
     if (200 == statusCode) {
-      log(body);
-      if ('' != body && null == jsonDecode(body)['data']) {
+      if (null != data && (null != data['code'] && null != data['message'] )) {
         return true;
       }
 
@@ -61,25 +59,26 @@ extension ApiResponse on http.Response {
   }
 
   ErrorResponse getErrorResponse() {
+    log(statusMessage.toString());
+    log(statusCode.toString());
     if (200 == statusCode) {
-      final dynamic response = jsonDecode(body);
-
-      if (response['message'] is String) {
+      if (data['message'] is String) {
         return ErrorResponse(
-            code: response['code'], message: response['message']);
+            code: data['code'], message: data['message']);
       }
 
       return ErrorResponse(
-          code: response['code'],
+          code: data['code'],
           message: '',
-          messages: response['message']);
+          messages: data['message']);
     }
 
-    return ErrorResponse(code: statusCode, message: 'Network error');
+    log('Network error');
+    log(statusCode.toString());
+    return ErrorResponse(code: statusCode ?? 500, message: data['message'] ?? 'Network error');
   }
 
   SuccessResponse getSuccessResponse() {
-    dynamic data = jsonDecode(body);
-    return SuccessResponse(data: body.isEmpty ? '' : data['data'], page: data['page'], total: data['total'], perPage: data['per_page']);
+    return SuccessResponse(data: data?['data'], page: data?['page'], total: data?['total'], perPage: data?['per_page']);
   }
 }

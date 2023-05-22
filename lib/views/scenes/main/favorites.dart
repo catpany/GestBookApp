@@ -10,6 +10,7 @@ import '../../../models/gesture.dart';
 import '../../styles.dart';
 import '../../widgets/paged_list.dart';
 import '../../widgets/search.dart';
+import '../gesture.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({Key? key}) : super(key: key);
@@ -30,8 +31,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     super.initState();
     context.read<FavoritesCubit>().load();
     _pagingController.addPageRequestListener((pageKey) {
-      log('update list 3');
-      search(pageKey);
+      searchOrGet(pageKey);
     });
   }
 
@@ -42,13 +42,35 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     super.dispose();
   }
 
-  void search(int pageKey) {
+  void _navigateToGestureScreen(String gestureId) {
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+      return GestureScreen(gestureId: gestureId);
+    }));
+  }
+
+  void searchOrGet(int pageKey) {
     if (context.read<FavoritesCubit>().state is! DataLoading) {
-      context.read<FavoritesCubit>().search(_searchController.text, pageKey);
+      if (_searchController.text != '') {
+        context.read<FavoritesCubit>().search(_searchController.text, pageKey);
+      } else {
+        context.read<FavoritesCubit>().getFavorites(pageKey);
+      }
     }
   }
 
-  Widget _renderMenuPopup() {
+  void onSearchChange(String word) {
+    if ('' == word) {
+      _pagingController.refresh();
+      }
+  }
+
+  void refresh() {
+    if (context.read<FavoritesCubit>().state is! DataLoading) {
+      context.read<FavoritesCubit>().refresh();
+    }
+  }
+
+  Widget _renderMenuPopup(GestureModel gesture) {
     return PopupMenuButton(
       iconSize: 20,
       elevation: 3,
@@ -61,7 +83,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 'Удалить',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
-              onTap: () => log('tap on delete')),
+              onTap: () {
+                log('tap on delete');
+                context.read<FavoritesCubit>().delete(gesture);
+                _pagingController.itemList?.remove(gesture);
+                },
+          )
         ];
       },
     );
@@ -75,11 +102,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<FavoritesCubit, MainState>(listener: (context, state) {
       if (state is DataLoaded) {
-        search(1);
+        searchOrGet(1);
       }
 
       if (state is Searched) {
         final isLastPage = context.read<FavoritesCubit>().isLastPage();
+        log('is last page: ' + isLastPage.toString());
         final newItems = context.read<FavoritesCubit>().searchResults;
 
         if (context.read<FavoritesCubit>().page == 1) {
@@ -114,6 +142,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   child: SearchWidget(
                     searchController: _searchController,
                     onSearch: () => _pagingController.refresh(),
+                    onChange: onSearchChange,
                   )),
               Expanded(
                   child: PagedListWidget(
@@ -126,13 +155,17 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                           dense: true,
                           contentPadding: const EdgeInsets.only(left: 10),
                           title: Text(item.name + getContext(item.context),
-                              style: Theme.of(context).textTheme.bodySmall),
-                          onTap: () => log('tap on gesture'),
-                          trailing: _renderMenuPopup(),
+                              style: Theme.of(context).textTheme.bodySmall,
+                              maxLines: 2,
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis),
+                          onTap: () {
+                            _navigateToGestureScreen(item.id);
+                          },
+                          trailing: _renderMenuPopup(item),
                         );
                       },
-                      isLoading:
-                          context.read<FavoritesCubit>().state is Searching))
+                      isLoading: state is Searching))
             ],
           ));
     });

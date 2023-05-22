@@ -83,7 +83,6 @@ class ResetPasswordScreen extends AuthScreen {
               }
 
               context.read<AuthCubit>().resetPassword();
-              log('success!!');
             },
             text: 'Сбросить пароль',
             color: ColorStyles.accent,

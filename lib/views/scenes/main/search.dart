@@ -6,6 +6,7 @@ import 'package:sigest/bloc/main_cubit.dart';
 import 'package:sigest/bloc/search/search_cubit.dart';
 import 'package:sigest/models/word.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:sigest/views/scenes/gesture.dart';
 
 import '../../widgets/paged_list.dart';
 import '../../widgets/search.dart';
@@ -29,8 +30,6 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     super.initState();
     _pagingController.addPageRequestListener((pageKey) {
-      log('update list 1');
-      log(isInitial.toString());
       if (!isInitial) {
         search(pageKey);
       } else {
@@ -52,6 +51,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
   String getContext(String context) {
     return context == '' ? '' : ' (' + context + ')';
+  }
+
+  void _navigateToGestureScreen(String gestureId) {
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+      return GestureScreen(gestureId: gestureId);
+    }));
   }
 
   @override
@@ -108,8 +113,14 @@ class _SearchScreenState extends State<SearchScreen> {
                           dense: true,
                           contentPadding: const EdgeInsets.only(left: 10),
                           title: Text(item.name + getContext(item.context),
-                              style: Theme.of(context).textTheme.bodySmall),
-                          onTap: () => log('tap on gesture'),
+                              style: Theme.of(context).textTheme.bodySmall,
+                              maxLines: 2,
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis),
+                          onTap: () {
+                            log('tap on gesture');
+                            _navigateToGestureScreen(item.gesture);
+                          },
                         );
                       },
                       isLoading:

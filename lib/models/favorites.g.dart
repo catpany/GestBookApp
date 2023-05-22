@@ -1,31 +1,34 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'dictionary.dart';
+part of 'favorites.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class DictionaryModelAdapter extends TypeAdapter<DictionaryModel> {
+class FavoritesModelAdapter extends TypeAdapter<FavoritesModel> {
   @override
   final int typeId = 8;
 
   @override
-  DictionaryModel read(BinaryReader reader) {
+  FavoritesModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return DictionaryModel(
-      items: (fields[0] as HiveList).castHiveList(),
+    return FavoritesModel(
+      id: fields[0] as String,
+      items: (fields[1] as HiveList).castHiveList(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, DictionaryModel obj) {
+  void write(BinaryWriter writer, FavoritesModel obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
       ..write(obj.items);
   }
 
@@ -35,7 +38,7 @@ class DictionaryModelAdapter extends TypeAdapter<DictionaryModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DictionaryModelAdapter &&
+      other is FavoritesModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

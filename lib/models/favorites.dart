@@ -5,13 +5,15 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'gesture.dart';
 
-part 'dictionary.g.dart';
+part 'favorites.g.dart';
 
 @HiveType(typeId: 8)
-class DictionaryModel extends HiveObject {
+class FavoritesModel extends HiveObject {
   @JsonKey(defaultValue: [])
   @HiveField(0)
+  String id;
+  @HiveField(1)
   HiveList<GestureModel> items;
 
-  DictionaryModel({required this.items});
+  FavoritesModel({required this.id, required this.items});
 }

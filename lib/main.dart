@@ -13,10 +13,11 @@ import 'package:sigest/views/scenes/splash.dart';
 import 'package:sigest/views/styles.dart';
 
 import 'models/auth.dart';
-import 'models/dictionary.dart';
+import 'models/favorites.dart';
 import 'models/gesture-info.dart';
 import 'models/gesture.dart';
 import 'models/lesson.dart';
+import 'models/saved.dart';
 import 'models/unit.dart';
 import 'models/units.dart';
 
@@ -36,7 +37,8 @@ void main() async {
   Hive.registerAdapter(SettingsModelAdapter());
   Hive.registerAdapter(GestureInfoModelAdapter());
   Hive.registerAdapter(GestureModelAdapter());
-  Hive.registerAdapter(DictionaryModelAdapter());
+  Hive.registerAdapter(FavoritesModelAdapter());
+  Hive.registerAdapter(SavedModelAdapter());
   await cacheAssets();
   await Hive.openBox<SettingsModel>('settings');
 

@@ -28,5 +28,15 @@ Future<Response> search(Params params);
 
 Future<Response> favorites(Params params);
 
-Future<Response> gesture(String id, Params params);
+Future<Response> gesture(String id);
+
+Future<Response> addToFavorites(Params params);
+
+Future<Response> removeFromFavorites(Params params);
+
+Future<Response> downloadVideo(String url);
+
+Future<Response> downloadImage(String url);
+
+Future<Response> searchFavorites(Params params);
 }
