@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/bloc/splash/splash_cubit.dart';
 import 'package:sigest/views/scenes/main/main.dart';
-import 'package:sigest/views/scenes/main/units.dart';
 
 import '../../bloc/main_cubit.dart';
 import '../styles.dart';
-import '../widgets/button.dart';
 import 'auth/login.dart';
 
 class SplashScreen extends StatefulWidget {

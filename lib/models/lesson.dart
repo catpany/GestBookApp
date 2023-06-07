@@ -23,16 +23,16 @@ class LessonModel extends HiveObject {
   @JsonKey(name: 'levels_finished', defaultValue: 0)
   @HiveField(5)
   int levelsFinished;
-  @JsonKey(defaultValue: false)
+  @JsonKey(defaultValue: false, name: 'with_theory',)
   @HiveField(6)
-  bool theory;
+  bool withTheory;
   @JsonKey(includeFromJson: false, includeToJson: false)
   @HiveField(7, defaultValue: false)
   bool available;
 
   double get progress => (levelsFinished / levelsTotal);
 
-  LessonModel({required this.id, required this.order, required this.name, required this.icon, required this.levelsTotal, required this.levelsFinished, required this.theory, this.available = false});
+  LessonModel({required this.id, required this.order, required this.name, required this.icon, required this.levelsTotal, required this.levelsFinished, required this.withTheory, this.available = false});
 
   factory LessonModel.fromJson(Map<String, dynamic> json) => _$LessonModelFromJson(json);
 

@@ -29,7 +29,12 @@ class LessonInfoRepository extends HiveStock<LessonInfoModel> {
   Future<LessonInfoModel> reload(String key, Params? params) async {
     this.params = params;
     id = key;
-    return stock.fresh(name);
+    LessonInfoModel? lesson = get('lessonInfo');
+    if (lesson == null || lesson.id != key) {
+      return stock.fresh(name);
+    }
+
+    return lesson;
   }
 
   @override
