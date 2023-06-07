@@ -10,7 +10,7 @@ class LessonDialogWidget extends StatefulWidget {
   final LessonModel lesson;
   final Function(String id, int levelOrder) onStartLesson;
   final Function(String id) onStartFastRepetition;
-  final Function(String id) onViewTheory;
+  final Function(String id, int finished, int total) onViewTheory;
 
   const LessonDialogWidget(
       {Key? key,
@@ -30,12 +30,12 @@ class _LessonDialogState extends State<LessonDialogWidget> {
   List<Widget> _renderActionButtons() {
     List<Widget> list = <Widget>[];
 
-    if (true == widget.lesson.theory) {
+    if (true == widget.lesson.withTheory) {
       list.add(Container(
           margin: const EdgeInsets.only(bottom: 4),
           child: ButtonWidget(
             onClick: () {
-              widget.onViewTheory(widget.lesson.id);
+              widget.onViewTheory(widget.lesson.id, widget.lesson.levelsFinished, widget.lesson.levelsTotal);
             },
             color: ColorStyles.accent,
             borderSideColor: ColorStyles.accent,

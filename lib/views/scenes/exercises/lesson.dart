@@ -99,15 +99,15 @@ class LessonScreenState extends State<LessonScreen> {
   Widget _nextExercise() {
     switch (cubit.currentExercise.type) {
       case 1:
-        return NewGestExerciseScreen();
+        return const NewGestExerciseScreen();
       case 2:
-        return ChooseWordExerciseScreen();
+        return const ChooseWordExerciseScreen();
       case 3:
-        return ChooseGestExerciseScreen();
+        return const ChooseGestExerciseScreen();
       case 4:
-        return YesNoExerciseScreen();
+        return const YesNoExerciseScreen();
       case 5:
-        return MatchExerciseScreen();
+        return const MatchExerciseScreen();
       default:
         throw Exception('No such exercise');
     }
@@ -138,7 +138,7 @@ class LessonScreenState extends State<LessonScreen> {
   }
 
   Widget _renderNextLevelScreen() {
-    return Container(
+    return SizedBox(
       width: double.infinity,
         height: double.infinity,
         child: Stack(
@@ -177,23 +177,6 @@ class LessonScreenState extends State<LessonScreen> {
             ))
       ],
     ));
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      width: double.infinity,
-      height: double.infinity,
-      alignment: AlignmentDirectional.bottomCenter,
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
-      ),
-      child: ButtonWidget(
-        text: 'Продолжить',
-        color: Colors.white,
-        backgroundColor: ColorStyles.green,
-        onClick: () => cubit.startNextLevel(),
-        minWidth: double.infinity,
-        height: 40,
-      ),
-    );
   }
 
   void onQuit() {

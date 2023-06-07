@@ -8,6 +8,7 @@ import 'package:sigest/views/styles.dart';
 import 'package:sigest/views/widgets/unit_list.dart';
 
 import '../exercises/lesson.dart';
+import '../theory.dart';
 
 class UnitsScreen extends StatefulWidget {
   UnitsScreen({Key? key}) : super(key: key);
@@ -18,7 +19,6 @@ class UnitsScreen extends StatefulWidget {
 }
 
 class _UnitsScreenState extends State<UnitsScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -43,7 +43,13 @@ class _UnitsScreenState extends State<UnitsScreen> {
                   margin: const EdgeInsets.only(right: 2),
                 ),
                 Container(
-                  child: Text(widget.cubit.store.user.user.stat['goal_achieved'].toString() + '/' + (widget.cubit.store.user.user.stat['goal']?? 10).toString(), style: Theme.of(context).textTheme.bodySmall),
+                  child: Text(
+                      widget.cubit.store.user.user.stat['goal_achieved']
+                              .toString() +
+                          '/' +
+                          (widget.cubit.store.user.user.stat['goal'] ?? 10)
+                              .toString(),
+                      style: Theme.of(context).textTheme.bodySmall),
                   margin: const EdgeInsets.only(right: 30),
                 ),
                 Container(
@@ -51,23 +57,40 @@ class _UnitsScreenState extends State<UnitsScreen> {
                       color: ColorStyles.orange, size: 27),
                   margin: const EdgeInsets.only(right: 2),
                 ),
-                Text(widget.cubit.store.user.user.stat['impact_mode'].toString(), style: Theme.of(context).textTheme.bodySmall),
+                Text(
+                    widget.cubit.store.user.user.stat['impact_mode'].toString(),
+                    style: Theme.of(context).textTheme.bodySmall),
               ],
             )));
   }
 
   void _navigateToLesson(String lessonId, int levelOrder) {
-    Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(builder: (BuildContext context) {
-          return LessonScreen(lessonId: lessonId, levelOrder: levelOrder,);
-        }
-        )
-    ).then((value) => setState(() {}));
+    Navigator.of(context, rootNavigator: true)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
+      return LessonScreen(
+        lessonId: lessonId,
+        levelOrder: levelOrder,
+      );
+    })).then((value) => setState(() {}));
+  }
+
+  void _navigateToTheory(String lessonId, int finished, int total) {
+    Navigator.of(context, rootNavigator: true)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
+      return TheoryScreen(lessonId: lessonId, finished: finished, total: total);
+    })).then((value) => setState(() {}));
   }
 
   Widget _renderBody(BuildContext context, MainState state) {
     if (state is! DataLoading) {
-      return UnitListWidget(units: widget.cubit.store.units.units, onStartLesson: (String lessonId, int levelOrder) => _navigateToLesson(lessonId, levelOrder), onStartFastRepetition: (String id) {  }, onViewTheory: (String id) {  },);
+      return UnitListWidget(
+        units: widget.cubit.store.units.units,
+        onStartLesson: (String lessonId, int levelOrder) =>
+            _navigateToLesson(lessonId, levelOrder),
+        onStartFastRepetition: (String lessonId) => {},
+        onViewTheory: (String lessonId, int finished, int total) =>
+            _navigateToTheory(lessonId, finished, total),
+      );
     }
 
     return const SizedBox.shrink();

@@ -20,7 +20,7 @@ class UnitListWidget extends StatefulWidget {
   final UnitsModel units;
   final Function(String id, int levelOrder) onStartLesson;
   final Function(String id) onStartFastRepetition;
-  final Function(String id) onViewTheory;
+  final Function(String id, int finished, int total) onViewTheory;
   const UnitListWidget({Key? key, required this.units, required this.onStartLesson, required this.onStartFastRepetition, required this.onViewTheory}) : super(key: key);
 
   @override
@@ -180,8 +180,8 @@ class _UnitListState extends State<UnitListWidget> {
               }
               widget.onStartLesson(id, order);
               },
-            onViewTheory: (String id) {
-              widget.onViewTheory(id);
+            onViewTheory: (String id, int finished, int total) {
+              widget.onViewTheory(id, finished, total);
             },
             onStartFastRepetition: (String id) {
               widget.onStartFastRepetition(id);

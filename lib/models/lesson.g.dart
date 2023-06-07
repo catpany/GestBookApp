@@ -23,7 +23,7 @@ class LessonModelAdapter extends TypeAdapter<LessonModel> {
       icon: fields[3] as int,
       levelsTotal: fields[4] as int,
       levelsFinished: fields[5] as int,
-      theory: fields[6] as bool,
+      withTheory: fields[6] as bool,
       available: fields[7] == null ? false : fields[7] as bool,
     );
   }
@@ -45,7 +45,7 @@ class LessonModelAdapter extends TypeAdapter<LessonModel> {
       ..writeByte(5)
       ..write(obj.levelsFinished)
       ..writeByte(6)
-      ..write(obj.theory)
+      ..write(obj.withTheory)
       ..writeByte(7)
       ..write(obj.available);
   }
@@ -72,7 +72,7 @@ LessonModel _$LessonModelFromJson(Map<String, dynamic> json) => LessonModel(
       icon: LessonModel._hexStringToInt(json['icon'] as String),
       levelsTotal: json['levels_total'] as int,
       levelsFinished: json['levels_finished'] as int? ?? 0,
-      theory: json['theory'] as bool? ?? false,
+      withTheory: json['with_theory'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$LessonModelToJson(LessonModel instance) =>
@@ -83,5 +83,5 @@ Map<String, dynamic> _$LessonModelToJson(LessonModel instance) =>
       'icon': LessonModel._intToHexString(instance.icon),
       'levels_total': instance.levelsTotal,
       'levels_finished': instance.levelsFinished,
-      'theory': instance.theory,
+      'with_theory': instance.withTheory,
     };
