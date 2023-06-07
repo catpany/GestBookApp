@@ -19,13 +19,12 @@ class SplashCubit extends MainCubit {
   Future<void> load() async {
     log('splash data load');
     emit(DataLoading());
-    store
-        .reload()
-        .then((value) {
-        log('static splash data loaded');
-        updateSettings();
+    store.reload().then((value) {
+      updateSettings();
+      store.user.checkAndUpdateStats();
+      log('static splash data loaded');
 
-        emit(DataLoaded());
+      emit(DataLoaded());
     }, onError: (error, StackTrace stackTrace) {
       log('error!!!');
       log(error.toString());

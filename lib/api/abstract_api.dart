@@ -39,4 +39,10 @@ Future<Response> downloadVideo(String url);
 Future<Response> downloadImage(String url);
 
 Future<Response> searchFavorites(Params params);
+
+Future<Response> lesson(String id);
+
+Future<Response> updateStats(Params params);
+
+Future<Response> finishLevel(String id);
 }

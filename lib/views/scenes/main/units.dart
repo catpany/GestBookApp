@@ -7,6 +7,8 @@ import 'package:sigest/bloc/units/units_cubit.dart';
 import 'package:sigest/views/styles.dart';
 import 'package:sigest/views/widgets/unit_list.dart';
 
+import '../exercises/lesson.dart';
+
 class UnitsScreen extends StatefulWidget {
   UnitsScreen({Key? key}) : super(key: key);
   final UnitsCubit cubit = UnitsCubit();
@@ -54,9 +56,18 @@ class _UnitsScreenState extends State<UnitsScreen> {
             )));
   }
 
+  void _navigateToLesson(String lessonId, int levelOrder) {
+    Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(builder: (BuildContext context) {
+          return LessonScreen(lessonId: lessonId, levelOrder: levelOrder,);
+        }
+        )
+    ).then((value) => setState(() {}));
+  }
+
   Widget _renderBody(BuildContext context, MainState state) {
-    if (state is DataLoaded) {
-      return UnitListWidget(units: widget.cubit.store.units.units, onStartLesson: widget.cubit.onStartLesson);
+    if (state is! DataLoading) {
+      return UnitListWidget(units: widget.cubit.store.units.units, onStartLesson: (String lessonId, int levelOrder) => _navigateToLesson(lessonId, levelOrder), onStartFastRepetition: (String id) {  }, onViewTheory: (String id) {  },);
     }
 
     return const SizedBox.shrink();

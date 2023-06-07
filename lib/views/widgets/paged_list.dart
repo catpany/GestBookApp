@@ -38,7 +38,6 @@ class PagedListWidget extends StatelessWidget {
         pagingController: pagingController,
         builderDelegate: PagedChildBuilderDelegate(
           firstPageProgressIndicatorBuilder: (BuildContext context) {
-            log('first page');
             if (isLoading) {
               return Center(
                   child: Container(

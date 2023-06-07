@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sigest/views/widgets/widget_wrapper.dart';
 
@@ -44,6 +43,7 @@ class StatisticWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WidgetWrapper(
+      alignment: AlignmentDirectional.center,
       width: 155,
       height: 75,
       padding: const EdgeInsets.symmetric(horizontal: 8),

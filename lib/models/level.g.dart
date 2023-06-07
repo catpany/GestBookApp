@@ -1,41 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user.dart';
+part of 'level.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class UserModelAdapter extends TypeAdapter<UserModel> {
+class LevelModelAdapter extends TypeAdapter<LevelModel> {
   @override
-  final int typeId = 0;
+  final int typeId = 11;
 
   @override
-  UserModel read(BinaryReader reader) {
+  LevelModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return UserModel(
+    return LevelModel(
       id: fields[0] as String,
-      username: fields[1] as String,
-      email: fields[2] as String,
-      stat: (fields[3] as Map).cast<String, dynamic>(),
+      order: fields[1] as int,
+      exercises: (fields[2] as List).cast<ExerciseModel>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, UserModel obj) {
+  void write(BinaryWriter writer, LevelModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.username)
+      ..write(obj.order)
       ..writeByte(2)
-      ..write(obj.email)
-      ..writeByte(3)
-      ..write(obj.stat);
+      ..write(obj.exercises);
   }
 
   @override
@@ -44,7 +41,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is UserModelAdapter &&
+      other is LevelModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -53,16 +50,17 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
+LevelModel _$LevelModelFromJson(Map<String, dynamic> json) => LevelModel(
       id: json['id'] as String,
-      username: json['username'] as String,
-      email: json['email'] as String? ?? '',
-      stat: json['stat'] as Map<String, dynamic>,
+      order: json['order'] as int,
+      exercises: (json['exercises'] as List<dynamic>)
+          .map((e) => ExerciseModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
-Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
+Map<String, dynamic> _$LevelModelToJson(LevelModel instance) =>
+    <String, dynamic>{
       'id': instance.id,
-      'username': instance.username,
-      'email': instance.email,
-      'stat': instance.stat,
+      'order': instance.order,
+      'exercises': instance.exercises,
     };

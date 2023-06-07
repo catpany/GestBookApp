@@ -13,10 +13,13 @@ import 'package:sigest/views/scenes/splash.dart';
 import 'package:sigest/views/styles.dart';
 
 import 'models/auth.dart';
+import 'models/exercise.dart';
 import 'models/favorites.dart';
 import 'models/gesture-info.dart';
 import 'models/gesture.dart';
+import 'models/lesson-info.dart';
 import 'models/lesson.dart';
+import 'models/level.dart';
 import 'models/saved.dart';
 import 'models/unit.dart';
 import 'models/units.dart';
@@ -39,6 +42,9 @@ void main() async {
   Hive.registerAdapter(GestureModelAdapter());
   Hive.registerAdapter(FavoritesModelAdapter());
   Hive.registerAdapter(SavedModelAdapter());
+  Hive.registerAdapter(ExerciseModelAdapter());
+  Hive.registerAdapter(LevelModelAdapter());
+  Hive.registerAdapter(LessonInfoModelAdapter());
   await cacheAssets();
   await Hive.openBox<SettingsModel>('settings');
 
@@ -91,8 +97,8 @@ class MyApp extends StatelessWidget {
               textTheme:
               const TextTheme(
                 bodyLarge: TextStyles.text14SemiBoldLight,
-                bodyMedium: TextStyles.text14MediumLight,
-                bodySmall: TextStyles.text14RegularLight,
+                bodyMedium: TextStyles.text16MediumLight,
+                bodySmall: TextStyles.text16RegularLight,
                 headlineMedium: TextStyles.text16MediumLight,
                 headlineLarge: TextStyles.text16SemiBoldLight,
                 displaySmall: TextStyles.text12Regular,
@@ -105,8 +111,8 @@ class MyApp extends StatelessWidget {
               textTheme:
               const TextTheme(
                 bodyLarge: TextStyles.text14SemiBoldDark,
-                bodyMedium: TextStyles.text14MediumDark,
-                bodySmall: TextStyles.text14RegularDark,
+                bodyMedium: TextStyles.text16MediumDark,
+                bodySmall: TextStyles.text16RegularDark,
                 headlineMedium: TextStyles.text16MediumDark,
                 headlineLarge: TextStyles.text16SemiBoldDark,
                 displaySmall: TextStyles.text12Regular,

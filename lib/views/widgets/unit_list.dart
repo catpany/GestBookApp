@@ -18,9 +18,10 @@ import 'lesson_dialog.dart';
 
 class UnitListWidget extends StatefulWidget {
   final UnitsModel units;
-  final Function onStartLesson;
-
-  const UnitListWidget({Key? key, required this.units, required this.onStartLesson}) : super(key: key);
+  final Function(String id, int levelOrder) onStartLesson;
+  final Function(String id) onStartFastRepetition;
+  final Function(String id) onViewTheory;
+  const UnitListWidget({Key? key, required this.units, required this.onStartLesson, required this.onStartFastRepetition, required this.onViewTheory}) : super(key: key);
 
   @override
   _UnitListState createState() => _UnitListState();
@@ -164,12 +165,27 @@ class _UnitListState extends State<UnitListWidget> {
   }
 
   Future<void> _renderLessonDialog(LessonModel lesson) async {
+    BuildContext? dcontext;
+
     await showDialog<void>(
         context: context,
       builder: (BuildContext context) {
+        dcontext = context;
+
           return LessonDialogWidget(
             lesson: lesson,
-            onStartLesson: widget.onStartLesson,
+            onStartLesson: (String id, int order) {
+              if(dcontext != null){
+                Navigator.pop(dcontext!);
+              }
+              widget.onStartLesson(id, order);
+              },
+            onViewTheory: (String id) {
+              widget.onViewTheory(id);
+            },
+            onStartFastRepetition: (String id) {
+              widget.onStartFastRepetition(id);
+            },
           );
       }
     );
@@ -226,7 +242,7 @@ class _UnitListState extends State<UnitListWidget> {
               autoPlay: false,
               enlargeCenterPage: false,
               disableCenter: true,
-              viewportFraction: 0.9,
+              viewportFraction: 1,
               scrollDirection: Axis.horizontal,
               onPageChanged: (index, _) {
                 updateUnitTitle(index);

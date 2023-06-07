@@ -12,6 +12,7 @@ import '../locator.dart';
 import 'favorites.dart';
 import 'gesture-info.dart';
 import 'gestures.dart';
+import 'lesson-info.dart';
 
 class Store {
   late Map<String, AbstractRepository> _stores = {};
@@ -25,6 +26,7 @@ class Store {
   FavoritesRepository get favorites => _stores['favorites'] as FavoritesRepository;
   GestureRepository get gestures => _stores['gestures'] as GestureRepository;
   GestureInfoRepository get gestureInfo => _stores['gestureInfo'] as GestureInfoRepository;
+  LessonInfoRepository get lessonInfo => _stores['lessonInfo'] as LessonInfoRepository;
   final List<String> staticStores = ['auth', 'units', 'user', 'lessons'];
   List<String> clearStores = ['lessons', 'units', 'auth', 'user'];
 

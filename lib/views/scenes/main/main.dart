@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:sigest/bloc/main_cubit.dart';
-import 'package:sigest/views/scenes/auth/login.dart';
 import 'package:sigest/views/scenes/main/dictionaries.dart';
 import 'package:sigest/views/scenes/main/page_navigators.dart';
 import 'package:sigest/views/scenes/main/profile.dart';
