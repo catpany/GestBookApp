@@ -733,4 +733,229 @@ class ApiMock implements AbstractApi {
       return SuccessResponse(data: body['data']);
     });
   }
+
+  @override
+  Future<Response> lesson(String id) {
+    const body = {
+      "data": {
+        "id": "046e73ef-8268-4f7e-9655-35998794a92c",
+        "name": "Prof.",
+        "gestures": [
+          {
+            "id": "df7e1c2c-6600-40aa-a379-d4bb993428be",
+            "name": "гроб",
+            "context": "",
+            "description": "Consequatur dolores autem quia et. Iste enim id consequatur et quia nihil. Et iste voluptatem alias accusamus.",
+            "src": "http://localhost:8000/storage/gestures/grob-rsl.mp4",
+            "img": null,
+            "aud": "user"
+          },
+          {
+            "id": "5b430794-1339-48fa-95ff-e0cbac13b659",
+            "name": "дом",
+            "context": "",
+            "description": "Voluptatem inventore ullam ullam inventore qui voluptatem quia omnis. Labore ipsam laudantium ullam nam et rerum dolorem. Consequuntur et dolores quibusdam cum similique.",
+            "src": "http://localhost:8000/storage/gestures/dom-rsl.mp4",
+            "img": null,
+            "aud": "user"
+          },
+          {
+            "id": "c82203c4-db43-4528-9c0d-fa4da73b1f20",
+            "name": "Гомель",
+            "context": "",
+            "description": "Aut debitis quod dolores et. Veniam odio molestiae fugiat aliquam consequuntur. In porro ut vero nostrum quibusdam dolor.",
+            "src": "http://localhost:8000/storage/gestures/gomel-rsl.mp4",
+            "img": null,
+            "aud": "user"
+          },
+          {
+            "id": "235f8da4-ad43-4bdd-bd08-6af816836acf",
+            "name": "гармония",
+            "context": "Dignissimos aliquam et laudantium. A maiores labore quisquam earum velit a. Fuga quo sed non molestiae cum. Ducimus facilis laboriosam dolore aut autem aliquam.",
+            "description": "Inventore harum minus et quod nihil. Ut voluptas ut et voluptatem quos nulla magnam quasi.",
+            "src": "http://localhost:8000/storage/gestures/garmoniia-rsl.mp4",
+            "img": null,
+            "aud": "user"
+          }
+        ],
+        "theory": "Nostrum voluptatem officia est velit. Recusandae tenetur in atque explicabo sunt natus. Et unde corporis magni eos deserunt aut voluptatem. Eos sunt illum adipisci qui.",
+        "best_time": null,
+        "levels": [
+          {
+            "id": "9c51967f-5987-4843-8239-9fb1979b12ba",
+            "order": 1,
+            "exercises": [
+              {
+                "id": "b96c9074-0da2-4693-9cea-12a9b7d07929",
+                "type": 3,
+                "answers": [
+                  "c82203c4-db43-4528-9c0d-fa4da73b1f20"
+                ],
+                "options": [
+                  "df7e1c2c-6600-40aa-a379-d4bb993428be",
+                  "5b430794-1339-48fa-95ff-e0cbac13b659",
+                  "235f8da4-ad43-4bdd-bd08-6af816836acf"
+                ]
+              },
+              {
+                "id": "59bd2bfc-c4a6-46be-8c1b-a44ee3a8b9bb",
+                "type": 2,
+                "answers": [
+                  "c82203c4-db43-4528-9c0d-fa4da73b1f20"
+                ],
+                "options": [
+                  "df7e1c2c-6600-40aa-a379-d4bb993428be",
+                  "5b430794-1339-48fa-95ff-e0cbac13b659",
+                  "235f8da4-ad43-4bdd-bd08-6af816836acf"
+                ]
+              },
+              {
+                "id": "eddb5c15-3ff5-4a32-986e-4a16f253154e",
+                "type": 4,
+                "answers": [
+                  "c82203c4-db43-4528-9c0d-fa4da73b1f20"
+                ],
+                "options": [
+                  "df7e1c2c-6600-40aa-a379-d4bb993428be"
+                ]
+              },
+              {
+                "id": "c44df062-60b2-442c-90ba-991e945928ad",
+                "type": 5,
+                "answers": [
+                  "df7e1c2c-6600-40aa-a379-d4bb993428be",
+                  "5b430794-1339-48fa-95ff-e0cbac13b659",
+                  "c82203c4-db43-4528-9c0d-fa4da73b1f20",
+                  "235f8da4-ad43-4bdd-bd08-6af816836acf"
+                ],
+                "options": []
+              }
+            ]
+          },
+          {
+            "id": "7aa3bb4c-4790-49a0-89f6-d97cb5752482",
+            "order": 2,
+            "exercises": [
+              {
+                "id": "110581f5-4a11-43ee-ad5d-112a7c8f81d7",
+                "type": 3,
+                "answers": [
+                  "c82203c4-db43-4528-9c0d-fa4da73b1f20"
+                ],
+                "options": [
+                  "df7e1c2c-6600-40aa-a379-d4bb993428be",
+                  "5b430794-1339-48fa-95ff-e0cbac13b659",
+                  "235f8da4-ad43-4bdd-bd08-6af816836acf"
+                ]
+              },
+              {
+                "id": "a6510733-8041-424c-b58a-8b98fd806cf5",
+                "type": 2,
+                "answers": [
+                  "c82203c4-db43-4528-9c0d-fa4da73b1f20"
+                ],
+                "options": [
+                  "df7e1c2c-6600-40aa-a379-d4bb993428be",
+                  "5b430794-1339-48fa-95ff-e0cbac13b659",
+                  "235f8da4-ad43-4bdd-bd08-6af816836acf"
+                ]
+              },
+              {
+                "id": "6f05f271-3229-4dbf-b166-b99f2889b1a4",
+                "type": 4,
+                "answers": [
+                  "c82203c4-db43-4528-9c0d-fa4da73b1f20"
+                ],
+                "options": [
+                  "df7e1c2c-6600-40aa-a379-d4bb993428be"
+                ]
+              },
+              {
+                "id": "f7d8de9c-bce8-4cfb-83ae-ea6abfad0302",
+                "type": 5,
+                "answers": [
+                  "df7e1c2c-6600-40aa-a379-d4bb993428be",
+                  "5b430794-1339-48fa-95ff-e0cbac13b659",
+                  "c82203c4-db43-4528-9c0d-fa4da73b1f20",
+                  "235f8da4-ad43-4bdd-bd08-6af816836acf"
+                ],
+                "options": []
+              }
+            ]
+          },
+          {
+            "id": "b41f6242-fa2f-4119-b20a-82be11926f75",
+            "order": 3,
+            "exercises": [
+              {
+                "id": "1b7cb09a-86bd-4164-af1f-1383ef920479",
+                "type": 3,
+                "answers": [
+                  "c82203c4-db43-4528-9c0d-fa4da73b1f20"
+                ],
+                "options": [
+                  "df7e1c2c-6600-40aa-a379-d4bb993428be",
+                  "5b430794-1339-48fa-95ff-e0cbac13b659",
+                  "235f8da4-ad43-4bdd-bd08-6af816836acf"
+                ]
+              },
+              {
+                "id": "b7acf9d2-98c5-4d08-a580-9c076d58bef2",
+                "type": 2,
+                "answers": [
+                  "c82203c4-db43-4528-9c0d-fa4da73b1f20"
+                ],
+                "options": [
+                  "df7e1c2c-6600-40aa-a379-d4bb993428be",
+                  "5b430794-1339-48fa-95ff-e0cbac13b659",
+                  "235f8da4-ad43-4bdd-bd08-6af816836acf"
+                ]
+              },
+              {
+                "id": "5d184b41-3365-450e-b288-f3390f7dc3f3",
+                "type": 4,
+                "answers": [
+                  "c82203c4-db43-4528-9c0d-fa4da73b1f20"
+                ],
+                "options": [
+                  "df7e1c2c-6600-40aa-a379-d4bb993428be"
+                ]
+              },
+              {
+                "id": "453cb2b3-7054-4158-8f8b-a8d337b1024c",
+                "type": 5,
+                "answers": [
+                  "df7e1c2c-6600-40aa-a379-d4bb993428be",
+                  "5b430794-1339-48fa-95ff-e0cbac13b659",
+                  "c82203c4-db43-4528-9c0d-fa4da73b1f20",
+                  "235f8da4-ad43-4bdd-bd08-6af816836acf"
+                ],
+                "options": []
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    return Future<Response>.delayed(const Duration(seconds: 2), () {
+      return SuccessResponse(data: body['data']);
+    });
+  }
+
+  @override
+  Future<Response> updateStats(Params params) {
+    return Future<Response>.delayed(const Duration(seconds: 2), () {
+      return SuccessResponse(data: {});
+    });
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Response> finishLevel(String id) {
+    return Future<Response>.delayed(const Duration(seconds: 2), () {
+      return SuccessResponse(data: {});
+    });
+    throw UnimplementedError();
+  }
 }

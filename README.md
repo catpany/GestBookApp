@@ -5,6 +5,13 @@
 
 ##### Prerequisites
 
+В файле gradle.build нужно установить версию java, которая используется для сборки android-приложения:
+
+compileOptions {
+    sourceCompatibility JavaVersion.VERSION_<java_version>
+    targetCompatibility JavaVersion.VERSION_<java_version>
+}
+
 Перед запуском программы необходимо установить:
 
 - [Flutter SDK](https://docs.flutter.dev/get-started/install)

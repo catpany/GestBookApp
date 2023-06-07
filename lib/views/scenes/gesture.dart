@@ -8,6 +8,7 @@ import '../../bloc/gesture/gesture_cubit.dart';
 import '../../bloc/main_cubit.dart';
 import '../../main.dart';
 import '../styles.dart';
+import '../widgets/content.dart';
 import '../widgets/video_player.dart';
 import '../widgets/widget_wrapper.dart';
 
@@ -108,79 +109,6 @@ class GestureScreenState extends State<GestureScreen> {
     );
   }
 
-  Widget _showContent() {
-    String src;
-
-    if (cubit.store.gestureInfo.gestureInfo.src != null) {
-      src = cubit.store.gestureInfo.gestureInfo.src ?? '';
-
-      if (src.startsWith('http')) {
-        return VideoPlayerWidget(
-            src: src.replaceAll('localhost:8000', config["domain"]));
-      }
-
-      return VideoPlayerWidget(
-        src: src,
-        fromNetwork: false,
-      );
-    }
-
-    if (cubit.store.gestureInfo.gestureInfo.img != null) {
-      src = cubit.store.gestureInfo.gestureInfo.img ?? '';
-
-      if (src.startsWith('http')) {
-        return Image.network(
-          src.replaceAll('localhost:8000', config["domain"]),
-          errorBuilder: (BuildContext context, error, _) => _showError(),
-          frameBuilder: (BuildContext context, Widget child, int? frame, bool? wasSynchronouslyLoaded) {
-            return _loadingFrame(child);
-          },
-        );
-      }
-
-      return Image.file(
-        File(src),
-        errorBuilder: (BuildContext context, error, _) => _showError(),
-        frameBuilder: (BuildContext context, Widget child, int? frame, bool? wasSynchronouslyLoaded) {
-          return _loadingFrame(child);
-        },
-      );
-    }
-
-    return _showError();
-  }
-
-  Widget _loadingFrame(Widget child) {
-    return Container(
-        width: double.infinity,
-        constraints: const BoxConstraints(
-          maxHeight: 212,
-        ),
-        decoration: const BoxDecoration(
-          color: ColorStyles.gray,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          child: child,
-        ));
-  }
-
-  Widget _showError() {
-    return Container(
-      decoration: const BoxDecoration(
-          color: ColorStyles.gray,
-          borderRadius: BorderRadius.all(Radius.circular(10))),
-      alignment: AlignmentDirectional.center,
-      width: double.infinity,
-      height: 212,
-      child: Text(
-        'Ресурс недоступен',
-        style: TextStyles.title20SemiBold?.apply(color: ColorStyles.grayDark),
-      ),
-    );
-  }
-
   Widget _renderBody(BuildContext context, MainState state) {
     if (state is! DataLoading) {
       return Container(
@@ -193,14 +121,21 @@ class GestureScreenState extends State<GestureScreen> {
                   margin: const EdgeInsets.only(bottom: 15),
                   child: Text(cubit.store.gestureInfo.gestureInfo.name,
                       style: Theme.of(context).textTheme.headlineMedium)),
-              _showContent(),
+              ContentWidget(
+                video: cubit.store.gestureInfo.gestureInfo.src,
+                img: cubit.store.gestureInfo.gestureInfo.img,
+              ),
               Container(
+                constraints: const BoxConstraints(
+                  minHeight: 100,
+                ),
                   margin: const EdgeInsets.only(top: 20),
                   child: WidgetWrapper(
+                    alignment: AlignmentDirectional.topStart,
                     padding: const EdgeInsets.symmetric(
                         vertical: 16, horizontal: 18),
                     child: Text(cubit.store.gestureInfo.gestureInfo.description,
-                        style: Theme.of(context).textTheme.bodySmall),
+                        style: Theme.of(context).textTheme.bodySmall, textAlign: TextAlign.start,),
                   ))
             ],
           )));

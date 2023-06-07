@@ -19,6 +19,7 @@ class NoticeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WidgetWrapper(
+      alignment: AlignmentDirectional.center,
       width: double.infinity,
       height: 110,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),

@@ -147,6 +147,13 @@ class Api implements AbstractApi {
                   options: http.Options(headers: headers),
                   data: jsonEncode(params?.body))
               .timeout(const Duration(seconds: 60));
+        case 'patch':
+          return await client
+              .patch('http://' + _host + _prefix + _version + uri,
+              queryParameters: params?.query,
+              options: http.Options(headers: headers),
+              data: jsonEncode(params?.body))
+              .timeout(const Duration(seconds: 60));
         case 'delete':
           return await client
               .delete('http://' + _host + _prefix + _version + uri,
@@ -320,5 +327,33 @@ class Api implements AbstractApi {
         uri: '/gesture',
         headers: {},
         params: params);
+  }
+
+  @override
+  Future<Response> lesson(String id) {
+    return make(
+      method: 'get',
+      uri: '/lesson/' + id,
+      headers: {},
+    );
+  }
+
+  @override
+  Future<Response> updateStats(Params params) {
+    return make(
+      method: 'patch',
+      uri: '/user/stat',
+      headers: {},
+      params: params,
+    );
+  }
+
+  @override
+  Future<Response> finishLevel(String id) {
+    return make(
+      method: 'post',
+      uri: '/lesson/levels/' + id,
+      headers: {},
+    );
   }
 }

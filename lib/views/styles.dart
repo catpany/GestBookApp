@@ -53,18 +53,18 @@ class TextStyles {
     height: 1.4,
   );
 
-  static const TextStyle text14RegularLight = TextStyle(
+  static const TextStyle text16RegularLight = TextStyle(
     color: ColorStyles.black,
-    fontSize: 14.0,
+    fontSize: 16.0,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
     // fontFamily: 'Jost',
     height: 1.4,
   );
 
-  static const TextStyle text14RegularDark = TextStyle(
+  static const TextStyle text16RegularDark = TextStyle(
     color: ColorStyles.white,
-    fontSize: 14.0,
+    fontSize: 16.0,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
     // fontFamily: 'Jost',

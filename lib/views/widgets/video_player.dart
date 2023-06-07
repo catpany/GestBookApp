@@ -35,22 +35,26 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     _videoPlayerController = widget.fromNetwork
         ? VideoPlayerController.network(widget.src)
         : VideoPlayerController.file(File(widget.src))
-      ..addListener(() {
-        setState(() {
-          currentPosition = _videoPlayerController.value.position;
-          bufferedPosition = _videoPlayerController.value.buffered.isNotEmpty
-              ? _videoPlayerController.value.buffered.first.end
-              : const Duration(seconds: 0);
-        });
-      })
+      ..addListener(
+      _updateProgress)
       ..initialize().then((_) {
         setState(() {});
         _videoPlayerController.play();
       });
   }
 
+  void _updateProgress() {
+    setState(() {
+      currentPosition = _videoPlayerController.value.position;
+      bufferedPosition = _videoPlayerController.value.buffered.isNotEmpty
+          ? _videoPlayerController.value.buffered.first.end
+          : const Duration(seconds: 0);
+    });
+  }
+
   @override
   void dispose() {
+    _videoPlayerController.removeListener(_updateProgress);
     _videoPlayerController.dispose();
     super.dispose();
   }
@@ -181,6 +185,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   }
 
   Widget _renderProgressBar() {
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -235,7 +240,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         key: visibilityKey,
         onVisibilityChanged: (VisibilityInfo info) {
           debugPrint("${info.visibleFraction} of my widget is visible");
-          if (info.visibleFraction == 0 && _videoPlayerController.value.isInitialized) {
+          if (info.visibleFraction == 0 && mounted && _videoPlayerController.value.isInitialized) {
             _videoPlayerController.pause();
           }
         },

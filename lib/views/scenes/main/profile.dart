@@ -89,7 +89,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: ColorStyles.grayDark, size: 30),
                   splashRadius: 20,
                   onPressed: () {
-                    print('go to settings');
                     _navigateToSettings();
                   },
                   style: ButtonStyle(
@@ -110,6 +109,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ));
   }
 
+  String _getImpactMode() {
+    var mode = cubit.store.user.user.stat['impact_mode'];
+
+    if (mode > 10 && mode < 14) return mode.toString() + ' дней';
+
+    mode = mode.toString();
+
+    if (mode.endsWith('1')) return mode + ' день';
+
+    if (mode.endsWith('2') || mode.endsWith('3') || mode.endsWith('4')) return mode + ' дня';
+
+    return mode + ' дней';
+  }
+
   List<Widget> _renderStatisticsBlock(BuildContext context) {
     return [
       Container(
@@ -125,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               StatisticWidget(
                 type: StatisticType.days,
-                title: cubit.store.user.user.stat['impact_mode'].toString() + ' дней',
+                title: _getImpactMode(),
                 subtitle: 'ударный режим',
               ),
               // Spacer(),
@@ -261,6 +274,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _renderQuitButton() {
     return Container(
         margin: const EdgeInsets.only(top: 28),
+        alignment: AlignmentDirectional.center,
         child: ButtonWidget(
           text: 'ВЫЙТИ ИЗ ПРОФИЛЯ',
           backgroundColor: Colors.transparent,
@@ -293,12 +307,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 18),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
             children: [_renderUserBlock()] +
                 _renderStatisticsBlock(context) +
-                _renderNotificationsBlock(context) +
+                // _renderNotificationsBlock(context) +
                 [_renderQuitButton()]),
       );
     }
+
     return const SizedBox.shrink();
   }
 

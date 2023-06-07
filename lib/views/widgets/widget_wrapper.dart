@@ -8,20 +8,22 @@ class WidgetWrapper extends StatelessWidget {
   final EdgeInsets margin;
   final double? width;
   final double? height;
+  final AlignmentDirectional? alignment;
 
-  const WidgetWrapper(
-      {Key? key,
-      required this.child,
-      this.width,
-      this.height,
-      this.padding = const EdgeInsets.all(0),
-      this.margin = const EdgeInsets.all(0)})
-      : super(key: key);
+  const WidgetWrapper({
+    Key? key,
+    required this.child,
+    this.width,
+    this.height,
+    this.padding = const EdgeInsets.all(0),
+    this.margin = const EdgeInsets.all(0),
+    this.alignment,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: AlignmentDirectional.center,
+      alignment: alignment,
       padding: padding,
       margin: margin,
       width: width,

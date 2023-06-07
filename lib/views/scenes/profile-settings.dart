@@ -128,6 +128,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                     },
                   ),
                   WidgetWrapper(
+                      alignment: AlignmentDirectional.center,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 26, vertical: 10),
                       width: 146,
@@ -162,6 +163,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
               style: Theme.of(context).textTheme.headlineMedium),
         ),
         WidgetWrapper(
+          alignment: AlignmentDirectional.center,
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
           child: Column(
@@ -213,6 +215,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
           ),
         ),
         WidgetWrapper(
+          alignment: AlignmentDirectional.center,
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
           margin: const EdgeInsets.only(top: 17),

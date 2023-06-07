@@ -19,6 +19,7 @@ import 'package:sigest/stock/auth.dart' as _i7;
 import 'package:sigest/stock/favorites.dart' as _i8;
 import 'package:sigest/stock/gesture-info.dart' as _i9;
 import 'package:sigest/stock/gestures.dart' as _i10;
+import 'package:sigest/stock/lesson-info.dart' as _i16;
 import 'package:sigest/stock/lessons.dart' as _i11;
 import 'package:sigest/stock/saved.dart' as _i12;
 import 'package:sigest/stock/settings.dart' as _i13;
@@ -82,6 +83,10 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i6.AbstractRepository>(
       () => _i15.UserRepository(),
       instanceName: 'user',
+    );
+    gh.lazySingleton<_i6.AbstractRepository>(
+      () => _i16.LessonInfoRepository(),
+      instanceName: 'lessonInfo',
     );
     return this;
   }

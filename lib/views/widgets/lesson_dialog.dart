@@ -8,10 +8,16 @@ import 'button.dart';
 
 class LessonDialogWidget extends StatefulWidget {
   final LessonModel lesson;
-  final Function onStartLesson;
+  final Function(String id, int levelOrder) onStartLesson;
+  final Function(String id) onStartFastRepetition;
+  final Function(String id) onViewTheory;
 
   const LessonDialogWidget(
-      {Key? key, required this.lesson, required this.onStartLesson})
+      {Key? key,
+      required this.lesson,
+      required this.onStartLesson,
+      required this.onViewTheory,
+      required this.onStartFastRepetition})
       : super(key: key);
 
   @override
@@ -19,8 +25,8 @@ class LessonDialogWidget extends StatefulWidget {
     return _LessonDialogState();
   }
 }
- class _LessonDialogState extends State<LessonDialogWidget> {
 
+class _LessonDialogState extends State<LessonDialogWidget> {
   List<Widget> _renderActionButtons() {
     List<Widget> list = <Widget>[];
 
@@ -29,7 +35,7 @@ class LessonDialogWidget extends StatefulWidget {
           margin: const EdgeInsets.only(bottom: 4),
           child: ButtonWidget(
             onClick: () {
-              log('press on theory');
+              widget.onViewTheory(widget.lesson.id);
             },
             color: ColorStyles.accent,
             borderSideColor: ColorStyles.accent,
@@ -43,7 +49,7 @@ class LessonDialogWidget extends StatefulWidget {
     if (widget.lesson.levelsFinished == widget.lesson.levelsTotal) {
       list.add(ButtonWidget(
         onClick: () {
-          log('press on repeat');
+          widget.onStartFastRepetition(widget.lesson.id);
         },
         color: ColorStyles.white,
         backgroundColor: ColorStyles.purple,
@@ -56,9 +62,7 @@ class LessonDialogWidget extends StatefulWidget {
     if (0 == widget.lesson.levelsFinished) {
       list.add(ButtonWidget(
         onClick: () {
-          log('press on start');
-          widget.onStartLesson(widget.lesson.id);
-          setState(() {});
+          widget.onStartLesson(widget.lesson.id, 1);
         },
         color: ColorStyles.white,
         backgroundColor: ColorStyles.green,
@@ -72,9 +76,8 @@ class LessonDialogWidget extends StatefulWidget {
         widget.lesson.levelsFinished < widget.lesson.levelsTotal) {
       list.add(ButtonWidget(
         onClick: () {
-          log('press on continue');
-          widget.onStartLesson(widget.lesson.id);
-          setState(() {});
+          widget.onStartLesson(
+              widget.lesson.id, widget.lesson.levelsFinished + 1);
         },
         color: ColorStyles.white,
         backgroundColor: ColorStyles.green,
@@ -91,14 +94,17 @@ class LessonDialogWidget extends StatefulWidget {
     List<Widget> list = <Widget>[];
     for (var i = 0; i < widget.lesson.levelsTotal; i++) {
       list.add(_renderLevel(
-          isFinished: (i < widget.lesson.levelsFinished),
-          isActive: (i <= widget.lesson.levelsFinished)));
+        isFinished: (i < widget.lesson.levelsFinished),
+        isActive: (i <= widget.lesson.levelsFinished),
+        order: i + 1,
+      ));
     }
 
     return list;
   }
 
-  Widget _renderLevel({required bool isFinished, required bool isActive}) {
+  Widget _renderLevel(
+      {required bool isFinished, required bool isActive, required int order}) {
     return Container(
         margin: const EdgeInsets.only(bottom: 14),
         child: SizedBox(
@@ -107,8 +113,7 @@ class LessonDialogWidget extends StatefulWidget {
             child: ElevatedButton(
               child: Icon(Icons.star_rounded,
                   size: 40,
-                  color:
-                      isFinished ? ColorStyles.yellow : ColorStyles.gray),
+                  color: isFinished ? ColorStyles.yellow : ColorStyles.gray),
               style: ButtonStyle(
                 overlayColor:
                     MaterialStateProperty.all<Color>(Colors.transparent),
@@ -122,37 +127,13 @@ class LessonDialogWidget extends StatefulWidget {
                     MaterialStateProperty.all<Color>(Colors.transparent),
               ),
               onPressed: () {
-                isActive ? log('press level') : log('pres inactive level');
+                isActive
+                    ? widget.onStartLesson(
+                        widget.lesson.id, order)
+                    : {};
               },
             )));
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return AlertDialog(
-  //     contentPadding:
-  //         const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 10),
-  //     actionsAlignment: MainAxisAlignment.center,
-  //     actionsPadding: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
-  //     shadowColor: Colors.transparent,
-  //     surfaceTintColor: Colors.transparent,
-  //     shape: RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.circular(10),
-  //     ),
-  //     content: Row(
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //       children: _renderLevels(),
-  //     ),
-  //     actions: <Widget>[
-  //       Column(
-  //         crossAxisAlignment: CrossAxisAlignment.center,
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: _renderActionButtons(),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -160,29 +141,30 @@ class LessonDialogWidget extends StatefulWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        child:
-        Container(
+        child: Container(
           width: 225,
-          padding: const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
-          child:
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.min,
-            children:[
-            Row(
+          padding:
+              const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
+          child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: _renderLevels(),
-            ),
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Wrap(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  spacing: 5,
+                  alignment: WrapAlignment.start,
+                  runSpacing: 10,
+                  runAlignment: WrapAlignment.start,
+                  children: _renderLevels(),
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: _renderActionButtons(),
                 ),
-          ]
-          ),
-        )
-    );
+              ]),
+        ));
   }
 }
