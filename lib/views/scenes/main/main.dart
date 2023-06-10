@@ -7,6 +7,7 @@ import 'package:sigest/views/scenes/main/dictionaries.dart';
 import 'package:sigest/views/scenes/main/page_navigators.dart';
 import 'package:sigest/views/scenes/main/profile.dart';
 import 'package:sigest/views/scenes/main/units.dart';
+import 'package:sigest/views/scenes/main/vocabulary.dart';
 import 'package:sigest/views/styles.dart';
 
 class MainScreen extends StatefulWidget {
@@ -50,7 +51,7 @@ class _MainScreenState extends State<MainScreen> {
       PageNavigator(
           navigatorKey: navigatorKeys[pages[1].index],
           builder: (BuildContext context) {
-            return UnitsScreen();
+            return VocabularyScreen();
           }),
       PageNavigator(
           navigatorKey: navigatorKeys[pages[2].index],

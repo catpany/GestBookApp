@@ -33,9 +33,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   PreferredSizeWidget _renderTopBar(BuildContext context, MainState state) {
     return AppBar(
       title: const Text('ПРОФИЛЬ', style: TextStyles.title18Medium),
-      backgroundColor: ColorStyles.accent,
       shadowColor: Colors.transparent,
       centerTitle: true,
+      flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [ColorStyles.orange, ColorStyles.accent]))),
     );
   }
 

@@ -36,7 +36,13 @@ class GestureScreenState extends State<GestureScreen> {
     log(state.toString());
     return AppBar(
         title: const Text('СЛОВАРЬ', style: TextStyles.title18Medium),
-        backgroundColor: ColorStyles.accent,
+        // backgroundColor: ColorStyles.accent,
+        flexibleSpace: Container(
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [ColorStyles.orange, ColorStyles.accent]))),
         shadowColor: Colors.transparent,
         centerTitle: true,
         actions: [

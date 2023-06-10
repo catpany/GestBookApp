@@ -62,18 +62,50 @@ Future<void> loadConfig() async {
 Future<List<void>> cacheAssets() async {
   List<String> assets = [
     'assets/images/triangle.svg',
-    'assets/images/unit.svg'
+    'assets/images/unit.svg',
+    'assets/images/vocabulary/А.svg',
+    'assets/images/vocabulary/Б.svg',
+    'assets/images/vocabulary/В.svg',
+    'assets/images/vocabulary/Г.svg',
+    'assets/images/vocabulary/Д.svg',
+    'assets/images/vocabulary/Е.svg',
+    'assets/images/vocabulary/Ё.svg',
+    'assets/images/vocabulary/Ж.svg',
+    'assets/images/vocabulary/З.svg',
+    'assets/images/vocabulary/И.svg',
+    'assets/images/vocabulary/Й.svg',
+    'assets/images/vocabulary/К.svg',
+    'assets/images/vocabulary/Л.svg',
+    'assets/images/vocabulary/М.svg',
+    'assets/images/vocabulary/Н.svg',
+    'assets/images/vocabulary/О.svg',
+    'assets/images/vocabulary/П.svg',
+    'assets/images/vocabulary/Р.svg',
+    'assets/images/vocabulary/С.svg',
+    'assets/images/vocabulary/Т.svg',
+    'assets/images/vocabulary/У.svg',
+    'assets/images/vocabulary/Ф.svg',
+    'assets/images/vocabulary/Х.svg',
+    'assets/images/vocabulary/Ц.svg',
+    'assets/images/vocabulary/Ч.svg',
+    'assets/images/vocabulary/Ш.svg',
+    'assets/images/vocabulary/Щ.svg',
+    'assets/images/vocabulary/Ь.svg',
+    'assets/images/vocabulary/Ъ.svg',
+    'assets/images/vocabulary/Э.svg',
+    'assets/images/vocabulary/Ю.svg',
+    'assets/images/vocabulary/Я.svg',
   ];
 
-  return Future.wait(
-    assets.map((asset) => precachePicture(
-        ExactAssetPicture(
-          SvgPicture.svgStringDecoderBuilder,
-          asset,
-        ),
-        null,
-      )).toList()
-  );
+  return Future.wait(assets
+      .map((asset) => precachePicture(
+            ExactAssetPicture(
+              SvgPicture.svgStringDecoderBuilder,
+              asset,
+            ),
+            null,
+          ))
+      .toList());
 }
 
 class MyApp extends StatelessWidget {
@@ -82,20 +114,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: Hive.box<SettingsModel>('settings').listenable(keys: ['current']),
+      valueListenable:
+          Hive.box<SettingsModel>('settings').listenable(keys: ['current']),
       builder: (context, box, widget) {
-        SettingsModel? settings = Hive.box<SettingsModel>('settings').get('current');
+        SettingsModel? settings =
+            Hive.box<SettingsModel>('settings').get('current');
         bool darkMode = settings == null ? false : settings.isDarkMode;
         return MaterialApp(
             debugShowCheckedModeBanner: false,
             themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
             title: 'Книга Жестов',
-            theme: ThemeData(colorScheme: const ColorScheme.light(
-                secondary: ColorStyles.gray, primary: ColorStyles.black
-            ),
+            theme: ThemeData(
+              colorScheme: const ColorScheme.light(
+                  secondary: ColorStyles.gray, primary: ColorStyles.black),
               fontFamily: 'Jost',
-              textTheme:
-              const TextTheme(
+              textTheme: const TextTheme(
                 bodyLarge: TextStyles.text14SemiBoldLight,
                 bodyMedium: TextStyles.text16MediumLight,
                 bodySmall: TextStyles.text16RegularLight,
@@ -107,9 +140,11 @@ class MyApp extends StatelessWidget {
                 titleLarge: TextStyles.title21Regular,
               ),
             ),
-            darkTheme:  ThemeData(colorScheme: const ColorScheme.dark(secondary: ColorStyles.white, primary: ColorStyles.white), fontFamily: 'Jost',
-              textTheme:
-              const TextTheme(
+            darkTheme: ThemeData(
+              colorScheme: const ColorScheme.dark(
+                  secondary: ColorStyles.white, primary: ColorStyles.white),
+              fontFamily: 'Jost',
+              textTheme: const TextTheme(
                 bodyLarge: TextStyles.text14SemiBoldDark,
                 bodyMedium: TextStyles.text16MediumDark,
                 bodySmall: TextStyles.text16RegularDark,
@@ -121,8 +156,7 @@ class MyApp extends StatelessWidget {
                 titleLarge: TextStyles.title21Regular,
               ),
             ),
-            home: const SplashScreen()
-        );
+            home: const SplashScreen());
       },
     );
   }

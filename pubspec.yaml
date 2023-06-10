@@ -97,8 +97,8 @@ flutter:
   # https://flutter.dev/assets-and-images/#from-packages
 
   assets:
-    - assets/images/triangle.svg
-    - assets/images/unit.svg
+    - assets/images/
+    - assets/images/vocabulary/
     - assets/config/
 
   # To add custom fonts to your application, add a fonts section here,
