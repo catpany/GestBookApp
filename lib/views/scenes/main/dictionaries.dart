@@ -35,8 +35,12 @@ class _DictionariesScreenState extends State<DictionariesScreen> {
   PreferredSizeWidget _renderTopBar() {
     return AppBar(
       title: const Text('ЖЕСТЫ', style: TextStyles.title18Medium),
-      backgroundColor: ColorStyles.accent,
-      shadowColor: Colors.transparent,
+      flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [ColorStyles.orange, ColorStyles.accent]))),      shadowColor: Colors.transparent,
       centerTitle: true,
       bottom: const TabBar(
         indicatorColor: ColorStyles.white,
