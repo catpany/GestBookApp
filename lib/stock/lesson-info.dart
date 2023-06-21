@@ -48,4 +48,25 @@ class LessonInfoRepository extends HiveStock<LessonInfoModel> {
     response = response as SuccessResponse;
     return LessonInfoModel.fromJson(response.data);
   }
+
+  Future<List<dynamic>> getFastRepetition(String key) async {
+    Response response = await api.getFastRepetition(id);
+
+    if (response is ErrorResponse) {
+      throw StockResponseError(ResponseOrigin.fetcher, response);
+    }
+
+    response = response as SuccessResponse;
+    return response.data as List<dynamic>;
+  }
+
+  Future<void> updateFastRepetition(String key, int time) async {
+    Response response = await api.updateFastRepetition(id, Params({}, {'best_time': time}));
+
+    if (response is ErrorResponse) {
+      throw StockResponseError(ResponseOrigin.fetcher, response);
+    }
+
+    lessonInfo.bestTime = time;
+  }
 }

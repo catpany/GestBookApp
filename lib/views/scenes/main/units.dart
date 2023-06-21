@@ -7,7 +7,8 @@ import 'package:sigest/bloc/units/units_cubit.dart';
 import 'package:sigest/views/styles.dart';
 import 'package:sigest/views/widgets/unit_list.dart';
 
-import '../exercises/lesson.dart';
+import '../fast_repetition/fast_repetition.dart';
+import '../lesson/lesson.dart';
 import '../theory.dart';
 
 class UnitsScreen extends StatefulWidget {
@@ -78,7 +79,14 @@ class _UnitsScreenState extends State<UnitsScreen> {
     Navigator.of(context, rootNavigator: true)
         .push(MaterialPageRoute(builder: (BuildContext context) {
       return TheoryScreen(lessonId: lessonId, finished: finished, total: total);
-    })).then((value) => setState(() {}));
+    }));
+  }
+
+  void _navigateToFastRepetition(String lessonId) {
+    Navigator.of(context, rootNavigator: true)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
+      return FastRepetitionScreen(lessonId: lessonId);
+    }));
   }
 
   Widget _renderBody(BuildContext context, MainState state) {
@@ -87,7 +95,7 @@ class _UnitsScreenState extends State<UnitsScreen> {
         units: widget.cubit.store.units.units,
         onStartLesson: (String lessonId, int levelOrder) =>
             _navigateToLesson(lessonId, levelOrder),
-        onStartFastRepetition: (String lessonId) => {},
+        onStartFastRepetition: (String lessonId) => _navigateToFastRepetition(lessonId),
         onViewTheory: (String lessonId, int finished, int total) =>
             _navigateToTheory(lessonId, finished, total),
       );

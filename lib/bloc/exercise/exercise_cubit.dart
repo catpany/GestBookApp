@@ -66,9 +66,18 @@ class LessonCubit extends MainCubit {
     Map<String, dynamic> newStats = store.user.user.stat;
     newStats['goal_achieved'] += getLearnedGestures();
     newStats['impact_mode'] = getImpactMode();
+    newStats['lessons_total'] = getLessonsTotal();
     newStats['last_level_passed'] = DateTime.now().toUtc().toString();
 
     await store.user.updateStats(newStats);
+  }
+
+  int getLessonsTotal() {
+    if (isLastLevel()) {
+      return store.user.user.stat['lessons_total'] + 1;
+    }
+
+    return store.user.user.stat['lessons_total'];
   }
 
   int getImpactMode() {
@@ -100,8 +109,9 @@ class LessonCubit extends MainCubit {
   Future<void> startNextLevel() async {
     await finishLevel();
     levelOrder++;
-    currentLevel = store.lessonInfo.lessonInfo.levels
-        .singleWhere((level) => level.order == levelOrder);
+    loadNewLevel();
+    currentExerciseIndex = 0;
+    failedExercises = [];
     completed = 0;
     emit(LevelStarted());
   }

@@ -56,12 +56,12 @@ class _MainScreenState extends State<MainScreen> {
       PageNavigator(
           navigatorKey: navigatorKeys[pages[2].index],
           builder: (BuildContext context) {
-            return const DictionariesScreen();
+            return DictionariesScreen();
           }),
       PageNavigator(
           navigatorKey: navigatorKeys[pages[3].index],
           builder: (BuildContext context) {
-            return const ProfileScreen();
+            return ProfileScreen();
           }),
     ];
   }

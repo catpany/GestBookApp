@@ -48,7 +48,7 @@ class _DictionariesScreenState extends State<DictionariesScreen> {
           Tab(icon: Icon(Icons.search)),
           Tab(icon: Icon(Icons.file_download_outlined)),
           Tab(icon: Icon(Icons.star_rounded)),
-          Tab(icon: Icon(Icons.layers_outlined)),
+          // Tab(icon: Icon(Icons.layers_outlined)),
         ],
       ),
     );
@@ -66,17 +66,17 @@ class _DictionariesScreenState extends State<DictionariesScreen> {
             lazy: false,
             create: (BuildContext context) => SavedCubit(),
           ),
-          BlocProvider<LearnedCubit>(
-            lazy: false,
-            create: (BuildContext context) => LearnedCubit(),
-          ),
+          // BlocProvider<LearnedCubit>(
+          //   lazy: false,
+          //   create: (BuildContext context) => LearnedCubit(),
+          // ),
           BlocProvider<FavoritesCubit>(
             lazy: false,
             create: (BuildContext context) => FavoritesCubit(),
           ),
         ],
         child: DefaultTabController(
-            length: 4,
+            length: 3,
             child: Scaffold(
                 resizeToAvoidBottomInset: false,
                 appBar: _renderTopBar(),
@@ -85,7 +85,7 @@ class _DictionariesScreenState extends State<DictionariesScreen> {
                           SearchScreen(),
                           SavedScreen(),
                           FavoritesScreen(),
-                          LearnedScreen(),
+                          // LearnedScreen(),
                         ],
                       )
             )));

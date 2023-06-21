@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/bloc/main_cubit.dart';
-import 'package:sigest/views/scenes/exercises/lesson.dart';
+import 'package:sigest/views/scenes/lesson/lesson.dart';
 
 import '../../bloc/theory/theory_cubit.dart';
 import '../styles.dart';
 import '../widgets/button.dart';
-import 'exercises/loading.dart';
+import 'loading.dart';
 
 class TheoryScreen extends StatefulWidget {
   final String lessonId;

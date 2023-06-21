@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
-import '../../styles.dart';
+import '../styles.dart';
 
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen(
