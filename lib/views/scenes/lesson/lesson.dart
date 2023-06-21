@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/bloc/exercise/exercise_cubit.dart';
-import 'package:sigest/views/scenes/exercises/choose_word_exercise.dart';
-import 'package:sigest/views/scenes/exercises/yes_no_exercise.dart';
+import 'package:sigest/views/scenes/lesson/choose_word_exercise.dart';
+import 'package:sigest/views/scenes/lesson/yes_no_exercise.dart';
 
 import '../../../bloc/main_cubit.dart';
 import '../../styles.dart';
@@ -13,7 +13,7 @@ import '../../widgets/exercise_popup.dart';
 import '../../widgets/popup_window.dart';
 import '../../widgets/progress_bar.dart';
 import 'choose_gest_exercise.dart';
-import 'loading.dart';
+import '../loading.dart';
 import 'match_exercise.dart';
 import 'new_gest_exercise.dart';
 

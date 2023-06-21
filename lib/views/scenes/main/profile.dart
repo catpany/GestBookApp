@@ -10,6 +10,7 @@ import 'package:sigest/views/widgets/button.dart';
 import 'package:sigest/views/widgets/notice.dart';
 import 'package:sigest/views/widgets/popup_window.dart';
 import 'package:sigest/views/widgets/statistic.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../bloc/main_cubit.dart';
 import '../../styles.dart';
@@ -23,6 +24,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late ProfileCubit cubit = ProfileCubit();
+  Key visibilityKey = UniqueKey();
 
   @override
   void initState() {
@@ -45,20 +47,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _navigateToSettings() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (BuildContext context) {
-        return ProfileSettingsScreen();
-      }));
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+      return ProfileSettingsScreen();
+    }));
   }
 
   void _navigateToLogin() {
     Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (BuildContext context) {
-        return LoginScreen();
-      }),
-        (r) => false
-    );
+        MaterialPageRoute(builder: (BuildContext context) {
+      return LoginScreen();
+    }), (r) => false);
   }
 
   Widget _renderUserBlock() {
@@ -81,7 +79,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 '' != cubit.store.user.user.email
                     ? Text(cubit.store.user.user.email.toLowerCase(),
-                        style: Theme.of(context).textTheme.bodySmall
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
                             ?.apply(color: ColorStyles.grayDark))
                     : const SizedBox.shrink(),
               ],
@@ -123,7 +123,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (mode.endsWith('1')) return mode + ' день';
 
-    if (mode.endsWith('2') || mode.endsWith('3') || mode.endsWith('4')) return mode + ' дня';
+    if (mode.endsWith('2') || mode.endsWith('3') || mode.endsWith('4'))
+      return mode + ' дня';
 
     return mode + ' дней';
   }
@@ -133,7 +134,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Container(
         margin: const EdgeInsets.only(top: 22, bottom: 17),
         alignment: AlignmentDirectional.centerStart,
-        child: Text('СТАТИСТИКА', style: Theme.of(context).textTheme.headlineMedium),
+        child: Text('СТАТИСТИКА',
+            style: Theme.of(context).textTheme.headlineMedium),
       ),
       SizedBox(
         width: double.infinity,
@@ -149,12 +151,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // Spacer(),
               StatisticWidget(
                 type: StatisticType.gestures,
-                title: cubit.store.user.user.stat['goal_achieved'].toString() + '/' + (cubit.store.user.user.stat['goal']?? 10).toString() + ' жестов',
+                title: cubit.store.user.user.stat['goal_achieved'].toString() +
+                    '/' +
+                    (cubit.store.user.user.stat['goal'] ?? 10).toString() +
+                    ' жестов',
                 subtitle: 'ежедн. цель',
               ),
               StatisticWidget(
                 type: StatisticType.lessons,
-                title: cubit.store.user.user.stat['goal_achieved'].toString() + '/' + cubit.getAllLessonsNumber().toString() + ' уроков',
+                title: cubit.getFinishedLessons().toString() +
+                    '/' +
+                    cubit.getAllLessonsNumber().toString() +
+                    ' уроков',
                 subtitle: 'пройдено',
               ),
             ]),
@@ -172,40 +180,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Row(
               children: [
-                Text('УВЕДОМЛЕНИЯ', style: Theme.of(context).textTheme.headlineMedium),
-                Padding(padding: const EdgeInsets.symmetric(horizontal: 10), child: Text('9', style: Theme.of(context).textTheme.headlineMedium?.apply(color: ColorStyles.red))),
+                Text('УВЕДОМЛЕНИЯ',
+                    style: Theme.of(context).textTheme.headlineMedium),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text('9',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.apply(color: ColorStyles.red))),
               ],
             ),
             Positioned(
-              right: 0,
-              bottom: 0,
-              width: 110,
-              height: 22,
-              child: ElevatedButton(
-                onPressed: () => print('go to notices'),
-                style: ButtonStyle(
-                  overlayColor:
-                  MaterialStateProperty.all<Color>(Colors.black12),
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                      const EdgeInsets.all(0)),
-                  shadowColor:
-                  MaterialStateProperty.all<Color>(Colors.transparent),
-                  backgroundColor:
-                  MaterialStateProperty.all<Color>(Colors.transparent),
-                  foregroundColor:
-                  MaterialStateProperty.all<Color>(Colors.transparent),
-                  alignment: Alignment.center,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('смотреть все', style: Theme.of(context).textTheme.bodySmall),
-                    const Icon(Icons.chevron_right, size: 22, color: ColorStyles.grayDark)
-                  ]
-                )
-              )
-            )
+                right: 0,
+                bottom: 0,
+                width: 110,
+                height: 22,
+                child: ElevatedButton(
+                    onPressed: () => print('go to notices'),
+                    style: ButtonStyle(
+                      overlayColor:
+                          MaterialStateProperty.all<Color>(Colors.black12),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                          const EdgeInsets.all(0)),
+                      shadowColor:
+                          MaterialStateProperty.all<Color>(Colors.transparent),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.transparent),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.transparent),
+                      alignment: Alignment.center,
+                    ),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('смотреть все',
+                              style: Theme.of(context).textTheme.bodySmall),
+                          const Icon(Icons.chevron_right,
+                              size: 22, color: ColorStyles.grayDark)
+                        ])))
           ],
         ),
       ),
@@ -246,7 +260,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Text(
                 "НЕТ НОВЫХ \n УВЕДОМЛЕНИЙ",
-                style: Theme.of(context).textTheme.headlineMedium?.apply(color: ColorStyles.gray),
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium
+                    ?.apply(color: ColorStyles.gray),
                 textAlign: TextAlign.center,
               ),
               const Padding(
@@ -255,22 +272,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           ));
     }
-    return Column(
-      children: _renderNotices(notices)
-    );
+    return Column(children: _renderNotices(notices));
   }
 
   List<Widget> _renderNotices(List<Map<String, String>> notices) {
     List<Widget> noticeWidgets = [];
     int length = min(notices.length, 3);
 
-    for(var index = 0; index < length; index++){
+    for (var index = 0; index < length; index++) {
       noticeWidgets.add(Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.5),
           child: NoticeWidget(
               title: notices[index]['title'] ?? '',
-              text: notices[index]['text'] ?? ''))
-      );
+              text: notices[index]['text'] ?? '')));
     }
 
     return noticeWidgets;
@@ -303,16 +317,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             acceptButtonText: 'выйти',
             rejectButtonText: 'отмена',
           );
-        }
-    );
+        });
   }
 
   Widget _renderBody(BuildContext context, MainState state) {
-    if(state is DataLoaded) {
+    if (state is DataLoaded) {
       return SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 18),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.min,
             children: [_renderUserBlock()] +
                 _renderStatisticsBlock(context) +
                 // _renderNotificationsBlock(context) +
@@ -329,15 +342,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
         create: (_) => cubit,
         child: BlocConsumer<ProfileCubit, MainState>(
             listener: (BuildContext context, state) {
-              if (state is ProfileQuited) {
-                _navigateToLogin();
-              }
-            },
-            builder: (BuildContext context, state) {
-              return Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  appBar: _renderTopBar(context, state),
-                  body: _renderBody(context, state));
-            }));
+          if (state is ProfileQuited) {
+            _navigateToLogin();
+          }
+        }, builder: (BuildContext context, state) {
+          return Scaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: _renderTopBar(context, state),
+              body: VisibilityDetector(
+                  key: visibilityKey,
+                  onVisibilityChanged: (VisibilityInfo info) {
+                    if (info.visibleFraction == 1) {
+                      setState(() {});
+                    }
+                  },
+                  child: _renderBody(context, state)));
+        }));
   }
 }

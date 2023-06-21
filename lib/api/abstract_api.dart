@@ -45,4 +45,8 @@ Future<Response> lesson(String id);
 Future<Response> updateStats(Params params);
 
 Future<Response> finishLevel(String id);
+
+Future<Response> getFastRepetition(String id);
+
+Future<Response> updateFastRepetition(String id, Params params);
 }

@@ -156,7 +156,7 @@ class _VocabularyScreenState extends State<VocabularyScreen> {
                       spacing: 10,
                       runSpacing: 10,
                     )))),
-        // _renderStartButton()
+        _renderStartButton()
       ],
     );
   }

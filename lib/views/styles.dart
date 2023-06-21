@@ -152,6 +152,24 @@ class TextStyles {
     height: 1.4,
   );
 
+  static const TextStyle title24MediumLight = TextStyle(
+    color: ColorStyles.black,
+    fontSize: 24.0,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    // fontFamily: 'Jost',
+    height: 1.4,
+  );
+
+  static const TextStyle title24MediumDark = TextStyle(
+    color: ColorStyles.white,
+    fontSize: 24.0,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    // fontFamily: 'Jost',
+    height: 1.4,
+  );
+
   static const TextStyle title21Regular = TextStyle(
     color: ColorStyles.white,
     fontSize: 21.0,

@@ -958,4 +958,68 @@ class ApiMock implements AbstractApi {
     });
     throw UnimplementedError();
   }
+
+  @override
+  Future<Response> getFastRepetition(String id) {
+    const body = {
+      "data": [
+        {
+          "type": 2,
+          "answers": [
+            "b7b759e5-3f19-47aa-a54e-fa9d708b41c1"
+          ],
+          "options": [
+            "3b4b2991-9b1d-4362-8500-788eefddbfae",
+            "78aafd90-42dd-4c54-a282-24e7604aa8dd",
+            "1cad54bc-9646-4e74-b45f-a4fe20a54ee1"
+          ]
+        },
+        {
+          "type": 2,
+          "answers": [
+            "3b4b2991-9b1d-4362-8500-788eefddbfae"
+          ],
+          "options": [
+            "1cad54bc-9646-4e74-b45f-a4fe20a54ee1",
+            "78aafd90-42dd-4c54-a282-24e7604aa8dd",
+            "b7b759e5-3f19-47aa-a54e-fa9d708b41c1"
+          ]
+        },
+        {
+          "type": 2,
+          "answers": [
+            "78aafd90-42dd-4c54-a282-24e7604aa8dd"
+          ],
+          "options": [
+            "3b4b2991-9b1d-4362-8500-788eefddbfae",
+            "1cad54bc-9646-4e74-b45f-a4fe20a54ee1",
+            "b7b759e5-3f19-47aa-a54e-fa9d708b41c1"
+          ]
+        },
+        {
+          "type": 2,
+          "answers": [
+            "1cad54bc-9646-4e74-b45f-a4fe20a54ee1"
+          ],
+          "options": [
+            "78aafd90-42dd-4c54-a282-24e7604aa8dd",
+            "b7b759e5-3f19-47aa-a54e-fa9d708b41c1",
+            "3b4b2991-9b1d-4362-8500-788eefddbfae"
+          ]
+        }
+      ]
+    };
+
+    return Future<Response>.delayed(const Duration(seconds: 2), () {
+      return SuccessResponse(data: body['data']);
+    });
+  }
+
+  @override
+  Future<Response> updateFastRepetition(String id, Params params) {
+    return Future<Response>.delayed(const Duration(seconds: 2), () {
+      return SuccessResponse(data: {});
+    });
+    throw UnimplementedError();
+  }
 }

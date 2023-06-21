@@ -79,6 +79,9 @@ class _ContentWidgetState extends State<ContentWidget> {
         return Image.network(
           src.replaceAll('localhost:8000', config["domain"]),
           errorBuilder: (BuildContext context, error, _) => _showError(),
+          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? event) {
+            return _loadingFrame(child);
+          },
           frameBuilder: (BuildContext context, Widget child, int? frame, bool? wasSynchronouslyLoaded) {
             return _loadingFrame(child);
           },

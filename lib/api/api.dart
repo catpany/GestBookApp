@@ -356,4 +356,23 @@ class Api implements AbstractApi {
       headers: {},
     );
   }
+
+  @override
+  Future<Response> getFastRepetition(String id) {
+    return make(
+      method: 'get',
+      uri: '/lesson/' + id + '/fast-repetition',
+      headers: {},
+    );
+  }
+
+  @override
+  Future<Response> updateFastRepetition(String id, Params params) {
+    return make(
+      method: 'patch',
+      uri: '/lesson/' + id + '/fast-repetition',
+      headers: {},
+      params: params
+    );
+  }
 }

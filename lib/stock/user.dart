@@ -96,20 +96,19 @@ class UserRepository extends HiveStock<UserModel> {
 
     if (updateImpactMode || updateAchievedGoal) {
       UserModel user = this.user;
-      user.stat['impact_mode'] =
+      Map<String, dynamic> stat = user.stat;
+      stat['impact_mode'] =
           updateImpactMode ? 0 : user.stat['impact_mode'];
-      user.stat['goal_achieved'] =
+      stat['goal_achieved'] =
           updateAchievedGoal ? 0 : user.stat['goal_achieved'];
-      user.stat['achieved_goal_updated'] = updateAchievedGoal
+      stat['achieved_goal_updated'] = updateAchievedGoal
           ? DateTime.now().toUtc().toString()
           : user.stat['achieved_goal_updated'];
+      user.stat = stat;
       user.save();
 
       UserModel? curUser = get(user.id);
-      curUser?.stat['impact_mode'] = user.stat['impact_mode'];
-      curUser?.stat['goal_achieved'] = user.stat['goal_achieved'];
-      curUser?.stat['achieved_goal_updated'] =
-          user.stat['achieved_goal_updated'];
+      curUser?.stat = stat;
       curUser?.save();
 
       await api.updateStats(Params({}, {

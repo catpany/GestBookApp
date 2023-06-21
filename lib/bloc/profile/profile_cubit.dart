@@ -20,6 +20,20 @@ class ProfileCubit extends MainCubit {
     return count;
   }
 
+  int getFinishedLessons() {
+    int count = 0;
+
+    for (var unit in store.units.units.items) {
+      for (var lesson in unit.lessons) {
+        if (lesson.levelsTotal == lesson.levelsFinished) {
+          count ++;
+        }
+      }
+    }
+
+    return count;
+  }
+
   void quit() {
     store.clear();
     store.settings.delete('current');
