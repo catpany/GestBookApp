@@ -11,6 +11,14 @@ class EmailChanged extends ProfileSettingsState {}
 
 class UserDataChanged extends ProfileSettingsState {}
 
+class NotificationTimeChanged extends ProfileSettingsState {}
+
+class NotificationTimeChange extends ProfileSettingsState {}
+
+class NotificationsEnabledChanged extends ProfileSettingsState {}
+
+class NotificationsEnabledChange extends ProfileSettingsState {}
+
 class UpdatingUser extends ProfileSettingsState {}
 
 class DeletingUser extends ProfileSettingsState {}

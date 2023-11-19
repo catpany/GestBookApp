@@ -19,7 +19,7 @@ class SettingsModelAdapter extends TypeAdapter<SettingsModel> {
     return SettingsModel(
       isDarkMode: fields[0] == null ? false : fields[0] as bool,
       isRightHanded: fields[1] == null ? true : fields[1] as bool,
-      notificationTime: fields[2] == null ? 18 : fields[2] as int,
+      notificationTime: fields[2] == null ? '18:00' : fields[2] as String,
       notificationsEnabled: fields[3] == null ? true : fields[3] as bool,
       messagesEnabled: fields[4] == null ? true : fields[4] as bool,
     );

@@ -1,15 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sigest/bloc/main_cubit.dart';
-import 'package:sigest/bloc/units/units_cubit.dart';
 import 'package:sigest/views/styles.dart';
-import 'package:sigest/views/widgets/unit_list.dart';
 
 import '../../../bloc/vocabulary/vocabulary_cubit.dart';
-import '../../widgets/button.dart';
 
 class VocabularyScreen extends StatefulWidget {
   VocabularyScreen({Key? key}) : super(key: key);
@@ -20,40 +15,40 @@ class VocabularyScreen extends StatefulWidget {
 }
 
 class _VocabularyScreenState extends State<VocabularyScreen> {
-  List<String> letters = [
-    'А',
-    'Б',
-    'В',
-    'Г',
-    'Д',
-    'Е',
-    'Ё',
-    'Ж',
-    'З',
-    'И',
-    'Й',
-    'К',
-    'Л',
-    'М',
-    'Н',
-    'О',
-    'П',
-    'Р',
-    'С',
-    'Т',
-    'У',
-    'Ф',
-    'Ц',
-    'Ч',
-    'Ш',
-    'Щ',
-    'Ь',
-    'Ы',
-    'Ъ',
-    'Э',
-    'Ю',
-    'Я',
-  ];
+  Map<String, String> letters = {
+    'А': 'A',
+    'Б': 'B',
+    'В': 'V',
+    'Г': 'G',
+    'Д': 'D',
+    'Е': 'E',
+    'Ё': 'Yo',
+    'Ж': 'Zh',
+    'З': 'Z',
+    'И': 'I',
+    'Й': 'J',
+    'К': 'K',
+    'Л': 'L',
+    'М': 'M',
+    'Н': 'N',
+    'О': 'O',
+    'П': 'P',
+    'Р': 'R',
+    'С': 'S',
+    'Т': 'T',
+    'У': 'U',
+    'Ф': 'F',
+    'Ц': 'Ts',
+    'Ч': 'Ch',
+    'Ш': 'Sh',
+    'Щ': 'Shch',
+    'Ь': 'Ss',
+    'Ы': 'Y',
+    'Ъ': 'Hs',
+    'Э': 'Aa',
+    'Ю': 'You',
+    'Я': 'Ya',
+  };
 
   @override
   void initState() {
@@ -63,7 +58,7 @@ class _VocabularyScreenState extends State<VocabularyScreen> {
 
   PreferredSizeWidget _renderTopBar() {
     return AppBar(
-      title: const Text('АЗБУКА ДАКТИЛЯ', style: TextStyles.title18Medium),
+      title: Text('ДАКТИЛЬНАЯ АЗБУКА', style: Theme.of(context).textTheme.titleSmall),
       shadowColor: Colors.transparent,
       centerTitle: true,
       flexibleSpace: Container(
@@ -78,7 +73,7 @@ class _VocabularyScreenState extends State<VocabularyScreen> {
   List<Widget> _renderLetters() {
     List<Widget> items = [];
 
-    for (String letter in letters) {
+    for (final letter in letters.entries) {
       items.add(
         SizedBox(
           width: 90,
@@ -99,34 +94,35 @@ class _VocabularyScreenState extends State<VocabularyScreen> {
             Padding(
                 padding: const EdgeInsets.only(top: 5, left: 5),
                 child: SvgPicture.asset(
-                    'assets/images/vocabulary/' + letter + '.svg',
+                    'assets/images/vocabulary/' + letter.value + '.svg',
                     width: 62,
                     height: 62)),
+            // Positioned(
+            //     right: 10,
+            //     bottom: -5,
+            //     child: Text(
+            //       letter,
+            //       style: TextStyle(
+            //         fontFamily: 'Comfortaa',
+            //         fontWeight: FontWeight.w500,
+            //         fontSize: 40,
+            //         foreground: Paint()
+            //           ..style = PaintingStyle.stroke
+            //           ..strokeWidth = 2
+            //           ..color =
+            //           Colors.white.withOpacity(0.9),
+            //       ),
+            //     )),
             Positioned(
                 right: 10,
                 bottom: -5,
                 child: Text(
-                  letter,
-                  style: TextStyle(
-                    fontFamily: 'Jost',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 40,
-                    foreground: Paint()
-                      ..style = PaintingStyle.stroke
-                      ..strokeWidth = 2
-                      ..color = Colors.white.withOpacity(0.9),
-                  ),
-                )),
-            Positioned(
-                right: 10,
-                bottom: -5,
-                child: Text(
-                  letter,
+                  letter.key,
                   style: const TextStyle(
-                    fontFamily: 'Jost',
-                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Comfortaa',
+                    fontWeight: FontWeight.w700,
                     fontSize: 40,
-                    color: ColorStyles.grayDark,
+                    color: ColorStyles.accent,
                   ),
                 ))
           ]),
@@ -174,16 +170,16 @@ class _VocabularyScreenState extends State<VocabularyScreen> {
           // decoration: BoxDecoration(
           //   color: Theme.of(context).scaffoldBackgroundColor,
           // ),
-          child: ButtonWidget(
-            text: 'к упражнениям',
-            color: Colors.white,
-            backgroundColor: ColorStyles.green,
-            onClick: () {
-              log('click on start button');
-            },
-            minWidth: double.infinity,
-            height: 40,
-          ),
+          // child: ButtonWidget(
+          //   text: 'к упражнениям',
+          //   color: Colors.white,
+          //   backgroundColor: ColorStyles.green,
+          //   onClick: () {
+          //     log('click on start button');
+          //   },
+          //   minWidth: double.infinity,
+          //   height: 40,
+          // ),
         ));
   }
 

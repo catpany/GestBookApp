@@ -8,6 +8,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../bloc/favorites/favorites_cubit.dart';
 import '../../../models/gesture.dart';
 import '../../styles.dart';
+import '../../widgets/notification.dart';
 import '../../widgets/paged_list.dart';
 import '../../widgets/search.dart';
 import '../gesture.dart';
@@ -45,7 +46,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   void _navigateToGestureScreen(String gestureId) {
     Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
       return GestureScreen(gestureId: gestureId);
-    }));
+    })).then((withError) {
+      if (withError == true) {
+        context.read<FavoritesCubit>().showNotification();
+      }
+    });
   }
 
   void searchOrGet(int pageKey) {
@@ -61,13 +66,21 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   void onSearchChange(String word) {
     if ('' == word) {
       _pagingController.refresh();
-      }
+    }
   }
 
   void refresh() {
     if (context.read<FavoritesCubit>().state is! DataLoading) {
       context.read<FavoritesCubit>().refresh();
     }
+  }
+
+  Widget _renderNotificationBlock(state) {
+    if (state is NotificationShow) {
+      return NotificationWidget(text: 'Ошибка загрузки данных', onClose: context.read<FavoritesCubit>().hideNotification,);
+    }
+
+    return const SizedBox.shrink();
   }
 
   Widget _renderMenuPopup(GestureModel gesture) {
@@ -78,16 +91,16 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       itemBuilder: (context) {
         return [
           PopupMenuItem(
-              value: 'delete',
-              child: Text(
-                'Удалить',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              onTap: () {
-                log('tap on delete');
-                context.read<FavoritesCubit>().delete(gesture);
-                _pagingController.itemList?.remove(gesture);
-                },
+            value: 'delete',
+            height: 30,
+            child: Text(
+              'Удалить',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            onTap: () {
+              context.read<FavoritesCubit>().delete(gesture);
+              _pagingController.itemList?.remove(gesture);
+            },
           )
         ];
       },
@@ -130,7 +143,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         _pagingController.error = 'Ошибка загрузки данных';
       }
     }, builder: (context, state) {
-      return Container(
+      return Stack(alignment: Alignment.topCenter, children: [
+        Container(
           height: double.infinity,
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -167,7 +181,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       },
                       isLoading: state is Searching))
             ],
-          ));
+          )),
+        _renderNotificationBlock(state)
+      ]);
     });
   }
 }

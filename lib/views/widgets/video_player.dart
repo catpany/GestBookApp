@@ -1,5 +1,5 @@
-import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +11,10 @@ import '../styles.dart';
 class VideoPlayerWidget extends StatefulWidget {
   final String src;
   final bool fromNetwork;
+  final bool mute;
 
   const VideoPlayerWidget(
-      {Key? key, required this.src, this.fromNetwork = true})
+      {Key? key, required this.src, this.fromNetwork = true, this.mute = true})
       : super(key: key);
 
   @override
@@ -24,6 +25,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   late VideoPlayerController _videoPlayerController;
   bool _playbackVisible = false;
   bool _slow = false;
+  bool _mute = true;
   late Duration currentPosition;
   late Duration bufferedPosition;
   Key visibilityKey = UniqueKey();
@@ -31,15 +33,16 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   void initState() {
     super.initState();
+    _mute = widget.mute;
 
     _videoPlayerController = widget.fromNetwork
         ? VideoPlayerController.network(widget.src)
         : VideoPlayerController.file(File(widget.src))
-      ..addListener(
-      _updateProgress)
+      ..addListener(_updateProgress)
       ..initialize().then((_) {
         setState(() {});
         _videoPlayerController.play();
+        _videoPlayerController.setVolume(_mute ? 0 : 1);
       });
   }
 
@@ -107,12 +110,17 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         : const SizedBox.shrink();
   }
 
-  void decreaseSpeed() {
+  void changeSpeed() {
     setState(() {
       _slow = !_slow;
-      _slow
-          ? _videoPlayerController.setPlaybackSpeed(0.5)
-          : _videoPlayerController.setPlaybackSpeed(1);
+      _videoPlayerController.setPlaybackSpeed(_slow ? 0.5 : 1);
+    });
+  }
+
+  void changeVolume() {
+    setState(() {
+      _mute = !_mute;
+      _videoPlayerController.setVolume(_mute ? 0 : 1);
     });
   }
 
@@ -132,11 +140,27 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
               right: 5,
               top: 0,
               child: IconButton(
-                icon: Icon(Icons.speed_outlined,
-                    size: 25,
-                    color: _slow ? ColorStyles.grayDark : ColorStyles.white),
+                icon: Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationY(
+                      _slow ? pi : 0,
+                    ),
+                    child: const Icon(Icons.speed_outlined,
+                        size: 25, color: ColorStyles.white)),
                 onPressed: () {
-                  decreaseSpeed();
+                  changeSpeed();
+                },
+              )),
+          Positioned(
+              right: 50,
+              top: 0,
+              child: IconButton(
+                icon: Icon(
+                    _mute ? Icons.volume_off_rounded : Icons.volume_up_rounded,
+                    size: 25,
+                    color: ColorStyles.white),
+                onPressed: () {
+                  changeVolume();
                 },
               )),
           _renderActionButton(),
@@ -185,7 +209,6 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   }
 
   Widget _renderProgressBar() {
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -216,7 +239,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                 const EdgeInsets.only(left: 10, right: 10, top: 9, bottom: 9),
             child: ProgressBar(
               timeLabelLocation: TimeLabelLocation.below,
-              timeLabelTextStyle: TextStyles.text12Regular,
+              timeLabelTextStyle: TextStyles.text14Regular,
               buffered: bufferedPosition,
               progress: currentPosition,
               total: _videoPlayerController.value.duration,
@@ -239,8 +262,10 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     return VisibilityDetector(
         key: visibilityKey,
         onVisibilityChanged: (VisibilityInfo info) {
-          debugPrint("${info.visibleFraction} of my widget is visible");
-          if (info.visibleFraction == 0 && mounted && _videoPlayerController.value.isInitialized) {
+          // debugPrint("${info.visibleFraction} of my widget is visible");
+          if (info.visibleFraction == 0 &&
+              mounted &&
+              _videoPlayerController.value.isInitialized) {
             _videoPlayerController.pause();
           }
         },

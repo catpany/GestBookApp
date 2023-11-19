@@ -16,3 +16,11 @@ class ExerciseFailed extends LessonState {}
 class StartNewLevel extends LessonState {}
 
 class QuitLevel extends LessonState {}
+
+class WrongMatchAnswer extends LessonState {}
+
+class CorrectMatchAnswer extends LessonState {}
+
+class ProcessingMatchAnswer extends LessonState {}
+
+class ImpactModeUpdated extends LessonState {}

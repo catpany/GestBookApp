@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/bloc/favorites/favorites_cubit.dart';
@@ -11,11 +9,10 @@ import 'package:sigest/views/styles.dart';
 import '../../../bloc/saved/saved_cubit.dart';
 import '../../../bloc/search/search_cubit.dart';
 import 'favorites.dart';
-import 'learned.dart';
-
 
 class DictionariesScreen extends StatefulWidget {
-  const DictionariesScreen({Key? key}) : super(key: key);
+  const DictionariesScreen({Key? key})
+      : super(key: key);
 
   @override
   _DictionariesScreenState createState() => _DictionariesScreenState();
@@ -32,24 +29,38 @@ class _DictionariesScreenState extends State<DictionariesScreen> {
     super.dispose();
   }
 
+  List<Widget> _getTabs() {
+      return [
+        const Tab(icon: Icon(Icons.search)),
+        const Tab(icon: Icon(Icons.file_download_outlined)),
+        const Tab(icon: Icon(Icons.star_rounded)),
+        // Tab(icon: Icon(Icons.layers_outlined)),
+      ];
+  }
+
+  List<Widget> _getTabViews() {
+      return [
+        const SearchScreen(),
+        const SavedScreen(),
+        const FavoritesScreen(),
+        // LearnedScreen(),
+      ];
+  }
+
   PreferredSizeWidget _renderTopBar() {
     return AppBar(
-      title: const Text('ЖЕСТЫ', style: TextStyles.title18Medium),
+      title: Text('ЖЕСТЫ', style: Theme.of(context).textTheme.titleSmall),
       flexibleSpace: Container(
           decoration: const BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
-                  colors: [ColorStyles.orange, ColorStyles.accent]))),      shadowColor: Colors.transparent,
+                  colors: [ColorStyles.orange, ColorStyles.accent]))),
+      shadowColor: Colors.transparent,
       centerTitle: true,
-      bottom: const TabBar(
+      bottom: TabBar(
         indicatorColor: ColorStyles.white,
-        tabs: [
-          Tab(icon: Icon(Icons.search)),
-          Tab(icon: Icon(Icons.file_download_outlined)),
-          Tab(icon: Icon(Icons.star_rounded)),
-          // Tab(icon: Icon(Icons.layers_outlined)),
-        ],
+        tabs: _getTabs(),
       ),
     );
   }
@@ -80,14 +91,8 @@ class _DictionariesScreenState extends State<DictionariesScreen> {
             child: Scaffold(
                 resizeToAvoidBottomInset: false,
                 appBar: _renderTopBar(),
-                body: const TabBarView(
-                        children: [
-                          SearchScreen(),
-                          SavedScreen(),
-                          FavoritesScreen(),
-                          // LearnedScreen(),
-                        ],
-                      )
-            )));
+                body: TabBarView(
+                  children: _getTabViews(),
+                ))));
   }
 }

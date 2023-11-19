@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,6 +23,15 @@ class ChooseWordExerciseScreenState extends State<ChooseWordExerciseScreen> {
     cubit = context.read<FastRepetitionCubit>();
 
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(oldWidget) {
+    if (cubit.state is StartNextExercise) {
+      selected.clear();
+    }
+
+    super.didUpdateWidget(oldWidget);
   }
 
   Widget _renderBody() {
@@ -58,6 +65,7 @@ class ChooseWordExerciseScreenState extends State<ChooseWordExerciseScreen> {
                                 margin:
                                     const EdgeInsets.only(bottom: 20, top: 17),
                                 child: ContainerRowWidget(
+                                  selected: selected,
                                   options: cubit.getGesturesOptions(),
                                   onSelect: (String id) {
                                     selected.add(id);
@@ -86,6 +94,10 @@ class ChooseWordExerciseScreenState extends State<ChooseWordExerciseScreen> {
         ));
   }
 
+  void _check() {
+    cubit.checkChooseWordEx(selected);
+  }
+
   Widget _renderAcceptButton() {
     return Positioned(
         bottom: 0,
@@ -105,7 +117,7 @@ class ChooseWordExerciseScreenState extends State<ChooseWordExerciseScreen> {
             backgroundColor:
                 selected.isEmpty ? ColorStyles.gray : ColorStyles.green,
             onClick: () {
-              selected.isEmpty ? {} : cubit.checkChooseWordEx(selected);
+              selected.isEmpty ? {} : _check();
             },
             minWidth: double.infinity,
             height: 40,

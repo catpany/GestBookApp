@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/views/scenes/auth/activate-profile.dart';
 import 'package:sigest/views/scenes/auth/auth.dart';
 import 'package:sigest/views/scenes/auth/login.dart';
@@ -29,11 +26,29 @@ class RegistrationScreen extends AuthScreen {
   @override
   void navigateTo(BuildContext context, MainState state) {
     if (state is NeedToActivate) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return ActivateProfileScreen(
-          params: {'login': state.login},
-        );
-      }));
+      Navigator.push(
+          context,
+          PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 300),
+              transitionsBuilder: (BuildContext context,
+                      Animation<double> animation, __, Widget child) =>
+                  FadeTransition(
+                      opacity: CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeIn,
+                      ),
+                      child: child),
+              pageBuilder: (BuildContext context, _, __) {
+                return ActivateProfileScreen(
+                  params: {'login': state.login},
+                );
+              })
+          //   MaterialPageRoute(builder: (context) {
+          // return ActivateProfileScreen(
+          //   params: {'login': state.login},
+          // );
+          // })
+          );
     }
   }
 
@@ -63,7 +78,7 @@ class RegistrationScreen extends AuthScreen {
         obscureText: true,
         type: FieldType.password,
         controller: bindControllers['password'],
-        rules: 'required|min:8|max:22|password',
+        rules: 'required|min:8|max:22',
         errorText: errors != null ? errors['password'] : null,
       ),
     ];
@@ -94,11 +109,26 @@ class RegistrationScreen extends AuthScreen {
       LinkButtonWidget(
           onClick: (BuildContext context) => {
                 Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return LoginScreen();
-                  }),
-                )
+                    context,
+                    PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 300),
+                        transitionsBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                __,
+                                Widget child) =>
+                            FadeTransition(
+                                opacity: CurvedAnimation(
+                                  parent: animation,
+                                  curve: Curves.easeIn,
+                                ),
+                                child: child),
+                        pageBuilder: (BuildContext context, _, __) {
+                          return LoginScreen();
+                        })
+                    // MaterialPageRoute(builder: (BuildContext context) {
+                    //   return LoginScreen();
+                    // }),
+                    )
               },
           color: Colors.white,
           splashColor: Colors.white38,

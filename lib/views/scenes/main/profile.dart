@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -34,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   PreferredSizeWidget _renderTopBar(BuildContext context, MainState state) {
     return AppBar(
-      title: const Text('ПРОФИЛЬ', style: TextStyles.title18Medium),
+      title: Text('ПРОФИЛЬ', style: Theme.of(context).textTheme.titleSmall),
       shadowColor: Colors.transparent,
       centerTitle: true,
       flexibleSpace: Container(
@@ -47,9 +46,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _navigateToSettings() {
-    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-      return ProfileSettingsScreen();
-    }));
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 400),
+            transitionsBuilder:
+                (_, Animation<double> animation, __, Widget child) =>
+                    FadeTransition(
+                        opacity: CurvedAnimation(
+                          parent: animation,
+                          curve: Curves.easeIn,
+                        ),
+                        child: child),
+            pageBuilder: (_, __, ___) {
+              return ProfileSettingsScreen();
+            })
+        //   MaterialPageRoute(builder: (BuildContext context) {
+        // return ProfileSettingsScreen();
+        // })
+        );
   }
 
   void _navigateToLogin() {
@@ -123,8 +138,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (mode.endsWith('1')) return mode + ' день';
 
-    if (mode.endsWith('2') || mode.endsWith('3') || mode.endsWith('4'))
+    if (mode.endsWith('2') || mode.endsWith('3') || mode.endsWith('4')) {
       return mode + ' дня';
+    }
 
     return mode + ' дней';
   }
@@ -298,7 +314,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           text: 'ВЫЙТИ ИЗ ПРОФИЛЯ',
           backgroundColor: Colors.transparent,
           color: ColorStyles.red,
-          minWidth: 200,
+          minWidth: 240,
           height: 40,
           borderSideColor: ColorStyles.red,
           onClick: () => _renderQuitDialog(),
@@ -321,16 +337,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _renderBody(BuildContext context, MainState state) {
+    double height = MediaQuery.of(context).size.height - 220;
+
     if (state is DataLoaded) {
       return SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 18),
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [_renderUserBlock()] +
-                _renderStatisticsBlock(context) +
-                // _renderNotificationsBlock(context) +
-                [_renderQuitButton()]),
-      );
+          padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 18),
+          child: SizedBox(
+            height: height,
+            child: Column(
+                children: [_renderUserBlock()] +
+                    _renderStatisticsBlock(context) +
+                    // _renderNotificationsBlock(context) +
+                    [const Spacer(), _renderQuitButton()]),
+          ));
     }
 
     return const SizedBox.shrink();

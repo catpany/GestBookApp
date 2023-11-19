@@ -1,17 +1,16 @@
-import 'dart:developer';
-
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/fast_repetition/fast_repetition_cubit.dart';
 import '../../../bloc/main_cubit.dart';
 import '../../styles.dart';
-import '../../widgets/button.dart';
 import '../../widgets/exercise_popup.dart';
 import '../../widgets/popup_window.dart';
 import '../../widgets/progress_bar.dart';
 import '../loading.dart';
 import 'choose_word_exercise.dart';
+import 'fast_repetition_finished.dart';
 import 'yes_no_exercise.dart';
 
 class FastRepetitionScreen extends StatefulWidget {
@@ -25,9 +24,16 @@ class FastRepetitionScreen extends StatefulWidget {
 }
 
 class FastRepetitionScreenState extends State<FastRepetitionScreen> {
+  final AudioPlayer player = AudioPlayer();
   late final FastRepetitionCubit cubit =
       FastRepetitionCubit(lessonId: widget.lessonId);
   Stopwatch timer = Stopwatch();
+
+  Map<String, String> audioAssets = {
+    'success': 'audio/success_sound.wav',
+    'error': 'audio/error_sound.wav',
+    'completed': 'audio/fast_rep_passed.wav'
+  };
 
   @override
   void initState() {
@@ -95,9 +101,9 @@ class FastRepetitionScreenState extends State<FastRepetitionScreen> {
   Widget _nextExercise() {
     switch (cubit.currentExercise.type) {
       case 2:
-        return const ChooseWordExerciseScreen();
+        return ChooseWordExerciseScreen();
       case 4:
-        return const YesNoExerciseScreen();
+        return YesNoExerciseScreen();
       default:
         throw Exception('No such exercise');
     }
@@ -109,10 +115,16 @@ class FastRepetitionScreenState extends State<FastRepetitionScreen> {
     }
 
     if (state is FastRepetitionCompleted) {
-      return _renderFastRepetitionCompletedScreen();
+      return FastRepetitionFinishedScreen(
+        time: timer.elapsed.inSeconds,
+      );
     }
 
-    return Stack(children: [_nextExercise(), _renderNextButton(state)]);
+    if (state is! DataLoadingError) {
+      return Stack(children: [_nextExercise(), _renderNextButton(state)]);
+    }
+
+    return const SizedBox.shrink();
   }
 
   Widget _renderNextButton(MainState state) {
@@ -135,159 +147,14 @@ class FastRepetitionScreenState extends State<FastRepetitionScreen> {
     int? bestTime = cubit.store.lessonInfo.lessonInfo.bestTime;
     int time = timer.elapsed.inSeconds;
 
-    if ((bestTime != null && time < bestTime && cubit.failedExercises == 0) ||
-        (bestTime == null && cubit.failedExercises == 0)) {
+    if (cubit.failedExercises == 0 &&
+        (bestTime != null && time < bestTime || bestTime == null)) {
       return getTime(time);
-    } else if (bestTime != null && bestTime < time) {
+    } else if (bestTime != null) {
       return getTime(bestTime);
     } else {
       return '???';
     }
-  }
-
-  Widget _renderFastRepetitionCompletedScreen() {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      padding: const EdgeInsets.only(top: 40, right: 20, left: 20),
-      child: Stack(alignment: AlignmentDirectional.topCenter, children: [
-        Column(children: [
-          Container(
-              margin: const EdgeInsets.only(bottom: 30),
-              child: Text(
-                'Пройдено!',
-                style: Theme.of(context).textTheme.displayMedium,
-              )),
-          Row(
-            children: [
-              Flexible(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    border: Border.all(width: 2, color: ColorStyles.yellow)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        child: Text('Лучшее время',
-                            style: Theme.of(context).textTheme.bodyLarge)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                            margin: const EdgeInsets.only(right: 8),
-                            child: const Icon(Icons.workspace_premium,
-                                size: 34, color: ColorStyles.yellow)),
-                        Text(getBestTime(),
-                            style: Theme.of(context).textTheme.bodyMedium),
-                      ],
-                    )
-                  ],
-                ),
-              )),
-              Container(width: 14),
-              Flexible(
-                  child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    border: Border.all(width: 2, color: ColorStyles.purple)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        child: Text('Текущее время',
-                            style: Theme.of(context).textTheme.bodyLarge)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                            margin: const EdgeInsets.only(right: 8),
-                            child: const Icon(Icons.timer_outlined,
-                                size: 34, color: ColorStyles.purple)),
-                        Text(getTime(timer.elapsed.inSeconds),
-                            style: Theme.of(context).textTheme.bodyMedium),
-                      ],
-                    )
-                  ],
-                ),
-              )),
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 18),
-              child: Row(
-                children: [
-              Text('Правильных ответов',
-                  style: Theme.of(context).textTheme.bodyMedium),
-              Expanded(child: Container(
-                alignment: AlignmentDirectional.centerEnd,
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                margin: const EdgeInsets.only(left: 16),
-                child: Text(
-                  cubit.passedExercises.toString(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.apply(color: ColorStyles.white),
-                ),
-                decoration: const BoxDecoration(
-                    color: ColorStyles.green,
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
-              )),
-            ],
-          )),
-          Container(
-              margin: const EdgeInsets.only(top: 12),
-              child: Row(
-                // crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text('Неравильных ответов',
-                  style: Theme.of(context).textTheme.bodyMedium),
-              Expanded(child: Container(
-                margin: const EdgeInsets.only(left: 16),
-                alignment: AlignmentDirectional.centerEnd,
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                child: Text(
-                  cubit.failedExercises.toString(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.apply(color: ColorStyles.white),
-                ),
-                decoration: const BoxDecoration(
-                    color: ColorStyles.red,
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
-              ),),
-            ],
-          ))
-        ]),
-        Positioned(
-          right: 0,
-          left: 0,
-          bottom: 40,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            width: double.infinity,
-            height: 40,
-            alignment: AlignmentDirectional.center,
-            child: ButtonWidget(
-              text: 'заново',
-              color: Colors.white,
-              backgroundColor: ColorStyles.green,
-              onClick: () {
-                cubit.restartFastRepetition(timer.elapsed.inSeconds);
-              },
-              minWidth: double.infinity,
-              height: 40,
-            ),
-          ),
-        )
-      ]),
-    );
   }
 
   void onQuit() {
@@ -331,15 +198,18 @@ class FastRepetitionScreenState extends State<FastRepetitionScreen> {
             listener: (BuildContext context, state) {
               if (state is QuitFastRepetition) {
                 onQuit();
-              }
-
-              if (state is FastRepetitionCompleted) {
+              } else if (state is ExercisePassed) {
+                player.play(AssetSource(audioAssets['success']!));
+              } else if (state is ExerciseFailed) {
+                player.play(AssetSource(audioAssets['error']!));
+              } else if (state is FastRepetitionCompleted) {
+                player.play(AssetSource(audioAssets['completed']!));
                 timer.stop();
-              }
-
-              if (state is FastRepetitionStarted) {
+              } else if (state is FastRepetitionStarted) {
                 timer.reset();
                 timer.start();
+              } else if (state is DataLoadingError) {
+                Navigator.of(context).pop(true);
               }
             },
             builder: (BuildContext context, state) {

@@ -8,12 +8,19 @@ class Validator {
       List <String> ruleRes = rule.split(':');
 
       switch (ruleRes[0]) {
+        case 'required':
+          if (value.isEmpty) {
+            return 'Пустое поле';
+          }
+
+          break;
         case 'password':
-          if (value.isEmpty || value.isValidPassword()) {
+          String res = value.isValidPassword();
+          if (value.isEmpty || res == '') {
             break;
           }
 
-          return 'Неверный формат пароля';
+          return res;
         case 'username':
           if (value.isEmpty || value.isValidUsername()) {
             break;
@@ -26,12 +33,6 @@ class Validator {
           }
 
           return 'Неверный формат почты';
-        case 'required':
-          if (value.isEmpty) {
-            return 'Пустое поле';
-          }
-
-          break;
         case 'numeric':
           if (value.isEmpty || value.isNumeric()) {
             break;
@@ -90,15 +91,24 @@ extension RegString on String {
     return RegExp(r'^\S*$').hasMatch(this);
   }
 
-  bool isValidPassword() {
+  String isValidPassword() {
     // return RegExp(r"^[a-z][A-Z][!#$%&'()*+,-./:;<=>?@\[\]^_`{|}~]$").hasMatch(this);
     bool hasUppercase = RegExp(r'[A-Z]').hasMatch(this);
     bool hasDigits = RegExp(r'[0-9]').hasMatch(this);
     bool hasLowercase = RegExp(r'[a-z]').hasMatch(this);
     bool hasSpecialCharacters = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(this);
-    bool notHasSpaces = this.notHasSpaces();
 
-    return hasDigits & hasUppercase & hasLowercase & hasSpecialCharacters & notHasSpaces;
+    if (!hasUppercase) return 'Пароль должен содержать символ(-ы) в верхнем регистре';
+
+    if (!hasDigits) return 'Пароль должен содержать цифру(-ы)';
+
+    if (!hasLowercase) return 'Пароль должен содержать символ(-ы) в нижнем регистре';
+
+    if (!hasSpecialCharacters) return 'Пароль должен содержать символ(-ы) !@#\$%^&*(),.?":{}|<>';
+
+    if (!notHasSpaces()) return 'Пароль содержит пробелы';
+
+    return '';
   }
 
   bool isValidUsername() {

@@ -71,7 +71,7 @@ class PagedListWidget extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .headlineMedium
-                        ?.apply(color: ColorStyles.gray))),
+                        ?.apply(color: ColorStyles.grayDark))),
             ButtonWidget(
               onClick: () => pagingController.refresh(),
               text: 'Повторить',
@@ -87,8 +87,8 @@ class PagedListWidget extends StatelessWidget {
             child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 0),
                 child: Text(onEmptyText,
-                    style: TextStyles.title18Medium
-                        .apply(color: ColorStyles.gray))),
+                    style: TextStyles.title18Bold
+                        .apply(color: ColorStyles.grayDark))),
           ),
         ),
       ),

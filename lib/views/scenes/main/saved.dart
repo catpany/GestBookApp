@@ -73,6 +73,7 @@ class _SavedScreenState extends State<SavedScreen> {
         return [
           PopupMenuItem(
             value: 'delete',
+            height: 30,
             child:
                 Text('Удалить', style: Theme.of(context).textTheme.bodySmall),
             onTap: () {

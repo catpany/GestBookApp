@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/views/scenes/auth/login.dart';
@@ -77,11 +75,26 @@ class ForgotPasswordScreen extends AuthScreen {
       LinkButtonWidget(
           onClick: (BuildContext context) => {
                 Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return LoginScreen();
-                  }),
-                )
+                    context,
+                    PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 300),
+                        transitionsBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                __,
+                                Widget child) =>
+                            FadeTransition(
+                                opacity: CurvedAnimation(
+                                  parent: animation,
+                                  curve: Curves.easeIn,
+                                ),
+                                child: child),
+                        pageBuilder: (BuildContext context, _, __) {
+                          return LoginScreen();
+                        }))
+                // MaterialPageRoute(builder: (BuildContext context) {
+                //   return LoginScreen();
+                // }),
+                // )
               },
           color: Colors.white,
           splashColor: Colors.white38,

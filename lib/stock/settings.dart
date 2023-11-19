@@ -14,6 +14,6 @@ class SettingsRepository extends HiveRepository<SettingsModel> {
 
   @override
   SettingsModel get(String key) {
-    return store.get(key) ?? SettingsModel(isDarkMode: false, isRightHanded: true, notificationTime: 18, notificationsEnabled: true, messagesEnabled: true);
+    return store.get(key) ?? SettingsModel(isDarkMode: false, isRightHanded: true, notificationTime: '18:00', notificationsEnabled: true, messagesEnabled: true);
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:sigest/bloc/main_cubit.dart';
@@ -10,8 +9,13 @@ import 'package:sigest/views/scenes/main/units.dart';
 import 'package:sigest/views/scenes/main/vocabulary.dart';
 import 'package:sigest/views/styles.dart';
 
+import '../../widgets/popup_window.dart';
+import '../splash.dart';
+
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  final Map<String, dynamic> params;
+
+  const MainScreen({Key? key, this.params = const {'offline': false}}) : super(key: key);
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -56,18 +60,61 @@ class _MainScreenState extends State<MainScreen> {
       PageNavigator(
           navigatorKey: navigatorKeys[pages[2].index],
           builder: (BuildContext context) {
-            return DictionariesScreen();
+            return const DictionariesScreen();
           }),
       PageNavigator(
           navigatorKey: navigatorKeys[pages[3].index],
           builder: (BuildContext context) {
-            return ProfileScreen();
+            return const ProfileScreen();
           }),
     ];
+
+    _renderOfflineDialog();
+  }
+
+  Future<void> _renderOfflineDialog() async {
+    if (widget.params['offline']) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await showDialog(
+            context: context,
+            builder: (context) {
+              return PopupWindowWidget(
+                title: 'Вы оффлайн',
+                text:
+                'Функции приложения ограничены. Проверьте интернет-соединение или попробуйте зайти позже',
+                onAcceptButtonPress: () {
+                  Navigator.pop(context);
+                  onReload();
+                },
+                onRejectButtonPress: () => Navigator.pop(context),
+                acceptButtonText: 'перезагрузка',
+                rejectButtonText: 'отмена',
+              );
+            });
+      });
+    }
+  }
+
+  void onReload() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (BuildContext context) {
+        return const SplashScreen();
+      }),
+          (Route<dynamic> route) => false,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    // TabController(vsync: tickerProvider, length: tabCount)..addListener(() {
+    //   if (!tabController.indexIsChanging) {
+    //     setState(() {
+    //       // Rebuild the enclosing scaffold with a new AppBar title
+    //       appBarTitle = 'Tab ${tabController.index}';
+    //     });
+    //   }
+    // })
+
     return WillPopScope(
             onWillPop: () async {
               final NavigatorState navigator =

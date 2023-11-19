@@ -56,8 +56,8 @@ class StatisticWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(title, style: Theme.of(context).textTheme.bodyMedium),
-              Text(subtitle, style: TextStyles.text12Regular, softWrap: true, maxLines: 2,),
+              Text(title, style: Theme.of(context).textTheme.bodySmall),
+              Text(subtitle, style: TextStyles.text14Regular, softWrap: true, maxLines: 2,),
             ],
           ))
         ],

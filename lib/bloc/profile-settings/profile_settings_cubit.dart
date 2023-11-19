@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:meta/meta.dart';
 import 'package:sigest/bloc/main_cubit.dart';
 import 'package:sigest/models/settings.dart';
@@ -42,12 +40,14 @@ class ProfileSettingsCubit extends MainCubit {
   }
 
   void updateNotificationsEnabled(bool newNotificationsEnabled) {
+    emit(NotificationsEnabledChange());
     SettingsModel userSettings = store.settings.get(store.user.user.id);
     SettingsModel currentSettings = store.settings.current;
     userSettings.notificationsEnabled = newNotificationsEnabled;
     currentSettings.notificationsEnabled = newNotificationsEnabled;
     userSettings.save();
     currentSettings.save();
+    emit(NotificationsEnabledChanged());
   }
 
   void updateMessagesEnabled(bool newMessagesEnabled) {
@@ -59,13 +59,15 @@ class ProfileSettingsCubit extends MainCubit {
     currentSettings.save();
   }
 
-  void updateNotificationTime(int newNotificationTime) {
+  void updateNotificationTime(String newNotificationTime) {
+    emit(NotificationTimeChange());
     SettingsModel userSettings = store.settings.get(store.user.user.id);
     SettingsModel currentSettings = store.settings.current;
     userSettings.notificationTime = newNotificationTime;
     currentSettings.notificationTime = newNotificationTime;
     userSettings.save();
     currentSettings.save();
+    emit(NotificationTimeChanged());
   }
 
   Future<void> updateUser(bindControllers) async {

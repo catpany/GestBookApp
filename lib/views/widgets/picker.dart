@@ -90,7 +90,6 @@ class _PickerWidgetState extends State<PickerWidget> {
   void dispose() {
     _timer.cancel();
     if (widget.onDispose && widget.current != value) {
-      print('change time to ' + value.toString());
       widget.onPick(value);
     }
     super.dispose();

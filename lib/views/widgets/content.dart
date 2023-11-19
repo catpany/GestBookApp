@@ -10,11 +10,13 @@ import '../styles.dart';
 class ContentWidget extends StatefulWidget {
   final String? video;
   final String? img;
+  final bool mute;
 
   const ContentWidget({
     Key? key,
     required this.video,
     required this.img,
+    this.mute = true,
   }) : super(key: key);
 
   @override
@@ -22,7 +24,6 @@ class ContentWidget extends StatefulWidget {
 }
 
 class _ContentWidgetState extends State<ContentWidget> {
-
   Widget _loadingFrame(Widget child) {
     return Container(
         width: double.infinity,
@@ -49,7 +50,7 @@ class _ContentWidgetState extends State<ContentWidget> {
       height: 212,
       child: Text(
         'Ресурс недоступен',
-        style: TextStyles.title20SemiBold?.apply(color: ColorStyles.grayDark),
+        style: Theme.of(context).textTheme.titleMedium?.apply(color: ColorStyles.grayDark),
       ),
     );
   }
@@ -63,12 +64,17 @@ class _ContentWidgetState extends State<ContentWidget> {
 
       if (src.startsWith('http')) {
         return VideoPlayerWidget(
-            src: src.replaceAll('localhost:8000', config["domain"]));
+          key: ValueKey(src),
+          src: src.replaceAll('localhost:8000', config["domain"]),
+          mute: widget.mute,
+        );
       }
 
       return VideoPlayerWidget(
+        key: ValueKey(src),
         src: src,
         fromNetwork: false,
+        mute: widget.mute,
       );
     }
 
@@ -79,10 +85,12 @@ class _ContentWidgetState extends State<ContentWidget> {
         return Image.network(
           src.replaceAll('localhost:8000', config["domain"]),
           errorBuilder: (BuildContext context, error, _) => _showError(),
-          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? event) {
+          loadingBuilder:
+              (BuildContext context, Widget child, ImageChunkEvent? event) {
             return _loadingFrame(child);
           },
-          frameBuilder: (BuildContext context, Widget child, int? frame, bool? wasSynchronouslyLoaded) {
+          frameBuilder: (BuildContext context, Widget child, int? frame,
+              bool? wasSynchronouslyLoaded) {
             return _loadingFrame(child);
           },
         );
@@ -91,7 +99,8 @@ class _ContentWidgetState extends State<ContentWidget> {
       return Image.file(
         File(src),
         errorBuilder: (BuildContext context, error, _) => _showError(),
-        frameBuilder: (BuildContext context, Widget child, int? frame, bool? wasSynchronouslyLoaded) {
+        frameBuilder: (BuildContext context, Widget child, int? frame,
+            bool? wasSynchronouslyLoaded) {
           return _loadingFrame(child);
         },
       );

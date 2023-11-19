@@ -24,7 +24,7 @@ class FastRepetitionCubit extends MainCubit {
 
   FastRepetitionCubit({required this.lessonId}) : super();
 
-  double get progress => currentExerciseIndex / (exercises.length - 1);
+  double get progress => currentExerciseIndex / (exercises.length);
 
   @override
   Future<void> load() async {

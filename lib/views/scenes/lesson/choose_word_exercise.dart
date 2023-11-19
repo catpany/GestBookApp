@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/bloc/exercise/exercise_cubit.dart';
@@ -25,6 +23,15 @@ class ChooseWordExerciseScreenState extends State<ChooseWordExerciseScreen> {
     cubit = context.read<LessonCubit>();
 
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(oldWidget) {
+    if (cubit.state is StartNextExercise) {
+      selected.clear();
+    }
+
+    super.didUpdateWidget(oldWidget);
   }
 
   Widget _renderBody() {
@@ -58,6 +65,7 @@ class ChooseWordExerciseScreenState extends State<ChooseWordExerciseScreen> {
                                 margin:
                                     const EdgeInsets.only(bottom: 20, top: 17),
                                 child: ContainerRowWidget(
+                                  selected: selected,
                                   options: cubit.getGesturesOptions(),
                                   onSelect: (String id) {
                                     selected.add(id);
@@ -80,10 +88,14 @@ class ChooseWordExerciseScreenState extends State<ChooseWordExerciseScreen> {
         alignment: AlignmentDirectional.centerStart,
         margin: const EdgeInsets.only(bottom: 14),
         child: Text(
-          'Выберите перевод жеста',
+          'Переведите жест',
           style: Theme.of(context).textTheme.bodySmall,
           textAlign: TextAlign.start,
         ));
+  }
+
+  void _check() {
+    cubit.checkChooseWordEx(selected);
   }
 
   Widget _renderAcceptButton() {
@@ -105,7 +117,7 @@ class ChooseWordExerciseScreenState extends State<ChooseWordExerciseScreen> {
             backgroundColor:
                 selected.isEmpty ? ColorStyles.gray : ColorStyles.green,
             onClick: () {
-              selected.isEmpty ? {} : cubit.checkChooseWordEx(selected);
+              selected.isEmpty ? {} : _check();
             },
             minWidth: double.infinity,
             height: 40,

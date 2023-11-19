@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sigest/views/widgets/link_button.dart';
 import 'package:sigest/views/widgets/notification.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:io' show Platform;
 
@@ -217,7 +216,7 @@ class AuthScreen extends StatelessWidget {
                     state.error.message,
                     style: Theme.of(context)
                         .textTheme
-                        .bodyLarge
+                        .bodyMedium
                         ?.apply(color: ColorStyles.red),
                   ))
             ];
@@ -286,9 +285,9 @@ class AuthScreen extends StatelessWidget {
 
   Widget _renderNotificationBlock(state) {
     if (state is CodeResent) {
-      return NotificationWidget(text: state.message);
+      return NotificationWidget(text: state.message, onClose: cubit.hideNotification,);
     } else if (state is DataLoadingError) {
-      return NotificationWidget(text: state.message);
+      return NotificationWidget(text: state.error.message, onClose: cubit.hideNotification);
     }
     return const SizedBox.shrink();
   }

@@ -81,7 +81,6 @@ class LessonCubit extends MainCubit {
   }
 
   int getImpactMode() {
-    log(store.user.lastLevelPassedToday().toString());
     if (!store.user.lastLevelPassedToday()) {
       return store.user.user.stat['impact_mode'] + 1;
     }
@@ -114,6 +113,14 @@ class LessonCubit extends MainCubit {
     failedExercises = [];
     completed = 0;
     emit(LevelStarted());
+  }
+
+  void checkImpactModeBeforeStart() {
+    if (!store.user.lastLevelPassedToday()) {
+      emit(ImpactModeUpdated());
+    } else {
+      startNextLevel();
+    }
   }
 
   Future<void> finishLevel() async {
@@ -264,5 +271,17 @@ class LessonCubit extends MainCubit {
     }
 
     return false;
+  }
+
+  void wrongAnswer() {
+    emit(WrongMatchAnswer());
+  }
+
+  void correctAnswer() {
+    emit(CorrectMatchAnswer());
+  }
+
+  void processingMatchAnswer() {
+    emit(ProcessingMatchAnswer());
   }
 }

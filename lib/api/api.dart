@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -11,6 +12,7 @@ import 'package:sigest/locator.dart';
 import 'package:sigest/main.dart';
 import 'package:sigest/models/auth.dart';
 import 'package:sigest/stock/auth.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../stock/abstract_repository.dart';
 import 'abstract_api.dart';
@@ -30,11 +32,13 @@ class Api implements AbstractApi {
   }
 
   Future<void> loadPaths() async {
-    Directory savePath = await getApplicationDocumentsDirectory();
-    saveVideoPath = savePath.path + '/video/';
-    saveImagePath = savePath.path + '/image/';
-    log(saveVideoPath);
-    log(saveImagePath);
+    if (!kIsWeb) {
+      Directory savePath = await getApplicationDocumentsDirectory();
+      saveVideoPath = savePath.path + '/video/';
+      saveImagePath = savePath.path + '/image/';
+      log(saveVideoPath);
+      log(saveImagePath);
+    }
   }
 
   AuthRepository get auth =>
@@ -85,11 +89,11 @@ class Api implements AbstractApi {
 
     response = await request(
         method: method, uri: uri, headers: headers, params: params);
-    log(response.toString());
-
     if (response.isError()) {
+
       ErrorResponse error = response.getErrorResponse();
       log(error.code.toString());
+      log(error.message);
 
       if (codeErrors[error.code] == ApiErrors.notAuthorized) {
         log('refresh tokens');
@@ -165,9 +169,10 @@ class Api implements AbstractApi {
           throw Exception('Invalid method');
       }
     } on http.DioError catch (error) {
-      log(error.toString());
       return error.response ??
           http.Response(requestOptions: http.RequestOptions());
+    } on TimeoutException {
+      return http.Response(requestOptions: http.RequestOptions());
     }
   }
 
@@ -179,8 +184,6 @@ class Api implements AbstractApi {
 
   @override
   Future<Response> register(Params params) async {
-    log('send request');
-    log(params.toString());
     return make(
         method: 'post', uri: '/auth/register', headers: {}, params: params);
   }

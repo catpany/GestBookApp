@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:sigest/views/widgets/popup_window.dart';
 
@@ -84,6 +82,7 @@ class _EditUserFormWidgetState extends State<EditUserFormWidget> {
               controller: bindControllers['old_password'],
               borderColor: ColorStyles.gray,
               obscureText: true,
+              rules: 'required',
               type: FieldType.password,
               errorText: widget.errors != null ? widget.errors!['old_password'] : null,
               onChanged: (value) {
@@ -95,7 +94,7 @@ class _EditUserFormWidgetState extends State<EditUserFormWidget> {
             TextFormFieldWidget(
               hintText: 'Новый пароль',
               controller: bindControllers['new_password'],
-              rules: 'min:8|max:22|password',
+              rules: 'required|min:8|max:22|password',
               borderColor: ColorStyles.gray,
               obscureText: true,
               type: FieldType.password,
@@ -128,7 +127,7 @@ class _EditUserFormWidgetState extends State<EditUserFormWidget> {
         showPasswordFields = !showPasswordFields;
       }),
       child: Text('ИЗМЕНЕНИЕ ПАРОЛЯ',
-          style: Theme.of(context).textTheme.bodyMedium),
+          style: Theme.of(context).textTheme.headlineMedium),
     );
   }
 
@@ -154,7 +153,7 @@ class _EditUserFormWidgetState extends State<EditUserFormWidget> {
           padding: EdgeInsets.only(
             top: 44,
           ),
-          child: CircularProgressIndicator(color: ColorStyles.white));
+          child: CircularProgressIndicator(color: ColorStyles.grayDark));
     }
 
     return Row(
@@ -173,7 +172,7 @@ class _EditUserFormWidgetState extends State<EditUserFormWidget> {
             backgroundColor: saveButtonDisabled
                 ? ColorStyles.gray
                 : ColorStyles.green,
-            minWidth: 127,
+            minWidth: 147,
             height: 40,
             text: 'сохранить',
           ),

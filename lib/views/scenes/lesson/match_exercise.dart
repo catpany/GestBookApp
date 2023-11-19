@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -99,6 +96,7 @@ class MatchExerciseScreenState extends State<MatchExerciseScreen> {
                                               options.elementAt(index).id)
                                           ? setState(() {
                                               selected = index;
+                                              selectedOption = '';
                                             })
                                           : setState(() {
                                               selectedOption =
@@ -139,13 +137,13 @@ class MatchExerciseScreenState extends State<MatchExerciseScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 6),
             decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                border: Border.all(
-                  color: _getSelectionColor(selectedAnswer, answer.id),
-                  width: 2,
-                ),
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-               ),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              border: Border.all(
+                color: _getSelectionColor(selectedAnswer, answer.id),
+                width: 2,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+            ),
             child:
                 Text(answer.name, style: Theme.of(context).textTheme.bodySmall),
           )));
@@ -168,7 +166,7 @@ class MatchExerciseScreenState extends State<MatchExerciseScreen> {
           height: 12,
           width: 12,
           decoration: BoxDecoration(
-              color: index == selected  ? ColorStyles.green : ColorStyles.gray,
+              color: index == selected ? ColorStyles.green : ColorStyles.gray,
               borderRadius: const BorderRadius.all(Radius.circular(10))),
         ),
       );
@@ -225,27 +223,32 @@ class MatchExerciseScreenState extends State<MatchExerciseScreen> {
           child: ButtonWidget(
             text: 'Проверить',
             color: Colors.white,
-            backgroundColor:
-                selectedAnswer == '' ? ColorStyles.gray : ColorStyles.green,
+            backgroundColor: selectedAnswer == '' || selectedOption == ''
+                ? ColorStyles.gray
+                : ColorStyles.green,
             onClick: () {
-              if (selectedAnswer != '') {
-                if (selectedOption == selectedAnswer) {
-                  matched.add(selectedAnswer);
+              cubit.processingMatchAnswer();
 
-                  if (!cubit.checkMatchEx(matched)) {
-                    setState(() {
-                      selectedOption = '';
-                      selectedAnswer = '';
-                      _show = true;
-                      _error = false;
-                    });
-                  }
-                } else {
+              if (selectedAnswer != '' &&
+                  selectedOption != '' &&
+                  selectedOption == selectedAnswer) {
+                matched.add(selectedAnswer);
+
+                if (!cubit.checkMatchEx(matched)) {
+                  cubit.correctAnswer();
                   setState(() {
+                    selectedOption = '';
+                    selectedAnswer = '';
                     _show = true;
-                    _error = true;
+                    _error = false;
                   });
                 }
+              } else if (selectedOption != '' && selectedAnswer != '') {
+                cubit.wrongAnswer();
+                setState(() {
+                  _show = true;
+                  _error = true;
+                });
               }
             },
             minWidth: double.infinity,

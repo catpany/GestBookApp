@@ -21,9 +21,9 @@ class DataReceived extends MainState {
 }
 
 class DataLoadingError extends MainState {
-  final String message;
+  final ErrorResponse error;
 
-  DataLoadingError(this.message);
+  DataLoadingError(this.error);
 }
 
 class Error extends MainState {
@@ -34,3 +34,7 @@ class Error extends MainState {
   @override
   List<Object> get props => [error];
 }
+
+class NotificationShow extends MainState {}
+
+class NotificationShowed extends MainState {}

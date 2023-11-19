@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:sigest/views/scenes/auth/auth.dart';
 import 'package:sigest/views/scenes/auth/registration.dart';
@@ -31,17 +29,47 @@ class LoginScreen extends AuthScreen {
     if (state is AuthSuccess) {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (BuildContext context) {
-          return const SplashScreen();
-        }),
+        PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 300),
+            transitionsBuilder: (BuildContext context,
+                    Animation<double> animation, __, Widget child) =>
+                FadeTransition(
+                    opacity: CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeIn,
+                    ),
+                    child: child),
+            pageBuilder: (BuildContext context, _, __) {
+              return const SplashScreen();
+            }),
+        // MaterialPageRoute(builder: (BuildContext context) {
+        //   return const SplashScreen();
+        // }),
         (Route<dynamic> route) => false,
       );
     } else if (state is NeedToActivate) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return ActivateProfileScreen(
-          params: {'login': state.login},
-        );
-      }));
+      Navigator.push(
+          context,
+          PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 300),
+              transitionsBuilder: (BuildContext context,
+                      Animation<double> animation, __, Widget child) =>
+                  FadeTransition(
+                      opacity: CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeIn,
+                      ),
+                      child: child),
+              pageBuilder: (BuildContext context, _, __) {
+                return ActivateProfileScreen(
+                  params: {'login': state.login},
+                );
+              }));
+      //   MaterialPageRoute(builder: (context) {
+      // return ActivateProfileScreen(
+      //   params: {'login': state.login},
+      // );
+      // }));
     }
   }
 
@@ -93,10 +121,27 @@ class LoginScreen extends AuthScreen {
     return [
       LinkButtonWidget(
           onClick: (BuildContext context) => {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (BuildContext context) {
-                  return ForgotPasswordScreen();
-                }))
+                Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 300),
+                        transitionsBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                __,
+                                Widget child) =>
+                            FadeTransition(
+                                opacity: CurvedAnimation(
+                                  parent: animation,
+                                  curve: Curves.easeIn,
+                                ),
+                                child: child),
+                        pageBuilder: (BuildContext context, _, __) {
+                          return ForgotPasswordScreen();
+                        })
+                    //   MaterialPageRoute(builder: (BuildContext context) {
+                    // return ForgotPasswordScreen();
+                    // })
+                    )
               },
           color: Colors.white,
           splashColor: Colors.white38,
@@ -105,11 +150,26 @@ class LoginScreen extends AuthScreen {
       LinkButtonWidget(
           onClick: (BuildContext context) => {
                 Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return RegistrationScreen();
-                  }),
-                )
+                    context,
+                    PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 300),
+                        transitionsBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                __,
+                                Widget child) =>
+                            FadeTransition(
+                                opacity: CurvedAnimation(
+                                  parent: animation,
+                                  curve: Curves.easeIn,
+                                ),
+                                child: child),
+                        pageBuilder: (BuildContext context, _, __) {
+                          return RegistrationScreen();
+                        })
+                    // MaterialPageRoute(builder: (BuildContext context) {
+                    //   return RegistrationScreen();
+                    // }),
+                    )
               },
           color: Colors.white,
           splashColor: Colors.white38,

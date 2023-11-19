@@ -8,8 +8,8 @@ class SettingsModel  extends HiveObject {
   bool isDarkMode;
   @HiveField(1, defaultValue: true)
   bool isRightHanded;
-  @HiveField(2, defaultValue: 18)
-  int notificationTime;
+  @HiveField(2, defaultValue: '18:00')
+  String notificationTime;
   @HiveField(3, defaultValue: true)
   bool notificationsEnabled;
   @HiveField(4, defaultValue: true)

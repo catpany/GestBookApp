@@ -20,6 +20,7 @@ class GestureCubit extends MainCubit {
 
   @override
   Future<void> load() async {
+    log('load');
     emit(DataLoading());
     store.load().then((value) async {
       await loadGesture();
@@ -54,12 +55,14 @@ class GestureCubit extends MainCubit {
   }
 
   bool isSaved() {
-    return store.saved.findById(store.user.user.id, store.gestureInfo.id) !=
+    return store.saved
+            .findById(store.user.user.id, store.gestureInfo.gestureInfo.id) !=
         null;
   }
 
   bool isFavorite() {
-    return store.favorites.findById(store.user.user.id, store.gestureInfo.id) !=
+    return store.favorites
+            .findById(store.user.user.id, store.gestureInfo.gestureInfo.id) !=
         null;
   }
 
@@ -112,9 +115,8 @@ class GestureCubit extends MainCubit {
 
     await store.favorites.deleteFromFavorites(store.user.user.id, gesture);
 
-    bool deleted = await store.favorites.removeFromFavorites(
-        store.user.user.id,
-        gesture);
+    bool deleted =
+        await store.favorites.removeFromFavorites(store.user.user.id, gesture);
 
     if (!deleted) {
       await store.favorites.saveInFavorites(store.user.user.id, gesture);

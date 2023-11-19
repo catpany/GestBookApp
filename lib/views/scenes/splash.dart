@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/bloc/splash/splash_cubit.dart';
@@ -37,36 +35,56 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Container(
             decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                     colors: [ColorStyles.orange, ColorStyles.accent])),
             child: Scaffold(
               resizeToAvoidBottomInset: false,
               backgroundColor: Colors.transparent,
-              appBar: AppBar(
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-              ),
               body: BlocListener<SplashCubit, MainState>(
                 listener: (context, state) {
-                  if (state is DataLoaded) {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) {
-                      return const MainScreen();
-                    }));
-                  } else if (state is Error) {
+                  if (state is DataLoaded || state is DataLoadingError) {
                     Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return LoginScreen();
-                      }),
-                    );
+                        context,
+                        PageRouteBuilder(
+                            transitionDuration:
+                                const Duration(milliseconds: 1500),
+                            transitionsBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    __,
+                                    Widget child) =>
+                                FadeTransition(
+                                    opacity: CurvedAnimation(
+                                      parent: animation,
+                                      curve: Curves.easeIn,
+                                    ),
+                                    child: child),
+                            pageBuilder: (BuildContext context, _, __) {
+                              return MainScreen(params: {'offline': state is DataLoadingError});
+                            }));
+                  } else if (state is Error) {
+                    Navigator.of(context).pushReplacement(PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 1500),
+                        transitionsBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                __,
+                                Widget child) =>
+                            FadeTransition(
+                                opacity: CurvedAnimation(
+                                  parent: animation,
+                                  curve: Curves.easeIn,
+                                ),
+                                child: child),
+                        pageBuilder: (BuildContext context, _, __) {
+                          return LoginScreen();
+                        }));
                   }
                 },
-                child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Center(
-                      child:
-                      Text('Книга Жестов', style: TextStyles.title60Bold),
+                      child: Image.asset('assets/images/launch_image.png',
+                          width: 150, height: 150),
                     )),
               ),
             )));

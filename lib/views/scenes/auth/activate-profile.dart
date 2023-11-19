@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/views/scenes/auth/login.dart';
@@ -37,9 +35,22 @@ class ActivateProfileScreen extends AuthScreen {
     if (state is AuthSuccess) {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (BuildContext context) {
-          return SplashScreen();
-        }),
+        PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 300),
+            transitionsBuilder: (BuildContext context,
+                Animation<double> animation, __, Widget child) =>
+                FadeTransition(
+                    opacity: CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeIn,
+                    ),
+                    child: child),
+            pageBuilder: (BuildContext context, _, __) {
+              return const SplashScreen();
+            }),
+        // MaterialPageRoute(builder: (BuildContext context) {
+        //   return SplashScreen();
+        // }),
         (Route<dynamic> route) => false,
       );
     }
@@ -100,9 +111,22 @@ class ActivateProfileScreen extends AuthScreen {
           onClick: (BuildContext context) => {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return LoginScreen();
-                  }),
+                  PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 300),
+                      transitionsBuilder: (BuildContext context,
+                          Animation<double> animation, __, Widget child) =>
+                          FadeTransition(
+                              opacity: CurvedAnimation(
+                                parent: animation,
+                                curve: Curves.easeIn,
+                              ),
+                              child: child),
+                      pageBuilder: (BuildContext context, _, __) {
+                        return LoginScreen();
+                      }),
+                  // MaterialPageRoute(builder: (BuildContext context) {
+                  //   return LoginScreen();
+                  // }),
                 )
               },
           color: Colors.white,
@@ -113,9 +137,22 @@ class ActivateProfileScreen extends AuthScreen {
           onClick: (BuildContext context) => {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return RegistrationScreen();
-                  }),
+                  PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 300),
+                      transitionsBuilder: (BuildContext context,
+                          Animation<double> animation, __, Widget child) =>
+                          FadeTransition(
+                              opacity: CurvedAnimation(
+                                parent: animation,
+                                curve: Curves.easeIn,
+                              ),
+                              child: child),
+                      pageBuilder: (BuildContext context, _, __) {
+                        return RegistrationScreen();
+                      }),
+                  // MaterialPageRoute(builder: (BuildContext context) {
+                  //   return RegistrationScreen();
+                  // }),
                 )
               },
           color: Colors.white,

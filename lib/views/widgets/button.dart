@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../styles.dart';
-
 class ButtonWidget extends StatefulWidget {
   final Function onClick;
   final String text;
@@ -70,7 +68,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
           children: <Widget>[
             _buildLeadingIcon(widget.leadingIcon),
             Text(widget.text.toUpperCase(),
-                style: Theme.of(context).textTheme.bodyMedium?.apply(color: widget.color)),
+                style: Theme.of(context).textTheme.headlineLarge?.apply(color: widget.color)),
             _buildTrailingIcon(widget.trailingIcon)
           ],
         ));

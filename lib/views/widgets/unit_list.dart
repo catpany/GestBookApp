@@ -1,8 +1,5 @@
 import 'dart:math';
 
-import 'dart:developer' as dev;
-import 'dart:ui';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -149,8 +146,8 @@ class _UnitListState extends State<UnitListWidget> {
         Positioned(
             top: 5,
             child: Text(
-              'UNIT ' + (curPage + 1).toString(),
-              style: TextStyles.title20SemiBold,
+              'ГЛАВА ' + (curPage + 1).toString(),
+              style: Theme.of(context).textTheme.titleMedium,
             )),
       ],
     );

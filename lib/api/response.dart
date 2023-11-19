@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'package:dio/dio.dart' as http;
 
 enum ApiErrors {
@@ -47,7 +45,7 @@ class SuccessResponse extends Response {
 
 extension ApiResponse on http.Response {
   bool isError() {
-    if (200 == statusCode) {
+    if (statusCode != null && 200 == statusCode) {
       if (null != data && (null != data['code'] && null != data['message'] )) {
         return true;
       }
@@ -59,9 +57,8 @@ extension ApiResponse on http.Response {
   }
 
   ErrorResponse getErrorResponse() {
-    log(statusMessage.toString());
-    log(statusCode.toString());
-    if (200 == statusCode) {
+    if (statusCode != null && 200 == statusCode) {
+
       if (data['message'] is String) {
         return ErrorResponse(
             code: data['code'], message: data['message']);
@@ -73,9 +70,7 @@ extension ApiResponse on http.Response {
           messages: data['message']);
     }
 
-    log('Network error');
-    log(statusCode.toString());
-    return ErrorResponse(code: statusCode ?? 500, message: data['message'] ?? 'Network error');
+    return ErrorResponse(code: statusCode ?? 500, message: data != null ? (data['message'] ?? 'Network error') : 'Network Error');
   }
 
   SuccessResponse getSuccessResponse() {

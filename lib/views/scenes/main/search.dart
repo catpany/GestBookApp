@@ -8,6 +8,7 @@ import 'package:sigest/models/word.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:sigest/views/scenes/gesture.dart';
 
+import '../../widgets/notification.dart';
 import '../../widgets/paged_list.dart';
 import '../../widgets/search.dart';
 
@@ -56,7 +57,19 @@ class _SearchScreenState extends State<SearchScreen> {
   void _navigateToGestureScreen(String gestureId) {
     Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
       return GestureScreen(gestureId: gestureId);
-    }));
+    })).then((withError) {
+      if (withError == true) {
+        context.read<SearchCubit>().showNotification();
+      }
+    });
+  }
+
+  Widget _renderNotificationBlock(state) {
+    if (state is NotificationShow) {
+      return NotificationWidget(text: 'Ошибка загрузки данных', onClose: context.read<SearchCubit>().hideNotification,);
+    }
+
+    return const SizedBox.shrink();
   }
 
   @override
@@ -89,44 +102,47 @@ class _SearchScreenState extends State<SearchScreen> {
         _pagingController.error = 'Ошибка загрузки данных';
       }
     }, builder: (context, state) {
-      return Container(
-          height: double.infinity,
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  child: SearchWidget(
-                    searchController: _searchController,
-                    onSearch: () => search(1),
-                  )),
-              Expanded(
-                  child: PagedListWidget(
-                      refreshKey: refreshKey,
-                      pagingController: _pagingController,
-                      onEmptyText: 'НИЧЕГО НЕ НАЙДЕНО',
-                      buildItem: (item) {
-                        item as WordModel;
-                        return ListTile(
-                          dense: true,
-                          contentPadding: const EdgeInsets.only(left: 10),
-                          title: Text(item.name + getContext(item.context),
-                              style: Theme.of(context).textTheme.bodySmall,
-                              maxLines: 2,
-                              softWrap: true,
-                              overflow: TextOverflow.ellipsis),
-                          onTap: () {
-                            log('tap on gesture');
-                            _navigateToGestureScreen(item.gesture);
-                          },
-                        );
-                      },
-                      isLoading:
-                          context.read<SearchCubit>().state is Searching))
-            ],
-          ));
+      return Stack(alignment: Alignment.topCenter, children: [
+        Container(
+            height: double.infinity,
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: SearchWidget(
+                      searchController: _searchController,
+                      onSearch: () => search(1),
+                    )),
+                Expanded(
+                    child: PagedListWidget(
+                        refreshKey: refreshKey,
+                        pagingController: _pagingController,
+                        onEmptyText: 'НИЧЕГО НЕ НАЙДЕНО',
+                        buildItem: (item) {
+                          item as WordModel;
+                          return ListTile(
+                            dense: true,
+                            contentPadding: const EdgeInsets.only(left: 10),
+                            title: Text(item.name + getContext(item.context),
+                                style: Theme.of(context).textTheme.bodySmall,
+                                maxLines: 2,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis),
+                            onTap: () {
+                              log('tap on gesture');
+                              _navigateToGestureScreen(item.gesture);
+                            },
+                          );
+                        },
+                        isLoading:
+                            context.read<SearchCubit>().state is Searching))
+              ],
+            )),
+        _renderNotificationBlock(state)
+      ]);
     });
   }
 }

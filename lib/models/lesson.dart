@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -39,7 +37,7 @@ class LessonModel extends HiveObject {
   Map<String, dynamic> toJson() => _$LessonModelToJson(this);
 
   static int _hexStringToInt(String hexIcon) {
-    var result = int.tryParse(hexIcon, radix: 16 );
+    var result = int.tryParse(hexIcon);
 
     if (null == result) {
       return 0xf036b;

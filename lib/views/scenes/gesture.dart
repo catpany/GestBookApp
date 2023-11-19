@@ -1,15 +1,12 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/gesture/gesture_cubit.dart';
 import '../../bloc/main_cubit.dart';
-import '../../main.dart';
 import '../styles.dart';
 import '../widgets/content.dart';
-import '../widgets/video_player.dart';
 import '../widgets/widget_wrapper.dart';
 
 class GestureScreen extends StatefulWidget {
@@ -33,9 +30,8 @@ class GestureScreenState extends State<GestureScreen> {
   }
 
   PreferredSizeWidget _renderTopBar(BuildContext context, MainState state) {
-    log(state.toString());
     return AppBar(
-        title: const Text('СЛОВАРЬ', style: TextStyles.title18Medium),
+        title: Text('СЛОВАРЬ', style: Theme.of(context).textTheme.titleSmall),
         // backgroundColor: ColorStyles.accent,
         flexibleSpace: Container(
             decoration: const BoxDecoration(
@@ -130,6 +126,7 @@ class GestureScreenState extends State<GestureScreen> {
               ContentWidget(
                 video: cubit.store.gestureInfo.gestureInfo.src,
                 img: cubit.store.gestureInfo.gestureInfo.img,
+                mute: false,
               ),
               Container(
                 constraints: const BoxConstraints(
@@ -183,6 +180,9 @@ class GestureScreenState extends State<GestureScreen> {
             bloc: cubit,
             listener: (BuildContext context, state) {
               if (state is Error) {}
+              if (state is DataLoadingError) {
+                Navigator.of(context).pop(true);
+              }
             },
             builder: (BuildContext context, state) {
               return Scaffold(

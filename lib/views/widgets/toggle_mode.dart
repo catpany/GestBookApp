@@ -48,7 +48,7 @@ class _ToggleModeWidgetState extends State<ToggleModeWidget> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-             Text('Ведущая рука', style: Theme.of(context).textTheme.bodyMedium,),
+             Text('Ведущая рука', style: Theme.of(context).textTheme.bodySmall,),
             Row (
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

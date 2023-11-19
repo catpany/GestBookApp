@@ -113,7 +113,12 @@ class _TheoryScreenState extends State<TheoryScreen> {
         lazy: false,
         child: BlocConsumer<TheoryCubit, MainState>(
             bloc: cubit,
-            listener: (BuildContext context, state) {},
+            listener: (BuildContext context, state) {
+              if (state is DataLoadingError) {
+                log('dataloadingerror');
+                Navigator.of(context).pop(true);
+              }
+            },
             builder: (BuildContext context, state) {
               return SafeArea(
                   child: Scaffold(

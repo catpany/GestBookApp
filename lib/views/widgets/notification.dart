@@ -1,18 +1,17 @@
 import 'dart:async';
-import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import '../styles.dart';
 
 class NotificationWidget extends StatefulWidget {
   final String text;
+  final Function onClose;
 
-  NotificationWidget({
+  const NotificationWidget({
     Key? key,
     required this.text,
+    required this.onClose
   }) : super(key: key);
 
   @override
@@ -25,7 +24,7 @@ class NotificationState extends State<NotificationWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late final Timer _timer;
-  bool disabled = false;
+  bool active = true;
 
   @override
   void initState() {
@@ -43,7 +42,8 @@ class NotificationState extends State<NotificationWidget>
 
   void close() {
     _timer.cancel();
-    _controller.reverse().then((_) => disable());
+    _controller.reverse().then((_) {_controller.reset();
+    disable(); widget.onClose();});
   }
 
   @override
@@ -53,9 +53,16 @@ class NotificationState extends State<NotificationWidget>
     super.dispose();
   }
 
+  void closeNotification() {
+    _timer.cancel();
+    _controller.reset();
+    disable();
+    widget.onClose();
+  }
+
   void disable() {
     setState(() {
-      disabled = true;
+      active = false;
     });
   }
 
@@ -75,7 +82,7 @@ class NotificationState extends State<NotificationWidget>
   Widget build(BuildContext context) {
     return Align(
         alignment: Alignment.bottomCenter,
-        child: !disabled
+        child: active
             ? AnimatedBuilder(
                 animation: _controller,
                 child: Container(
@@ -97,7 +104,7 @@ class NotificationState extends State<NotificationWidget>
                       fixedSize:
                           MaterialStateProperty.all<Size>(const Size(220, 60)),
                       backgroundColor: MaterialStateProperty.all<Color>(
-                          ColorStyles.grayLight),
+                          ColorStyles.gray),
                       foregroundColor:
                           MaterialStateProperty.all<Color>(Colors.transparent),
                     ),
@@ -107,10 +114,10 @@ class NotificationState extends State<NotificationWidget>
                       children: [
                         Expanded(
                             child: Text(widget.text,
-                                style: Theme.of(context).textTheme.headlineMedium,
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: ColorStyles.black),
                                 textAlign: TextAlign.center)),
                         IconButton(
-                          onPressed: disable,
+                          onPressed: closeNotification,
                           padding: const EdgeInsets.all(0),
                           icon: const Icon(Icons.close_rounded),
                           color: ColorStyles.black,

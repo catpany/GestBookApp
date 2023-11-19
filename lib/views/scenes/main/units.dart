@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sigest/bloc/main_cubit.dart';
@@ -7,6 +5,7 @@ import 'package:sigest/bloc/units/units_cubit.dart';
 import 'package:sigest/views/styles.dart';
 import 'package:sigest/views/widgets/unit_list.dart';
 
+import '../../widgets/notification.dart';
 import '../fast_repetition/fast_repetition.dart';
 import '../lesson/lesson.dart';
 import '../theory.dart';
@@ -65,6 +64,14 @@ class _UnitsScreenState extends State<UnitsScreen> {
             )));
   }
 
+  Widget _renderNotificationBlock(state) {
+    if (state is NotificationShow) {
+      return NotificationWidget(text: 'Ошибка загрузки данных', onClose: () => widget.cubit.hideNotification(),);
+    }
+
+    return const SizedBox.shrink();
+  }
+
   void _navigateToLesson(String lessonId, int levelOrder) {
     Navigator.of(context, rootNavigator: true)
         .push(MaterialPageRoute(builder: (BuildContext context) {
@@ -72,33 +79,51 @@ class _UnitsScreenState extends State<UnitsScreen> {
         lessonId: lessonId,
         levelOrder: levelOrder,
       );
-    })).then((value) => setState(() {}));
+    })).then((withError) {
+      if (withError == true) {
+        // log(ModalRoute.of(context)?.settings.name.toString() ?? 'null');
+        widget.cubit.showNotification();
+      }
+    });
   }
 
   void _navigateToTheory(String lessonId, int finished, int total) {
     Navigator.of(context, rootNavigator: true)
         .push(MaterialPageRoute(builder: (BuildContext context) {
       return TheoryScreen(lessonId: lessonId, finished: finished, total: total);
-    }));
+    })).then((withError) {
+      if (withError == true) {
+        widget.cubit.showNotification();
+      }
+    });
   }
 
   void _navigateToFastRepetition(String lessonId) {
     Navigator.of(context, rootNavigator: true)
         .push(MaterialPageRoute(builder: (BuildContext context) {
       return FastRepetitionScreen(lessonId: lessonId);
-    }));
+    })).then((withError) {
+      if (withError == true) {
+        Navigator.of(context, rootNavigator: true).pop();
+        widget.cubit.showNotification();
+      }
+    });
   }
 
   Widget _renderBody(BuildContext context, MainState state) {
     if (state is! DataLoading) {
-      return UnitListWidget(
-        units: widget.cubit.store.units.units,
-        onStartLesson: (String lessonId, int levelOrder) =>
-            _navigateToLesson(lessonId, levelOrder),
-        onStartFastRepetition: (String lessonId) => _navigateToFastRepetition(lessonId),
-        onViewTheory: (String lessonId, int finished, int total) =>
-            _navigateToTheory(lessonId, finished, total),
-      );
+      return Stack(alignment: Alignment.topCenter, children: [
+        UnitListWidget(
+          units: widget.cubit.store.units.units,
+          onStartLesson: (String lessonId, int levelOrder) =>
+              _navigateToLesson(lessonId, levelOrder),
+          onStartFastRepetition: (String lessonId) =>
+              _navigateToFastRepetition(lessonId),
+          onViewTheory: (String lessonId, int finished, int total) =>
+              _navigateToTheory(lessonId, finished, total),
+        ),
+        _renderNotificationBlock(state)
+      ]);
     }
 
     return const SizedBox.shrink();
@@ -112,7 +137,8 @@ class _UnitsScreenState extends State<UnitsScreen> {
             resizeToAvoidBottomInset: false,
             appBar: _renderTopBar(),
             body: BlocConsumer<UnitsCubit, MainState>(
-                listener: (context, state) {},
+                listener: (context, state) {
+                },
                 builder: (context, state) {
                   return _renderBody(context, state);
                 })));
